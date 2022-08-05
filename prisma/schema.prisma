@@ -15,7 +15,6 @@ model User {
   updatedAt DateTime @updatedAt
 
   password Password?
-  notes    Note[]
 }
 
 model Password {
@@ -25,14 +24,14 @@ model Password {
   userId String @unique
 }
 
-model Note {
-  id    String @id @default(cuid())
-  title String
-  body  String
+model Project {
+  id            String  @id @default(cuid())
+  name          String
+  code          String
+  description   String?
+  location      String
+  estimatedCost Decimal
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String
 }
