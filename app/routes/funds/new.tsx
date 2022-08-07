@@ -4,25 +4,21 @@ import {json, redirect} from '@remix-run/server-runtime';
 import Button from '../../components/Button';
 import TextArea from '../../components/TextArea';
 import TextInput from '../../components/TextInput';
-import {createProject} from '../../models/project.server';
+import {createFund} from '../../models/fund.server';
 import {validateRequiredString} from '../../utils';
 
-import type { Project } from "../../models/project.server";
+import type { Fund } from "../../models/fund.server";
 import type { ActionArgs } from "@remix-run/server-runtime";
 
 type FormErrors = {
   name?: string;
   code?: string;
-  location?: string;
-  estimatedCost?: string;
 };
 
 function getFormData(formData: FormData) {
   const errors: FormErrors = {};
-  const fields = ["name", "code", "description", "location", "estimatedCost"];
-  const [name, code, description, location, estimatedCost] = fields.map(
-    (field) => formData.get(field)
-  );
+  const fields = ["name", "code", "description"];
+  const [name, code, description] = fields.map((field) => formData.get(field));
 
   let hasErrors = false;
   if (!validateRequiredString(name)) {
@@ -33,24 +29,14 @@ function getFormData(formData: FormData) {
     errors.code = "Code is required";
     hasErrors = true;
   }
-  if (!validateRequiredString(location)) {
-    errors.location = "Location is required";
-    hasErrors = true;
-  }
-  if (!validateRequiredString(estimatedCost)) {
-    errors.estimatedCost = "Estimated Cost is required";
-    hasErrors = true;
-  }
 
   return {
     errors: hasErrors ? errors : undefined,
     data: {
       name,
       code,
-      location,
-      estimatedCost,
       description,
-    } as unknown as Project,
+    } as unknown as Fund,
   };
 }
 
@@ -60,14 +46,14 @@ export async function action({ request }: ActionArgs) {
 
   if (errors) return json({ errors }, { status: 400 });
 
-  const project = await createProject({
+  const fund = await createFund({
     ...data,
   });
 
-  return redirect(`/projects/${project.id}`);
+  return redirect(`/funds/${fund.id}`);
 }
 
-export default function NewProjectPage() {
+export default function NewFundPage() {
   const actionData = useActionData<typeof action>();
 
   return (
@@ -94,19 +80,6 @@ export default function NewProjectPage() {
           required
         />
         <TextArea name="description" label="Description: " />
-        <TextArea
-          name="location"
-          label="Location: "
-          error={actionData?.errors?.location}
-          required
-        />
-        <TextInput
-          name="estimatedCost"
-          label="Estimated Cost: "
-          error={actionData?.errors?.estimatedCost}
-          type="number"
-          required
-        />
         <div className="text-right">
           <Button type="submit">Save</Button>
         </div>
