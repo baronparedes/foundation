@@ -27,11 +27,39 @@ model Password {
 model Project {
   id            String  @id @default(cuid())
   name          String
-  code          String
+  code          String  @unique
   description   String?
   location      String
   estimatedCost Decimal
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  fundTransaction FundTransaction[]
+}
+
+model Fund {
+  id          String  @id @default(cuid())
+  name        String
+  code        String  @unique
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  fundTransaction FundTransaction[]
+}
+
+model FundTransaction {
+  id Int @id @default(autoincrement())
+
+  amount Decimal
+
+  project   Project? @relation(fields: [projectId], references: [id])
+  projectId String?
+
+  createdAt DateTime @default(now())
+
+  fund   Fund   @relation(fields: [fundId], references: [id])
+  fundId String
 }
