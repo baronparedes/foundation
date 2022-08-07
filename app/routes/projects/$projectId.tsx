@@ -5,6 +5,8 @@ import {getProject} from '~/models/project.server';
 import {json} from '@remix-run/node';
 import {useCatch, useLoaderData} from '@remix-run/react';
 
+import Button from '../../components/Button';
+
 export async function loader({ params }: LoaderArgs) {
   invariant(params.projectId, "projectId not found");
 
@@ -19,9 +21,14 @@ export default function ProjectDetailsPage() {
   const data = useLoaderData<typeof loader>();
 
   return (
-    <div>
+    <div className="w-full">
+      <h4 className="text-lg">{data.project.code}</h4>
       <h3 className="text-2xl font-bold">{data.project.name}</h3>
-      <p className="py-6">{data.project.description}</p>
+      <hr className="my-4" />
+      <p className="py-4">{data.project.description}</p>
+      <p className="py-4">📍 {data.project.location}</p>
+      <hr className="my-4" />
+      <Button>New Voucher</Button>
       <hr className="my-4" />
     </div>
   );

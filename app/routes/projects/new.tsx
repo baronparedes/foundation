@@ -1,7 +1,7 @@
 import {Form, useActionData} from '@remix-run/react';
 import {json, redirect} from '@remix-run/server-runtime';
 
-import SubmitButton from '../../components/SubmitButton';
+import Button from '../../components/Button';
 import TextArea from '../../components/TextArea';
 import TextInput from '../../components/TextInput';
 import {createProject} from '../../models/project.server';
@@ -108,7 +108,7 @@ export default function NewProjectPage() {
           required
         />
         <div className="text-right">
-          <SubmitButton>Save</SubmitButton>
+          <Button type="submit">Save</Button>
         </div>
       </Form>
     </>
