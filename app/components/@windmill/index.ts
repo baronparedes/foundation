@@ -3,8 +3,8 @@
 // export { default as Backdrop } from './Backdrop'
 export { default as Badge } from "./Badge";
 export { default as Button } from "./Button";
-// export { default as Card } from './Card'
-// export { default as CardBody } from './CardBody'
+export { default as Card } from "./Card";
+export { default as CardBody } from "./CardBody";
 // export { default as Dropdown } from './Dropdown'
 // export { default as DropdownItem } from './DropdownItem'
 // export { default as HelperText } from './HelperText'

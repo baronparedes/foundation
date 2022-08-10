@@ -2,9 +2,9 @@ import {DocumentIcon} from '@heroicons/react/solid';
 import {Link, NavLink, Outlet, useLoaderData} from '@remix-run/react';
 import {json} from '@remix-run/server-runtime';
 
+import {RoundIcon} from '../components/@ui';
+import {Card, CardBody} from '../components/@windmill';
 import AvailableBalance from '../components/AvailableBalance';
-import Card from '../components/Card';
-import CardContainer from '../components/CardContainer';
 import Page from '../components/Page';
 import {getFunds} from '../models/fund.server';
 
@@ -30,23 +30,23 @@ export default function FundsPage() {
           {data.funds.length === 0 ? (
             <p className="p-4">No wallets yet</p>
           ) : (
-            <CardContainer>
+            <div className="mb-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
               {data.funds.map((fund) => (
                 <Card key={fund.id}>
-                  <div className="mr-4 rounded-full bg-sky-100 p-3">
-                    <DocumentIcon className="h-5 w-5" />
-                  </div>
-                  <div className="w-full">
-                    <p className="mb-2 font-medium text-gray-600">
-                      <NavLink className="block text-lg" to={fund.id}>
-                        {fund.name}
-                      </NavLink>
-                    </p>
-                    <AvailableBalance value={46760.89} />
-                  </div>
+                  <CardBody className="flex items-center">
+                    <RoundIcon icon={DocumentIcon} className="mr-4" />
+                    <div>
+                      <p className="mb-2 font-medium text-gray-600">
+                        <NavLink className="block text-lg" to={fund.id}>
+                          {fund.name}
+                        </NavLink>
+                      </p>
+                      <AvailableBalance value={46760.89} />
+                    </div>
+                  </CardBody>
                 </Card>
               ))}
-            </CardContainer>
+            </div>
           )}
         </div>
         <div className="flex-1 p-6">

@@ -1,9 +1,8 @@
 import {Form, useActionData} from '@remix-run/react';
 import {json, redirect} from '@remix-run/server-runtime';
 
+import {TextArea, TextInput} from '../../components/@ui';
 import {Button} from '../../components/@windmill';
-import TextArea from '../../components/TextArea';
-import TextInput from '../../components/TextInput';
 import {createFund} from '../../models/fund.server';
 import {validateRequiredString} from '../../utils';
 
