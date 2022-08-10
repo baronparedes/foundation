@@ -39,9 +39,12 @@ CREATE TABLE "Fund" (
 CREATE TABLE "FundTransaction" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "amount" DECIMAL NOT NULL,
-    "projectId" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "description" TEXT NOT NULL DEFAULT '',
+    "createdById" TEXT NOT NULL,
+    "projectId" TEXT,
     "fundId" TEXT NOT NULL,
+    CONSTRAINT "FundTransaction_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "FundTransaction_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT "FundTransaction_fundId_fkey" FOREIGN KEY ("fundId") REFERENCES "Fund" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -57,3 +60,6 @@ CREATE UNIQUE INDEX "Project_code_key" ON "Project"("code");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Fund_code_key" ON "Fund"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "FundTransaction_createdById_key" ON "FundTransaction"("createdById");

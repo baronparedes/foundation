@@ -82,6 +82,11 @@ export function roundOff(num?: number) {
   return num === 0 ? 0 : Math.round(num * 100) / 100;
 }
 
+export function sum(numbers: number[] | undefined) {
+  if (!numbers || numbers.length === 0) return 0;
+  return numbers.reduce((p, c) => Number(p) + Number(c));
+}
+
 export function validateEmail(email: unknown): email is string {
   return typeof email === "string" && email.length > 3 && email.includes("@");
 }

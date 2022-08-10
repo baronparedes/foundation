@@ -7,6 +7,7 @@ import {Card, CardBody} from '../components/@windmill';
 import AvailableBalance from '../components/AvailableBalance';
 import Page from '../components/Page';
 import {getFunds} from '../models/fund.server';
+import {sum} from '../utils';
 
 import type { LoaderArgs } from "@remix-run/server-runtime";
 export async function loader({ request }: LoaderArgs) {
@@ -41,7 +42,9 @@ export default function FundsPage() {
                           {fund.name}
                         </NavLink>
                       </p>
-                      <AvailableBalance value={46760.89} />
+                      <AvailableBalance
+                        value={sum(fund.fundTransaction.map((v) => Number(v)))}
+                      />
                     </div>
                   </CardBody>
                 </Card>

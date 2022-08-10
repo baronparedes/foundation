@@ -1,18 +1,40 @@
-import type { Fund } from "@prisma/client";
-
 import {prisma} from '~/db.server';
 
-export type { Fund } from "@prisma/client";
+import type { Fund, Prisma } from "@prisma/client";
 
-export function getFund({ id }: Pick<Fund, "id">) {
+export type { Fund } from "@prisma/client";
+export type FundWithTransaction = Prisma.PromiseReturnType<typeof getFund>;
+
+export async function getFund({ id }: Pick<Fund, "id">) {
   return prisma.fund.findFirst({
     where: { id },
+    include: {
+      fundTransaction: {
+        select: {
+          id: true,
+          amount: true,
+          createdAt: true,
+          description: true,
+          createdBy: true,
+          project: true,
+        },
+      },
+    },
   });
 }
 
 export function getFunds() {
   return prisma.fund.findMany({
-    select: { id: true, name: true, code: true },
+    select: {
+      id: true,
+      name: true,
+      code: true,
+      fundTransaction: {
+        select: {
+          amount: true,
+        },
+      },
+    },
     orderBy: { updatedAt: "desc" },
   });
 }

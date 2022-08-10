@@ -14,7 +14,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  password Password?
+  password        Password?
+  FundTransaction FundTransaction?
 }
 
 model Password {
@@ -53,12 +54,15 @@ model Fund {
 model FundTransaction {
   id Int @id @default(autoincrement())
 
-  amount Decimal
+  amount      Decimal
+  createdAt   DateTime @default(now())
+  description String   @default("")
+
+  createdBy   User   @relation(fields: [createdById], references: [id])
+  createdById String @unique
 
   project   Project? @relation(fields: [projectId], references: [id])
   projectId String?
-
-  createdAt DateTime @default(now())
 
   fund   Fund   @relation(fields: [fundId], references: [id])
   fundId String
