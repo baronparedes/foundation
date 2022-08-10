@@ -1,13 +1,14 @@
-import {Form, useActionData} from '@remix-run/react';
+import {Form, useActionData, useNavigate} from '@remix-run/react';
 import {json, redirect} from '@remix-run/server-runtime';
 
-import {TextArea, TextInput} from '../../components/@ui';
+import {DialogWithTransition, TextArea, TextInput} from '../../components/@ui';
 import {Button} from '../../components/@windmill';
 import {createFund} from '../../models/fund.server';
 import {validateRequiredString} from '../../utils';
 
 import type { Fund } from "../../models/fund.server";
 import type { ActionArgs } from "@remix-run/server-runtime";
+
 type FormErrors = {
   name?: string;
   code?: string;
@@ -53,35 +54,47 @@ export async function action({ request }: ActionArgs) {
 
 export default function NewFundPage() {
   const actionData = useActionData<typeof action>();
+  const navigate = useNavigate();
+
+  function onCloseModal() {
+    navigate("/funds");
+  }
 
   return (
     <>
-      <Form
-        method="post"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 8,
-          width: "100%",
-        }}
+      <DialogWithTransition
+        isOpen={true}
+        isStatic={true}
+        title="Create New Wallet"
+        onCloseModal={onCloseModal}
       >
-        <TextInput
-          name="name"
-          label="Name: "
-          error={actionData?.errors?.name}
-          required
-        />
-        <TextInput
-          name="code"
-          label="Code: "
-          error={actionData?.errors?.code}
-          required
-        />
-        <TextArea name="description" label="Description: " />
-        <div className="text-right">
-          <Button type="submit">Save</Button>
-        </div>
-      </Form>
+        <Form
+          method="post"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+            width: "100%",
+          }}
+        >
+          <TextInput
+            name="name"
+            label="Name: "
+            error={actionData?.errors?.name}
+            required
+          />
+          <TextInput
+            name="code"
+            label="Code: "
+            error={actionData?.errors?.code}
+            required
+          />
+          <TextArea name="description" label="Description: " />
+          <div className="text-right">
+            <Button type="submit">Save</Button>
+          </div>
+        </Form>
+      </DialogWithTransition>
     </>
   );
 }

@@ -1,7 +1,7 @@
-import {Form, useActionData} from '@remix-run/react';
+import {Form, useActionData, useNavigate} from '@remix-run/react';
 import {json, redirect} from '@remix-run/server-runtime';
 
-import {TextArea, TextInput} from '../../components/@ui';
+import {DialogWithTransition, TextArea, TextInput} from '../../components/@ui';
 import {Button} from '../../components/@windmill';
 import {createProject} from '../../models/project.server';
 import {validateRequiredString} from '../../utils';
@@ -67,48 +67,60 @@ export async function action({ request }: ActionArgs) {
 
 export default function NewProjectPage() {
   const actionData = useActionData<typeof action>();
+  const navigate = useNavigate();
+
+  function onCloseModal() {
+    navigate("/projects");
+  }
 
   return (
     <>
-      <Form
-        method="post"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 8,
-          width: "100%",
-        }}
+      <DialogWithTransition
+        isOpen={true}
+        isStatic={true}
+        title="Create New Project"
+        onCloseModal={onCloseModal}
       >
-        <TextInput
-          name="name"
-          label="Name: "
-          error={actionData?.errors?.name}
-          required
-        />
-        <TextInput
-          name="code"
-          label="Code: "
-          error={actionData?.errors?.code}
-          required
-        />
-        <TextArea name="description" label="Description: " />
-        <TextArea
-          name="location"
-          label="Location: "
-          error={actionData?.errors?.location}
-          required
-        />
-        <TextInput
-          name="estimatedCost"
-          label="Estimated Cost: "
-          error={actionData?.errors?.estimatedCost}
-          type="number"
-          required
-        />
-        <div className="text-right">
-          <Button type="submit">Save</Button>
-        </div>
-      </Form>
+        <Form
+          method="post"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+            width: "100%",
+          }}
+        >
+          <TextInput
+            name="name"
+            label="Name: "
+            error={actionData?.errors?.name}
+            required
+          />
+          <TextInput
+            name="code"
+            label="Code: "
+            error={actionData?.errors?.code}
+            required
+          />
+          <TextArea name="description" label="Description: " />
+          <TextArea
+            name="location"
+            label="Location: "
+            error={actionData?.errors?.location}
+            required
+          />
+          <TextInput
+            name="estimatedCost"
+            label="Estimated Cost: "
+            error={actionData?.errors?.estimatedCost}
+            type="number"
+            required
+          />
+          <div className="text-right">
+            <Button type="submit">Save</Button>
+          </div>
+        </Form>
+      </DialogWithTransition>
     </>
   );
 }
