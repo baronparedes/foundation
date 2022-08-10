@@ -30,10 +30,10 @@ export default function FundsPage() {
           {data.funds.length === 0 ? (
             <p className="p-4">No wallets yet</p>
           ) : (
-            <div className="mb-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            <div className="m-4 mb-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
               {data.funds.map((fund) => (
                 <Card key={fund.id}>
-                  <CardBody className="flex items-center">
+                  <CardBody className="m-1 flex items-center">
                     <RoundIcon icon={DocumentIcon} className="mr-4" />
                     <div>
                       <p className="mb-2 font-medium text-gray-600">

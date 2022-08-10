@@ -47,7 +47,7 @@ export default function Page({
                   })}
                 </div>
               </div>
-              <div className="hidden md:block">
+              <div className="ml-4 hidden md:block">
                 <Form action="/logout" method="post">
                   <Button type="submit">Logout</Button>
                 </Form>
@@ -122,6 +122,9 @@ export default function Page({
                     </NavLink>
                   );
                 })}
+                <Form action="/logout" method="post">
+                  <Button type="submit">Logout</Button>
+                </Form>
               </div>
             </div>
           )}
