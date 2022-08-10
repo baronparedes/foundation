@@ -1,7 +1,7 @@
 import {Form, useActionData} from '@remix-run/react';
 import {json, redirect} from '@remix-run/server-runtime';
 
-import Button from '../../components/Button';
+import {Button} from '../../components/@windmill';
 import TextArea from '../../components/TextArea';
 import TextInput from '../../components/TextInput';
 import {createProject} from '../../models/project.server';
@@ -9,7 +9,6 @@ import {validateRequiredString} from '../../utils';
 
 import type { Project } from "../../models/project.server";
 import type { ActionArgs } from "@remix-run/server-runtime";
-
 type FormErrors = {
   name?: string;
   code?: string;

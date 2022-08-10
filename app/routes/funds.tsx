@@ -1,6 +1,10 @@
+import {DocumentIcon} from '@heroicons/react/solid';
 import {Link, NavLink, Outlet, useLoaderData} from '@remix-run/react';
 import {json} from '@remix-run/server-runtime';
 
+import AvailableBalance from '../components/AvailableBalance';
+import Card from '../components/Card';
+import CardContainer from '../components/CardContainer';
 import Page from '../components/Page';
 import {getFunds} from '../models/fund.server';
 
@@ -15,7 +19,7 @@ export default function FundsPage() {
 
   return (
     <Page currentPage="Funds">
-      <div className="sm:py-4 md:flex">
+      <div className="py-4">
         <div className="flex-none">
           <Link
             to="new"
@@ -26,22 +30,23 @@ export default function FundsPage() {
           {data.funds.length === 0 ? (
             <p className="p-4">No wallets yet</p>
           ) : (
-            <ol>
+            <CardContainer>
               {data.funds.map((fund) => (
-                <li key={fund.id}>
-                  <NavLink
-                    className={({ isActive }) =>
-                      `block p-4 text-xl hover:bg-sky-100 ${
-                        isActive ? "bg-white" : ""
-                      }`
-                    }
-                    to={fund.id}
-                  >
-                    🏢 {fund.name}
-                  </NavLink>
-                </li>
+                <Card key={fund.id}>
+                  <div className="mr-4 rounded-full bg-sky-100 p-3">
+                    <DocumentIcon className="h-5 w-5" />
+                  </div>
+                  <div className="w-full">
+                    <p className="mb-2 font-medium text-gray-600">
+                      <NavLink className="block text-lg" to={fund.id}>
+                        {fund.name}
+                      </NavLink>
+                    </p>
+                    <AvailableBalance value={46760.89} />
+                  </div>
+                </Card>
               ))}
-            </ol>
+            </CardContainer>
           )}
         </div>
         <div className="flex-1 p-6">

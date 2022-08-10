@@ -1,12 +1,11 @@
 import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
-import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
-import * as React from "react";
+import * as React from 'react';
+import {createUser, getUserByEmail} from '~/models/user.server';
+import {createUserSession, getUserId} from '~/session.server';
+import {safeRedirect, validateEmail} from '~/utils';
 
-import { getUserId, createUserSession } from "~/session.server";
-
-import { createUser, getUserByEmail } from "~/models/user.server";
-import { safeRedirect, validateEmail } from "~/utils";
+import {json, redirect} from '@remix-run/node';
+import {Form, Link, useActionData, useSearchParams} from '@remix-run/react';
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
@@ -156,7 +155,7 @@ export default function Join() {
               <Link
                 className="text-blue-500 underline"
                 to={{
-                  pathname: "/login",
+                  pathname: "/",
                   search: searchParams.toString(),
                 }}
               >

@@ -67,6 +67,21 @@ export function useUser(): User {
   return maybeUser;
 }
 
+export function formatCurrency(num?: number) {
+  num = num ? num : 0;
+  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+}
+
+export function formatCurrencyFixed(num?: number) {
+  num = num ? num : 0;
+  return num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+}
+
+export function roundOff(num?: number) {
+  if (!num) return 0;
+  return num === 0 ? 0 : Math.round(num * 100) / 100;
+}
+
 export function validateEmail(email: unknown): email is string {
   return typeof email === "string" && email.length > 3 && email.includes("@");
 }

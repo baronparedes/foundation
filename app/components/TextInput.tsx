@@ -11,7 +11,7 @@ export default function TextInput({ error, name, label, ...rest }: Props) {
         <span>{label}</span>
         <input
           name={name}
-          className="flex-1 rounded-md border-2 border-blue-200 px-3 text-lg leading-loose"
+          className="rounded border border-gray-500 px-2 py-1 text-lg"
           aria-invalid={error ? true : undefined}
           aria-errormessage={error ? `${name}-error` : undefined}
           {...rest}

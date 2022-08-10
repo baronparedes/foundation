@@ -12,7 +12,7 @@ export default function TextArea({ error, name, label, ...rest }: Props) {
         <textarea
           name={name}
           rows={4}
-          className="w-full flex-1 rounded-md border-2 border-blue-200 py-2 px-3 text-lg leading-6"
+          className="rounded border border-gray-500 px-2 py-1 text-lg leading-6"
           aria-invalid={error ? true : undefined}
           aria-errormessage={error ? `${name}-error` : undefined}
           {...rest}

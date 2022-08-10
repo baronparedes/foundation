@@ -5,7 +5,7 @@ import {getProject} from '~/models/project.server';
 import {json} from '@remix-run/node';
 import {useCatch, useLoaderData} from '@remix-run/react';
 
-import Button from '../../components/Button';
+import {Button} from '../../components/@windmill';
 
 export async function loader({ params }: LoaderArgs) {
   invariant(params.projectId, "projectId not found");

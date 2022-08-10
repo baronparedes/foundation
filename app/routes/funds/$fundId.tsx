@@ -5,7 +5,18 @@ import {getFund} from '~/models/fund.server';
 import {json} from '@remix-run/node';
 import {useCatch, useLoaderData} from '@remix-run/react';
 
-import Button from '../../components/Button';
+import {
+  Badge,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableFooter,
+  TableHeader,
+  TableRow,
+} from '../../components/@windmill';
+import AvailableBalance from '../../components/AvailableBalance';
 
 export async function loader({ params }: LoaderArgs) {
   invariant(params.fundId, "projectId not found");
@@ -22,17 +33,54 @@ export default function ProjectDetailsPage() {
 
   return (
     <div className="w-full">
-      <h4 className="text-lg">{data.fund.code}</h4>
+      <h4 className="text-sm">{data.fund.code}</h4>
       <h3 className="text-2xl font-bold">{data.fund.name}</h3>
-      <hr className="my-4" />
+      <AvailableBalance className="mt-4" value={6000000} />
       <p className="py-4">{data.fund.description}</p>
       <hr className="my-4" />
-      <Button variant="success">Cash In</Button>
-      <Button variant="danger" className="ml-1">
-        Cash Out
-      </Button>
+      <Button>Cash In</Button>
+      <Button className="ml-1">Cash Out</Button>
       <hr className="my-4" />
-      <div>Available Balance: P60000000</div>
+      <div>
+        <TableContainer>
+          <Table>
+            <TableHeader>
+              <tr>
+                <TableCell>Client</TableCell>
+                <TableCell>Amount</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Date</TableCell>
+              </tr>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <div className="flex items-center text-sm">
+                    <div>
+                      <p className="font-semibold">asdasd</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">
+                        test
+                      </p>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <span className="text-sm">$ 100000</span>
+                </TableCell>
+                <TableCell>
+                  <Badge type="success">success</Badge>
+                </TableCell>
+                <TableCell>
+                  <span className="text-sm">
+                    {new Date().toLocaleDateString()}
+                  </span>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+          <TableFooter>asdasd</TableFooter>
+        </TableContainer>
+      </div>
     </div>
   );
 }
