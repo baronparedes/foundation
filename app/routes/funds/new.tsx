@@ -1,4 +1,4 @@
-import {Form, useActionData, useNavigate} from '@remix-run/react';
+import {Form, useActionData, useNavigate, useTransition} from '@remix-run/react';
 import {json, redirect} from '@remix-run/server-runtime';
 
 import {DialogWithTransition, TextArea, TextInput} from '../../components/@ui';
@@ -54,6 +54,7 @@ export async function action({ request }: ActionArgs) {
 
 export default function NewFundPage() {
   const actionData = useActionData<typeof action>();
+  const transition = useTransition();
   const navigate = useNavigate();
 
   function onCloseModal() {
@@ -91,7 +92,9 @@ export default function NewFundPage() {
           />
           <TextArea name="description" label="Description: " />
           <div className="text-right">
-            <Button type="submit">Save</Button>
+            <Button type="submit" disabled={transition.state === "submitting"}>
+              Save
+            </Button>
           </div>
         </Form>
       </DialogWithTransition>

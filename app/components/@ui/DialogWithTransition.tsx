@@ -13,6 +13,7 @@ export default function DialogWithTransition({
   title,
   children,
   isStatic,
+  isOpen,
   onCloseModal,
 }: React.PropsWithChildren<Props>) {
   function handleOnClose() {
@@ -22,7 +23,7 @@ export default function DialogWithTransition({
   }
 
   return (
-    <Transition appear show={true} as={Fragment}>
+    <Transition appear show={isOpen} as={Fragment}>
       <Dialog
         as="div"
         className="relative top-0 left-0 right-0 bottom-0 z-10 overflow-auto"
