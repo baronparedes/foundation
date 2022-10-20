@@ -6,6 +6,7 @@ import {json} from '@remix-run/node';
 import {useCatch, useLoaderData} from '@remix-run/react';
 
 import {Button} from '../../components/@windmill';
+import LabeledCurrency from '../../components/LabeledCurrency';
 
 export async function loader({ params }: LoaderArgs) {
   invariant(params.projectId, "projectId not found");
@@ -27,8 +28,14 @@ export default function ProjectDetailsPage() {
       <hr className="my-4" />
       <p className="py-4">{data.project.description}</p>
       <p className="py-4">📍 {data.project.location}</p>
+      <LabeledCurrency
+        label="estimated cost"
+        value={Number(data.project.estimatedCost)}
+      />
       <hr className="my-4" />
-      <Button>New Voucher</Button>
+      <div className="w-full space-x-2 text-right">
+        <Button>New Voucher</Button>
+      </div>
       <hr className="my-4" />
     </div>
   );

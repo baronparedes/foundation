@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {Transition} from '@headlessui/react';
 import {Form, NavLink} from '@remix-run/react';
 
+import {useUser} from '../utils';
 import {Button} from './@windmill';
 
 type Props = {
@@ -18,6 +19,7 @@ export default function Page({
   children,
   currentPage,
 }: React.PropsWithChildren<Props>) {
+  const user = useUser();
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
@@ -32,6 +34,7 @@ export default function Page({
                   alt="Workflow"
                 />
               </div>
+              <div className="ml-10">Hi! {user.email}</div>
               <div className="hidden md:block">
                 <div className="ml-10 space-x-4">
                   {PAGES.map(({ label, route }, key) => {

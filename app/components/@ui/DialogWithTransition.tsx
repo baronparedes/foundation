@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react';
 
 import {Dialog, Transition} from '@headlessui/react';
+import {XIcon} from '@heroicons/react/solid';
 
 type Props = {
   onCloseModal?: () => void;
@@ -26,8 +27,8 @@ export default function DialogWithTransition({
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog
         as="div"
-        className="relative top-0 left-0 right-0 bottom-0 z-10 overflow-auto"
-        onClose={handleOnClose}
+        className="top-0 left-0 right-0 bottom-0 z-10 overflow-auto"
+        onClose={() => {}}
         static={isStatic}
       >
         <Transition.Child
@@ -52,12 +53,20 @@ export default function DialogWithTransition({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <Dialog.Title
                   as="h3"
                   className="mb-6 text-lg font-medium leading-6 text-gray-900"
                 >
-                  {title}
+                  <div className="flex">
+                    <div className="flex-1">{title}</div>
+                    <div className="flex cursor-pointer">
+                      <XIcon
+                        className="h-5 w-5 text-red-600 hover:text-red-800"
+                        onClick={handleOnClose}
+                      />
+                    </div>
+                  </div>
                 </Dialog.Title>
                 {children}
               </Dialog.Panel>

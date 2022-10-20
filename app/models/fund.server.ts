@@ -15,8 +15,19 @@ export async function getFund({ id }: Pick<Fund, "id">) {
           amount: true,
           createdAt: true,
           description: true,
-          createdBy: true,
-          project: true,
+          createdBy: {
+            select: {
+              id: true,
+              email: true,
+            },
+          },
+          project: {
+            select: {
+              code: true,
+              description: true,
+              id: true,
+            },
+          },
         },
       },
     },

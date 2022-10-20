@@ -15,7 +15,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   password        Password?
-  FundTransaction FundTransaction?
+  FundTransaction FundTransaction[]
+  ProjectVoucher  ProjectVoucher?
 }
 
 model Password {
@@ -59,11 +60,26 @@ model FundTransaction {
   description String   @default("")
 
   createdBy   User   @relation(fields: [createdById], references: [id])
-  createdById String @unique
+  createdById String
 
   project   Project? @relation(fields: [projectId], references: [id])
   projectId String?
 
   fund   Fund   @relation(fields: [fundId], references: [id])
   fundId String
+}
+
+model ProjectVoucher {
+  id Int @id @default(autoincrement())
+
+  projectId       String  @unique
+  voucherId       String  @unique
+  description     String  @default("")
+  disbursedAmount Decimal
+  consumedAmount  Decimal
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  updatedBy   User     @relation(fields: [updatedById], references: [id])
+  updatedById String   @unique
 }

@@ -65,7 +65,6 @@ export default function NewFundPage() {
     <>
       <DialogWithTransition
         isOpen={true}
-        isStatic={true}
         title="Create New Wallet"
         onCloseModal={onCloseModal}
       >

@@ -2,11 +2,11 @@ import invariant from 'tiny-invariant';
 import {getFund} from '~/models/fund.server';
 
 import {json} from '@remix-run/node';
-import {useCatch, useLoaderData} from '@remix-run/react';
+import {Outlet, useCatch, useLoaderData, useNavigate} from '@remix-run/react';
 
 import {Button} from '../../components/@windmill';
-import AvailableBalance from '../../components/AvailableBalance';
 import FundTransactionTable from '../../components/fund/FundTransactionTable';
+import LabeledCurrency from '../../components/LabeledCurrency';
 import {sum} from '../../utils';
 
 import type { LoaderArgs } from "@remix-run/node";
@@ -24,18 +24,23 @@ export async function loader({ params }: LoaderArgs) {
 
 export default function FundDetailsPage() {
   const data = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
 
   return (
     <div className="w-full">
       <h4 className="text-sm">{data.fund.code}</h4>
-      <h3 className="text-2xl font-bold">{data.fund.name}</h3>
-      <AvailableBalance
-        value={sum(data.fund.fundTransaction.map((v) => Number(v)))}
+      <h3 className="mb-4 text-2xl font-bold">{data.fund.name}</h3>
+      <LabeledCurrency
+        label="balance"
+        value={sum(data.fund.fundTransaction.map((v) => Number(v.amount)))}
       />
       <p className="py-4">{data.fund.description}</p>
       <hr className="my-4" />
-      <Button>Cash In</Button>
-      <Button className="ml-1">Cash Out</Button>
+      <div className="w-full space-x-2 text-right">
+        <Button onClick={() => navigate("./collections")}>Collect</Button>
+        <Button onClick={() => navigate("./transfers")}>Transfer</Button>
+      </div>
+      <Outlet />
       <hr className="my-4" />
       <div>
         <FundTransactionTable

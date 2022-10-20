@@ -49,6 +49,20 @@ CREATE TABLE "FundTransaction" (
     CONSTRAINT "FundTransaction_fundId_fkey" FOREIGN KEY ("fundId") REFERENCES "Fund" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+-- CreateTable
+CREATE TABLE "ProjectVoucher" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "projectId" TEXT NOT NULL,
+    "voucherId" TEXT NOT NULL,
+    "description" TEXT NOT NULL DEFAULT '',
+    "disbursedAmount" DECIMAL NOT NULL,
+    "consumedAmount" DECIMAL NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "updatedById" TEXT NOT NULL,
+    CONSTRAINT "ProjectVoucher_updatedById_fkey" FOREIGN KEY ("updatedById") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
@@ -62,4 +76,10 @@ CREATE UNIQUE INDEX "Project_code_key" ON "Project"("code");
 CREATE UNIQUE INDEX "Fund_code_key" ON "Fund"("code");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "FundTransaction_createdById_key" ON "FundTransaction"("createdById");
+CREATE UNIQUE INDEX "ProjectVoucher_projectId_key" ON "ProjectVoucher"("projectId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ProjectVoucher_voucherId_key" ON "ProjectVoucher"("voucherId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ProjectVoucher_updatedById_key" ON "ProjectVoucher"("updatedById");

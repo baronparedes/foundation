@@ -14,6 +14,7 @@ import type {
   LoaderArgs,
   MetaFunction,
 } from "@remix-run/server-runtime";
+
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
   if (userId) return redirect("/");

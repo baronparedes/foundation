@@ -54,12 +54,15 @@ export default function FundTransactionTable({ data }: Props) {
                     </span>
                   </TableCell>
                   <TableCell>
-                    <Badge type="success">{transaction.project?.name}</Badge>
+                    <Badge type="success">{transaction.project?.code}</Badge>
                   </TableCell>
                   <TableCell>
                     <span className="text-sm">
                       {new Date(transaction.createdAt).toLocaleDateString()}
                     </span>
+                  </TableCell>
+                  <TableCell>
+                    <Badge type="primary">{transaction.createdBy.email}</Badge>
                   </TableCell>
                 </TableRow>
               );
