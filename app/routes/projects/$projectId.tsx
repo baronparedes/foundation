@@ -3,7 +3,7 @@ import invariant from 'tiny-invariant';
 import {getProject} from '~/models/project.server';
 
 import {json} from '@remix-run/node';
-import {useCatch, useLoaderData} from '@remix-run/react';
+import {Outlet, useCatch, useLoaderData, useNavigate} from '@remix-run/react';
 
 import {Button} from '../../components/@windmill';
 import LabeledCurrency from '../../components/LabeledCurrency';
@@ -20,6 +20,7 @@ export async function loader({ params }: LoaderArgs) {
 
 export default function ProjectDetailsPage() {
   const data = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
 
   return (
     <div className="w-full">
@@ -34,7 +35,8 @@ export default function ProjectDetailsPage() {
       />
       <hr className="my-4" />
       <div className="w-full space-x-2 text-right">
-        <Button>New Voucher</Button>
+        <Button onClick={() => navigate("./vouchers")}>New Voucher</Button>
+        <Outlet />
       </div>
       <hr className="my-4" />
     </div>

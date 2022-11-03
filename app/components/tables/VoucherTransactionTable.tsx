@@ -15,7 +15,7 @@ type Props = {
   data: FundWithTransaction;
 };
 
-export default function FundTransactionTable({ data }: Props) {
+export default function VoucherTransactionTable({ data }: Props) {
   return (
     <TableContainer>
       <Table>
@@ -37,9 +37,12 @@ export default function FundTransactionTable({ data }: Props) {
             </TableRow>
           ) : (
             data?.fundTransaction.map((transaction, key) => {
+              const amount = Number(transaction.amount);
+              const isNegative = amount < 0;
+
               return (
                 <TableRow key={key}>
-                  <TableCell>
+                  <TableCell className="w-96">
                     <div className="flex items-center text-sm">
                       <div>
                         <p className="text-xs text-gray-600 dark:text-gray-400">
@@ -49,12 +52,15 @@ export default function FundTransactionTable({ data }: Props) {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="currency text-sm">
-                      {formatCurrencyFixed(Number(transaction.amount))}
-                    </span>
+                    <Badge
+                      type={isNegative ? "danger" : "success"}
+                      className="currency text-sm"
+                    >
+                      {formatCurrencyFixed(amount)}
+                    </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge type="success">{transaction.project?.code}</Badge>
+                    <Badge type="neutral">{transaction.project?.code}</Badge>
                   </TableCell>
                   <TableCell>
                     <span className="text-sm">

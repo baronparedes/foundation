@@ -6,7 +6,7 @@ import {XIcon} from '@heroicons/react/solid';
 type Props = {
   onCloseModal?: () => void;
   isOpen: boolean;
-  title: string;
+  title: React.ReactNode;
   isStatic?: boolean;
 };
 

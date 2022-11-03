@@ -1,4 +1,5 @@
 import moment from 'moment';
+import React, {useState} from 'react';
 import invariant from 'tiny-invariant';
 
 import {
@@ -12,15 +13,13 @@ import {json, redirect} from '@remix-run/server-runtime';
 
 import {DialogWithTransition, SelectInput, TextArea, TextInput} from '../../../components/@ui';
 import {Button} from '../../../components/@windmill';
-import {createFundTransaction} from '../../../models/fund-transaction.server';
-import {getFund} from '../../../models/fund.server';
-import {getProjectsByUserId} from '../../../models/project.server';
+import {getFunds} from '../../../models/fund.server';
+import {getProject} from '../../../models/project.server';
 import {requireUserId} from '../../../session.server';
-import {validateRequiredString} from '../../../utils';
+import {formatCurrencyFixed, validateRequiredString} from '../../../utils';
 
 import type { FundTransaction } from "@prisma/client";
 import type { LoaderArgs, ActionArgs } from "@remix-run/server-runtime";
-
 type FormErrors = {
   amount?: string;
   description?: string;
@@ -63,47 +62,58 @@ function getFormData(formData: FormData) {
 }
 
 export async function action({ params, request }: ActionArgs) {
-  invariant(params.fundId, "fund not found");
+  invariant(params.projectId, "project not found");
 
   const formData = await request.formData();
   const { errors, data } = getFormData(formData);
 
   if (errors) return json({ errors }, { status: 400 });
 
-  await createFundTransaction({
-    ...data,
-    projectId: data.projectId === "" ? null : data.projectId,
-  });
+  console.log(data);
 
-  return redirect(`/funds/${params.fundId}`);
+  return redirect(`/projects/${params.projectId}`);
 }
 
 export async function loader({ params, request }: LoaderArgs) {
-  invariant(params.fundId, "fund not found");
+  invariant(params.projectId, "project not found");
 
-  const fund = await getFund({ id: params.fundId });
-  if (!fund) {
+  const project = await getProject({ id: params.projectId });
+  if (!project) {
     throw new Response("Not Found", { status: 404 });
   }
 
   const userId = await requireUserId(request);
-  const projects = await getProjectsByUserId({ userId });
+  const funds = await getFunds();
 
-  return json({ fund, projects, userId });
+  return json({ project, funds, userId });
 }
 
-export default function CollectionsPage() {
+export default function VoucherPage() {
   const actionData = useActionData<typeof action>();
-  const { fund, projects, userId } = useLoaderData<typeof loader>();
+  const { project, userId, funds } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const transition = useTransition();
   const today = moment().format("yyyy-MM-DD");
 
+  const [maxBalance, setMaxBalance] = useState(0);
+
+  const handleOnSelectFund = (e: React.FormEvent<HTMLSelectElement>) => {
+    const index = e.currentTarget.selectedIndex;
+    const optionElement = e.currentTarget.childNodes[
+      index
+    ] as HTMLOptionElement;
+    const dataBalance = optionElement.dataset.balance;
+
+    // const dataBalance = e.currentTarget.getAttribute("data-balance");
+    console.log(dataBalance);
+    setMaxBalance(Number(dataBalance) ?? 0);
+  };
+
   return (
     <DialogWithTransition
       isOpen={true}
-      title={<>Collection for {fund.code} fund</>}
-      onCloseModal={() => navigate(`/funds/${fund.id}`)}
+      title={<>New voucher for project {project.code}</>}
+      onCloseModal={() => navigate(`/projects/${project.id}`)}
     >
       <Form
         method="post"
@@ -120,6 +130,7 @@ export default function CollectionsPage() {
           error={actionData?.errors?.amount}
           type="number"
           required
+          max={maxBalance}
         />
         <TextArea
           name="description"
@@ -135,23 +146,31 @@ export default function CollectionsPage() {
           type="date"
           defaultValue={today}
         />
-        <SelectInput name="projectId" label="Project?: " defaultValue={""}>
-          <option value={""}>Select a project</option>
-          {projects.map((p) => {
+        <SelectInput
+          name="fundId"
+          label="Fund: "
+          defaultValue={""}
+          required
+          onChange={handleOnSelectFund}
+        >
+          <option value={""} data-balance={0}>
+            Select a fund
+          </option>
+          {funds.map((f) => {
             return (
-              <option key={p.id} value={p.id}>
-                {p.code}
+              <option key={f.id} value={f.id} data-balance={f.balance}>
+                {f.name} - {formatCurrencyFixed(Number(f.balance))}
               </option>
             );
           })}
         </SelectInput>
         <div className="disable hidden">
           <TextInput name="createdById" required defaultValue={userId} />
-          <TextInput name="fundId" required defaultValue={fund.id} />
+          <TextInput name="projectId" required defaultValue={project.id} />
         </div>
         <div className="text-right">
           <Button type="submit" disabled={transition.state === "submitting"}>
-            Save Transaction
+            Save Voucher
           </Button>
         </div>
       </Form>

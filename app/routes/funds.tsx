@@ -7,7 +7,6 @@ import {Card, CardBody} from '../components/@windmill';
 import LabeledCurrency from '../components/LabeledCurrency';
 import Page from '../components/Page';
 import {getFunds} from '../models/fund.server';
-import {sum} from '../utils';
 
 export async function loader() {
   const funds = await getFunds();
@@ -42,9 +41,7 @@ export default function FundsPage() {
                         </p>
                         <LabeledCurrency
                           label="balance"
-                          value={sum(
-                            fund.fundTransaction.map((v) => Number(v.amount))
-                          )}
+                          value={Number(fund.balance)}
                         />
                       </div>
                     </CardBody>

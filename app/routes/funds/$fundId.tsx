@@ -5,8 +5,8 @@ import {json} from '@remix-run/node';
 import {Outlet, useCatch, useLoaderData, useNavigate} from '@remix-run/react';
 
 import {Button} from '../../components/@windmill';
-import FundTransactionTable from '../../components/fund/FundTransactionTable';
 import LabeledCurrency from '../../components/LabeledCurrency';
+import FundTransactionTable from '../../components/tables/FundTransactionTable';
 import {sum} from '../../utils';
 
 import type { LoaderArgs } from "@remix-run/node";
