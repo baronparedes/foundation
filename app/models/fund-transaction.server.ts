@@ -18,7 +18,11 @@ export function createFundTransaction({
   projectId,
   createdAt,
   createdById,
-}: Omit<FundTransaction, "id">) {
+  comments,
+  type,
+}: Omit<FundTransaction, "id" | "type"> & {
+  type: "collection" | "disbursement";
+}) {
   const data = {
     amount,
     description,
@@ -26,11 +30,38 @@ export function createFundTransaction({
     projectId,
     createdAt: new Date(createdAt),
     createdById,
+    comments,
+    type,
   };
-
-  console.log(data);
 
   return prisma.fundTransaction.create({
     data,
   });
+}
+
+export async function getProjectFundDetails(id: string) {
+  const collectedFundsData = await prisma.fundTransaction.aggregate({
+    where: {
+      projectId: id,
+      type: "collection",
+    },
+    _sum: {
+      amount: true,
+    },
+  });
+
+  const disbursedFundsData = await prisma.fundTransaction.aggregate({
+    where: {
+      projectId: id,
+      type: "disbursement",
+    },
+    _sum: {
+      amount: true,
+    },
+  });
+
+  return {
+    collectedFunds: collectedFundsData._sum.amount,
+    disbursedFunds: disbursedFundsData._sum.amount,
+  };
 }

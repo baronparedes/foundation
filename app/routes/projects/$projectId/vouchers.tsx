@@ -14,50 +14,76 @@ import {json, redirect} from '@remix-run/server-runtime';
 import {DialogWithTransition, SelectInput, TextArea, TextInput} from '../../../components/@ui';
 import {Button} from '../../../components/@windmill';
 import {getFunds} from '../../../models/fund.server';
+import {createProjectVoucher} from '../../../models/project-voucher.server';
 import {getProject} from '../../../models/project.server';
 import {requireUserId} from '../../../session.server';
 import {formatCurrencyFixed, validateRequiredString} from '../../../utils';
 
-import type { FundTransaction } from "@prisma/client";
+import type { ProjectVoucher } from "@prisma/client";
 import type { LoaderArgs, ActionArgs } from "@remix-run/server-runtime";
+
 type FormErrors = {
-  amount?: string;
+  disbursedAmount?: string;
   description?: string;
+  transactionDate?: string;
+  fundId?: string;
+  voucherNumber?: string;
 };
 
 function getFormData(formData: FormData) {
   const errors: FormErrors = {};
   const fields = [
-    "amount",
+    "voucherNumber",
     "description",
-    "fundId",
+    "disbursedAmount",
+    "transactionDate",
+    "updatedById",
     "projectId",
-    "createdById",
-    "createdAt",
+    "fundId",
   ];
-  const [amount, description, fundId, projectId, createdById, createdAt] =
-    fields.map((field) => formData.get(field));
+  const [
+    voucherNumber,
+    description,
+    disbursedAmount,
+    transactionDate,
+    updatedById,
+    projectId,
+    fundId,
+  ] = fields.map((field) => formData.get(field));
 
   let hasErrors = false;
   if (!validateRequiredString(description)) {
     errors.description = "Description is required";
     hasErrors = true;
   }
-  if (!validateRequiredString(amount)) {
-    errors.amount = "Amount is required";
+  if (!validateRequiredString(disbursedAmount)) {
+    errors.disbursedAmount = "Amount is required";
+    hasErrors = true;
+  }
+  if (!validateRequiredString(fundId)) {
+    errors.disbursedAmount = "Fund is required";
+    hasErrors = true;
+  }
+  if (!validateRequiredString(voucherNumber)) {
+    errors.disbursedAmount = "Voucher number is required";
+    hasErrors = true;
+  }
+  if (!validateRequiredString(transactionDate)) {
+    errors.disbursedAmount = "Transaction date is required";
     hasErrors = true;
   }
 
   return {
     errors: hasErrors ? errors : undefined,
     data: {
-      amount,
+      voucherNumber,
       description,
-      fundId,
+      disbursedAmount,
+      transactionDate,
+      updatedById,
       projectId,
-      createdById,
-      createdAt,
-    } as unknown as FundTransaction,
+      fundId,
+    } as unknown as ProjectVoucher,
   };
 }
 
@@ -69,7 +95,9 @@ export async function action({ params, request }: ActionArgs) {
 
   if (errors) return json({ errors }, { status: 400 });
 
-  console.log(data);
+  await createProjectVoucher({
+    ...data,
+  });
 
   return redirect(`/projects/${params.projectId}`);
 }
@@ -125,12 +153,19 @@ export default function VoucherPage() {
         }}
       >
         <TextInput
-          name="amount"
-          label="Amount: "
-          error={actionData?.errors?.amount}
+          name="voucherNumber"
+          label="Voucher Number: "
+          error={actionData?.errors?.voucherNumber}
+          required
+        />
+        <TextInput
+          name="disbursedAmount"
+          label="Amount to disburse: "
+          error={actionData?.errors?.disbursedAmount}
           type="number"
           required
           max={maxBalance}
+          min={1}
         />
         <TextArea
           name="description"
@@ -139,9 +174,9 @@ export default function VoucherPage() {
           required
         />
         <TextInput
-          name="createdAt"
+          name="transactionDate"
           label="Transaction Date: "
-          error={actionData?.errors?.amount}
+          error={actionData?.errors?.transactionDate}
           required
           type="date"
           defaultValue={today}
@@ -151,6 +186,7 @@ export default function VoucherPage() {
           label="Fund: "
           defaultValue={""}
           required
+          error={actionData?.errors?.fundId}
           onChange={handleOnSelectFund}
         >
           <option value={""} data-balance={0}>
@@ -165,7 +201,7 @@ export default function VoucherPage() {
           })}
         </SelectInput>
         <div className="disable hidden">
-          <TextInput name="createdById" required defaultValue={userId} />
+          <TextInput name="updatedById" required defaultValue={userId} />
           <TextInput name="projectId" required defaultValue={project.id} />
         </div>
         <div className="text-right">

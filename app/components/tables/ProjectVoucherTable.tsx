@@ -1,3 +1,5 @@
+import {Link} from '@remix-run/react';
+
 import {formatCurrencyFixed} from '../../utils';
 import {
   Badge,
@@ -10,43 +12,52 @@ import {
   TableRow,
 } from '../@windmill';
 
-import type { FundWithTransaction } from "../../models/fund.server";
+import type { ProjectVoucherWithDetails } from "../../models/project-voucher.server";
 type Props = {
-  data: FundWithTransaction;
+  data: ProjectVoucherWithDetails;
 };
 
-export default function VoucherTransactionTable({ data }: Props) {
+export default function ProjectVoucherTable({ data }: Props) {
   return (
     <TableContainer>
       <Table>
         <TableHeader>
           <tr>
+            <TableCell>Voucher Number</TableCell>
             <TableCell>Description</TableCell>
             <TableCell>Amount</TableCell>
-            <TableCell>Project?</TableCell>
+            <TableCell>Fund</TableCell>
             <TableCell>Date</TableCell>
             <TableCell>By</TableCell>
           </tr>
         </TableHeader>
         <TableBody>
-          {data?.fundTransaction.length === 0 ? (
+          {data?.length === 0 ? (
             <TableRow>
               <TableCell colSpan={5}>
-                <p className="text-center">No transactions yet</p>
+                <p className="text-center">No vouchers yet</p>
               </TableCell>
             </TableRow>
           ) : (
-            data?.fundTransaction.map((transaction, key) => {
-              const amount = Number(transaction.amount);
+            data?.map((voucher, key) => {
+              const amount = Number(voucher.consumedAmount);
               const isNegative = amount < 0;
 
               return (
                 <TableRow key={key}>
+                  <TableCell>
+                    <Link
+                      className="text-sm font-medium text-sky-600 hover:underline"
+                      to={`./vouchers/${voucher.id}`}
+                    >
+                      {voucher.voucherNumber}
+                    </Link>
+                  </TableCell>
                   <TableCell className="w-96">
                     <div className="flex items-center text-sm">
                       <div>
                         <p className="text-xs text-gray-600 dark:text-gray-400">
-                          {transaction.description}
+                          {voucher.description}
                         </p>
                       </div>
                     </div>
@@ -60,15 +71,15 @@ export default function VoucherTransactionTable({ data }: Props) {
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge type="neutral">{transaction.project?.code}</Badge>
+                    <Badge type="neutral">{voucher.fund.code}</Badge>
                   </TableCell>
                   <TableCell>
                     <span className="text-sm">
-                      {new Date(transaction.createdAt).toLocaleDateString()}
+                      {new Date(voucher.transactionDate).toLocaleDateString()}
                     </span>
                   </TableCell>
                   <TableCell>
-                    <Badge type="primary">{transaction.createdBy.email}</Badge>
+                    <Badge type="primary">{voucher.updatedBy.email}</Badge>
                   </TableCell>
                 </TableRow>
               );

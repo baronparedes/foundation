@@ -66,15 +66,18 @@ model FundTransaction {
 
   fund   Fund   @relation(fields: [fundId], references: [id])
   fundId String
+
+  type     String  @default("collection")
+  comments String?
 }
 
 model ProjectVoucher {
   id              Int      @id @default(autoincrement())
-  voucherId       String   @unique
+  voucherNumber   String   @unique
   description     String   @default("")
   disbursedAmount Decimal
-  consumedAmount  Decimal
-  createdAt       DateTime @default(now())
+  consumedAmount  Decimal?
+  transactionDate DateTime
   updatedAt       DateTime @default(now())
 
   updatedBy   User   @relation(fields: [updatedById], references: [id])

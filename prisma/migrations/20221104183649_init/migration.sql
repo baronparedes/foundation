@@ -44,6 +44,8 @@ CREATE TABLE "FundTransaction" (
     "createdById" TEXT NOT NULL,
     "projectId" TEXT,
     "fundId" TEXT NOT NULL,
+    "type" TEXT NOT NULL DEFAULT 'collection',
+    "comments" TEXT,
     CONSTRAINT "FundTransaction_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "FundTransaction_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT "FundTransaction_fundId_fkey" FOREIGN KEY ("fundId") REFERENCES "Fund" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
@@ -52,15 +54,18 @@ CREATE TABLE "FundTransaction" (
 -- CreateTable
 CREATE TABLE "ProjectVoucher" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "projectId" TEXT NOT NULL,
-    "voucherId" TEXT NOT NULL,
+    "voucherNumber" TEXT NOT NULL,
     "description" TEXT NOT NULL DEFAULT '',
     "disbursedAmount" DECIMAL NOT NULL,
-    "consumedAmount" DECIMAL NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "consumedAmount" DECIMAL,
+    "transactionDate" DATETIME NOT NULL,
+    "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedById" TEXT NOT NULL,
-    CONSTRAINT "ProjectVoucher_updatedById_fkey" FOREIGN KEY ("updatedById") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "projectId" TEXT NOT NULL,
+    "fundId" TEXT NOT NULL,
+    CONSTRAINT "ProjectVoucher_updatedById_fkey" FOREIGN KEY ("updatedById") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "ProjectVoucher_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "ProjectVoucher_fundId_fkey" FOREIGN KEY ("fundId") REFERENCES "Fund" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateIndex
@@ -76,10 +81,7 @@ CREATE UNIQUE INDEX "Project_code_key" ON "Project"("code");
 CREATE UNIQUE INDEX "Fund_code_key" ON "Fund"("code");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "ProjectVoucher_projectId_key" ON "ProjectVoucher"("projectId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "ProjectVoucher_voucherId_key" ON "ProjectVoucher"("voucherId");
+CREATE UNIQUE INDEX "ProjectVoucher_voucherNumber_key" ON "ProjectVoucher"("voucherNumber");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "ProjectVoucher_updatedById_key" ON "ProjectVoucher"("updatedById");

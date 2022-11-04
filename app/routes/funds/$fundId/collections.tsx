@@ -73,6 +73,7 @@ export async function action({ params, request }: ActionArgs) {
   await createFundTransaction({
     ...data,
     projectId: data.projectId === "" ? null : data.projectId,
+    type: "collection",
   });
 
   return redirect(`/funds/${params.fundId}`);

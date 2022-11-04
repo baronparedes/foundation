@@ -1,4 +1,3 @@
-import type { LoaderArgs } from "@remix-run/node";
 import invariant from 'tiny-invariant';
 import {getProject} from '~/models/project.server';
 
@@ -7,7 +6,12 @@ import {Outlet, useCatch, useLoaderData, useNavigate} from '@remix-run/react';
 
 import {Button} from '../../components/@windmill';
 import LabeledCurrency from '../../components/LabeledCurrency';
+import ProjectVoucherTable from '../../components/tables/ProjectVoucherTable';
+import {getProjectFundDetails} from '../../models/fund-transaction.server';
+import {getProjectVouchers} from '../../models/project-voucher.server';
 
+import type { LoaderArgs } from "@remix-run/node";
+import type { ProjectVoucherWithDetails } from "../../models/project-voucher.server";
 export async function loader({ params }: LoaderArgs) {
   invariant(params.projectId, "projectId not found");
 
@@ -15,30 +19,44 @@ export async function loader({ params }: LoaderArgs) {
   if (!project) {
     throw new Response("Not Found", { status: 404 });
   }
-  return json({ project });
+
+  const projectVouchers = await getProjectVouchers({ id: params.projectId });
+  const { collectedFunds, disbursedFunds } = await getProjectFundDetails(
+    params.projectId
+  );
+
+  return json({ project, collectedFunds, disbursedFunds, projectVouchers });
 }
 
 export default function ProjectDetailsPage() {
-  const data = useLoaderData<typeof loader>();
+  const { project, collectedFunds, disbursedFunds, projectVouchers } =
+    useLoaderData<typeof loader>();
   const navigate = useNavigate();
 
   return (
     <div className="w-full">
-      <h4 className="text-lg">{data.project.code}</h4>
-      <h3 className="text-2xl font-bold">{data.project.name}</h3>
+      <h4 className="text-lg">{project.code}</h4>
+      <h3 className="text-2xl font-bold">{project.name}</h3>
       <hr className="my-4" />
-      <p className="py-4">{data.project.description}</p>
-      <p className="py-4">📍 {data.project.location}</p>
+      <p className="py-4">{project.description}</p>
+      <p className="py-4">📍 {project.location}</p>
       <LabeledCurrency
         label="estimated cost"
-        value={Number(data.project.estimatedCost)}
+        value={Number(project.estimatedCost)}
       />
+      <LabeledCurrency label="collected funds" value={Number(collectedFunds)} />
+      <LabeledCurrency label="disbursed funds" value={Number(disbursedFunds)} />
       <hr className="my-4" />
       <div className="w-full space-x-2 text-right">
         <Button onClick={() => navigate("./vouchers")}>New Voucher</Button>
         <Outlet />
       </div>
       <hr className="my-4" />
+      <div>
+        <ProjectVoucherTable
+          data={projectVouchers as unknown as ProjectVoucherWithDetails}
+        />
+      </div>
     </div>
   );
 }
