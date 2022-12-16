@@ -10,6 +10,10 @@ export type ProjectVoucherWithDetails = Prisma.PromiseReturnType<
   typeof getProjectVouchers
 >;
 
+export function getProjectVoucher({ id }: Pick<ProjectVoucher, "id">) {
+  return prisma.projectVoucher.findFirst({ where: { id } });
+}
+
 export function getProjectVouchers({ id }: Pick<Project, "id">) {
   return prisma.projectVoucher.findMany({
     where: { projectId: id },

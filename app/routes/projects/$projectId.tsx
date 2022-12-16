@@ -40,12 +40,21 @@ export default function ProjectDetailsPage() {
       <hr className="my-4" />
       <p className="py-4">{project.description}</p>
       <p className="py-4">📍 {project.location}</p>
-      <LabeledCurrency
-        label="estimated cost"
-        value={Number(project.estimatedCost)}
-      />
-      <LabeledCurrency label="collected funds" value={Number(collectedFunds)} />
-      <LabeledCurrency label="disbursed funds" value={Number(disbursedFunds)} />
+      <div className="grid grid-cols-3 gap-3 text-center">
+        <LabeledCurrency
+          label="estimated cost"
+          value={Number(project.estimatedCost)}
+        />
+        <LabeledCurrency
+          label="collected funds"
+          value={Number(collectedFunds)}
+        />
+        <LabeledCurrency
+          label="disbursed funds"
+          value={Number(disbursedFunds)}
+        />
+      </div>
+
       <hr className="my-4" />
       <div className="w-full space-x-2 text-right">
         <Button onClick={() => navigate("./vouchers")}>New Voucher</Button>

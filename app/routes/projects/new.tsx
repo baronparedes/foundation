@@ -118,6 +118,7 @@ export default function NewProjectPage() {
             type="number"
             required
           />
+          <hr className="my-4" />
           <div className="text-right">
             <Button type="submit" disabled={transition.state === "submitting"}>
               Save

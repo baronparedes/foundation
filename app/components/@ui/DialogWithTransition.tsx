@@ -68,6 +68,7 @@ export default function DialogWithTransition({
                     </div>
                   </div>
                 </Dialog.Title>
+                <hr className="my-4" />
                 {children}
               </Dialog.Panel>
             </Transition.Child>

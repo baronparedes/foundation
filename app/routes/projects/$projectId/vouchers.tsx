@@ -134,9 +134,6 @@ export default function VoucherPage() {
       index
     ] as HTMLOptionElement;
     const dataBalance = optionElement.dataset.balance;
-
-    // const dataBalance = e.currentTarget.getAttribute("data-balance");
-    console.log(dataBalance);
     setMaxBalance(Number(dataBalance) ?? 0);
   };
 
@@ -208,6 +205,7 @@ export default function VoucherPage() {
           <TextInput name="projectId" required defaultValue={project.id} />
           <TextInput name="code" required defaultValue={project.code} />
         </div>
+        <hr className="my-4" />
         <div className="text-right">
           <Button type="submit" disabled={transition.state === "submitting"}>
             Save Voucher

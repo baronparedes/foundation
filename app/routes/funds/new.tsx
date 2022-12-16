@@ -90,6 +90,7 @@ export default function NewFundPage() {
             required
           />
           <TextArea name="description" label="Description: " />
+          <hr className="my-4" />
           <div className="text-right">
             <Button type="submit" disabled={transition.state === "submitting"}>
               Save

@@ -150,6 +150,7 @@ export default function CollectionsPage() {
           <TextInput name="createdById" required defaultValue={userId} />
           <TextInput name="fundId" required defaultValue={fund.id} />
         </div>
+        <hr className="my-4" />
         <div className="text-right">
           <Button type="submit" disabled={transition.state === "submitting"}>
             Save Transaction
