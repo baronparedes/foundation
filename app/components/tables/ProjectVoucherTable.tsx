@@ -1,6 +1,5 @@
-import {Link} from '@remix-run/react';
-
 import {formatCurrencyFixed} from '../../utils';
+import {LinkStyled} from '../@ui';
 import {
   Badge,
   Table,
@@ -46,12 +45,13 @@ export default function ProjectVoucherTable({ data }: Props) {
               return (
                 <TableRow key={key}>
                   <TableCell>
-                    <Link
-                      className="text-sm font-medium text-sky-600 hover:underline"
-                      to={`./vouchers/${voucher.id}`}
-                    >
-                      {voucher.voucherNumber}
-                    </Link>
+                    {voucher.isClosed ? (
+                      voucher.voucherNumber
+                    ) : (
+                      <LinkStyled to={`./vouchers/${voucher.id}`}>
+                        {voucher.voucherNumber}
+                      </LinkStyled>
+                    )}
                   </TableCell>
                   <TableCell className="w-96">
                     <div className="flex items-center text-sm">

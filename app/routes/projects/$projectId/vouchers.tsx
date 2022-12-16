@@ -39,6 +39,7 @@ function getFormData(formData: FormData) {
     "transactionDate",
     "updatedById",
     "projectId",
+    "code",
     "fundId",
   ];
   const [
@@ -48,6 +49,7 @@ function getFormData(formData: FormData) {
     transactionDate,
     updatedById,
     projectId,
+    code,
     fundId,
   ] = fields.map((field) => formData.get(field));
 
@@ -82,8 +84,9 @@ function getFormData(formData: FormData) {
       transactionDate,
       updatedById,
       projectId,
+      code,
       fundId,
-    } as unknown as ProjectVoucher,
+    } as unknown as ProjectVoucher & { code: string },
   };
 }
 
@@ -203,6 +206,7 @@ export default function VoucherPage() {
         <div className="disable hidden">
           <TextInput name="updatedById" required defaultValue={userId} />
           <TextInput name="projectId" required defaultValue={project.id} />
+          <TextInput name="code" required defaultValue={project.code} />
         </div>
         <div className="text-right">
           <Button type="submit" disabled={transition.state === "submitting"}>

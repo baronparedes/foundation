@@ -77,11 +77,12 @@ model ProjectVoucher {
   description     String   @default("")
   disbursedAmount Decimal
   consumedAmount  Decimal?
+  isClosed        Boolean?
   transactionDate DateTime
   updatedAt       DateTime @default(now())
 
   updatedBy   User   @relation(fields: [updatedById], references: [id])
-  updatedById String @unique
+  updatedById String
 
   project   Project @relation(fields: [projectId], references: [id])
   projectId String
