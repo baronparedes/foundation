@@ -88,6 +88,7 @@ export default function NewFundPage() {
             label="Code"
             error={actionData?.errors?.code}
             required
+            textTransform="uppercase"
           />
           <TextArea name="description" label="Description: " />
           <hr className="my-4" />

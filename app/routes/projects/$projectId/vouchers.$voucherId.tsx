@@ -26,15 +26,7 @@ export async function loader({ params, request }: LoaderArgs) {
 export default function VoucherDetails() {
   const { projectId, voucher } = useLoaderData<typeof loader>();
   const [itemizedAmount, setItemizedAmount] = useState(0);
-  const [voucherDetails, setVoucherDetails] = useState([
-    {
-      amount: 100,
-      category: "Test",
-      description: "descr",
-      supplierName: "supplier",
-      referenceNumber: "ref",
-    },
-  ] as AddVoucher[]);
+  const [voucherDetails, setVoucherDetails] = useState<AddVoucher[]>([]);
   const transition = useTransition();
   const navigate = useNavigate();
 

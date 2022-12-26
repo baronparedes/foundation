@@ -98,6 +98,7 @@ export function AddVoucherDetails({ onAdd: onAddDetail, maxAmount }: Props) {
             onChange={(e) => setSupplierName(e.currentTarget.value)}
           />
           <TextInput
+            textTransform="uppercase"
             name="referenceNumber"
             label="Reference Number"
             required

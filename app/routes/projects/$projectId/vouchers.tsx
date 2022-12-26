@@ -156,6 +156,7 @@ export default function VoucherPage() {
           name="voucherNumber"
           label="Voucher Number"
           error={actionData?.errors?.voucherNumber}
+          textTransform="uppercase"
           required
         />
         <TextInput

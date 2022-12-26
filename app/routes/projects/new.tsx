@@ -103,6 +103,7 @@ export default function NewProjectPage() {
             label="Code"
             error={actionData?.errors?.code}
             required
+            textTransform="uppercase"
           />
           <TextArea name="description" label="Description" />
           <TextArea
