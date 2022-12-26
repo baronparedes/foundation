@@ -11,7 +11,7 @@ import LabeledCurrency from '../../../components/LabeledCurrency';
 import VoucherDetailTable from '../../../components/tables/VoucherDetailTable';
 import {getProjectVoucher} from '../../../models/project-voucher.server';
 
-import type {AddVoucher} from '../../../components/forms/AddVoucherDetail';
+import type { AddVoucher } from "../../../components/forms/AddVoucherDetail";
 import type { LoaderArgs } from "@remix-run/server-runtime";
 export async function loader({ params, request }: LoaderArgs) {
   const { projectId, voucherId } = params;
@@ -46,14 +46,18 @@ export default function VoucherDetails() {
       }
       onCloseModal={() => navigate(`/projects/${projectId}`)}
     >
-      <div className="grid grid-cols-2 gap-2 text-center">
+      <div className="grid grid-cols-3 gap-3 text-center">
         <LabeledCurrency
-          label="original disbursed amount"
+          label="disbursed amount"
           value={Number(voucher.disbursedAmount)}
         />
         <LabeledCurrency
           label="itemized amount"
           value={Number(itemizedAmount)}
+        />
+        <LabeledCurrency
+          label="amount to be refunded"
+          value={Number(voucher.disbursedAmount) - Number(itemizedAmount)}
         />
       </div>
       <hr className="my-4" />
