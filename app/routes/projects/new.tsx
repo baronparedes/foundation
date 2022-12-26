@@ -94,26 +94,26 @@ export default function NewProjectPage() {
         >
           <TextInput
             name="name"
-            label="Name: "
+            label="Name"
             error={actionData?.errors?.name}
             required
           />
           <TextInput
             name="code"
-            label="Code: "
+            label="Code"
             error={actionData?.errors?.code}
             required
           />
-          <TextArea name="description" label="Description: " />
+          <TextArea name="description" label="Description" />
           <TextArea
             name="location"
-            label="Location: "
+            label="Location"
             error={actionData?.errors?.location}
             required
           />
           <TextInput
             name="estimatedCost"
-            label="Estimated Cost: "
+            label="Estimated Cost"
             error={actionData?.errors?.estimatedCost}
             type="number"
             required

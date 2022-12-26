@@ -11,6 +11,7 @@ import LabeledCurrency from '../../../components/LabeledCurrency';
 import VoucherDetailTable from '../../../components/tables/VoucherDetailTable';
 import {getProjectVoucher} from '../../../models/project-voucher.server';
 
+import type {AddVoucher} from '../../../components/forms/AddVoucherDetail';
 import type { LoaderArgs } from "@remix-run/server-runtime";
 export async function loader({ params, request }: LoaderArgs) {
   const { projectId, voucherId } = params;
@@ -29,13 +30,9 @@ export default function VoucherDetails() {
   const transition = useTransition();
   const navigate = useNavigate();
 
-  const handleOnAddDetail = (
-    description: string,
-    category: string,
-    amount: number
-  ) => {
-    setItemizedAmount(itemizedAmount + amount);
-    setVoucherDetails([...voucherDetails, {description, category, amount}])
+  const handleOnAddDetail = (details: AddVoucher) => {
+    setItemizedAmount(itemizedAmount + details.amount);
+    setVoucherDetails([...voucherDetails, { ...details }]);
   };
 
   return (
@@ -62,7 +59,7 @@ export default function VoucherDetails() {
       <hr className="my-4" />
       <div className="my-4 mx-4">
         <AddVoucherDetails
-          onAddDetail={handleOnAddDetail}
+          onAdd={handleOnAddDetail}
           maxAmount={Number(voucher.disbursedAmount) - itemizedAmount}
         />
       </div>

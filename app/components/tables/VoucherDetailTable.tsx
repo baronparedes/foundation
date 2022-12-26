@@ -10,14 +10,10 @@ import {
   TableRow,
 } from '../@windmill';
 
-type Data = {
-  description: string;
-  category: string;
-  amount: number;
-};
+import type { AddVoucher } from "../forms/AddVoucherDetail";
 
 type Props = {
-  data: Data[];
+  data: AddVoucher[];
 };
 
 export default function VoucherDetailTable({ data }: Props) {

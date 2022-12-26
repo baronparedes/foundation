@@ -32,11 +32,19 @@ export default function ProjectDetailsPage() {
   const { project, collectedFunds, disbursedFunds, projectVouchers } =
     useLoaderData<typeof loader>();
   const navigate = useNavigate();
+  const remainingFunds = Number(collectedFunds) - Number(disbursedFunds) * -1;
 
   return (
     <div className="w-full">
-      <h4 className="text-lg">{project.code}</h4>
-      <h3 className="text-2xl font-bold">{project.name}</h3>
+      <div className="grid grid-cols-2 gap-2">
+        <div>
+          <h4 className="text-lg">{project.code}</h4>
+          <h3 className="text-2xl font-bold">{project.name}</h3>
+        </div>
+        <div className="text-right">
+          <LabeledCurrency label="remaining funds" value={remainingFunds} />
+        </div>
+      </div>
       <hr className="my-4" />
       <p className="py-4">{project.description}</p>
       <p className="py-4">📍 {project.location}</p>

@@ -79,13 +79,13 @@ export default function NewFundPage() {
         >
           <TextInput
             name="name"
-            label="Name: "
+            label="Name"
             error={actionData?.errors?.name}
             required
           />
           <TextInput
             name="code"
-            label="Code: "
+            label="Code"
             error={actionData?.errors?.code}
             required
           />

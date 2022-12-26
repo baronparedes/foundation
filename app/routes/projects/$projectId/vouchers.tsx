@@ -154,13 +154,13 @@ export default function VoucherPage() {
       >
         <TextInput
           name="voucherNumber"
-          label="Voucher Number: "
+          label="Voucher Number"
           error={actionData?.errors?.voucherNumber}
           required
         />
         <TextInput
           name="disbursedAmount"
-          label="Amount to disburse: "
+          label="Amount to Disburse"
           error={actionData?.errors?.disbursedAmount}
           type="number"
           required
@@ -175,7 +175,7 @@ export default function VoucherPage() {
         />
         <TextInput
           name="transactionDate"
-          label="Transaction Date: "
+          label="Transaction Date"
           error={actionData?.errors?.transactionDate}
           required
           type="date"
@@ -183,7 +183,7 @@ export default function VoucherPage() {
         />
         <SelectInput
           name="fundId"
-          label="Fund: "
+          label="Fund"
           defaultValue={""}
           required
           error={actionData?.errors?.fundId}

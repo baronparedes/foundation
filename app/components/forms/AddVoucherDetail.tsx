@@ -8,22 +8,51 @@ import LabeledCurrency from '../LabeledCurrency';
 
 type Props = {
   maxAmount: number;
-  onAddDetail?: (description: string, category: string, amount: number) => void;
+  onAdd?: (details: AddVoucher) => void;
 };
 
-export function AddVoucherDetails({ onAddDetail, maxAmount }: Props) {
+export type AddVoucher = {
+  description: string;
+  category: string;
+  amount: number;
+  supplierName: string;
+  referenceNumber: string;
+  quantity?: number;
+};
+
+//TODO: Refactor to a better form implementation
+export function AddVoucherDetails({ onAdd: onAddDetail, maxAmount }: Props) {
   const [toggle, setToggle] = useState(false);
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState(0);
+  const [supplierName, setSupplierName] = useState("");
+  const [referenceNumber, setReferenceNumber] = useState("");
+  const [quantity, setQuantity] = useState<number>();
   const isValid =
-    description !== "" && category !== "" && amount > 0 && amount <= maxAmount;
+    supplierName !== "" &&
+    referenceNumber !== "" &&
+    description !== "" &&
+    category !== "" &&
+    amount > 0 &&
+    amount <= maxAmount;
 
   const handleOnAdd = () => {
-    onAddDetail && onAddDetail(description, category, amount);
+    onAddDetail &&
+      onAddDetail({
+        description,
+        category,
+        amount,
+        supplierName,
+        referenceNumber,
+        quantity,
+      });
     setToggle(false);
     setDescription("");
     setCategory("");
+    setReferenceNumber("");
+    setSupplierName("");
+    setQuantity(undefined);
     setAmount(0);
   };
 
@@ -62,22 +91,44 @@ export function AddVoucherDetails({ onAddDetail, maxAmount }: Props) {
           }}
         >
           <TextInput
+            name="supplierName"
+            label="Supplier Name"
+            required
+            value={supplierName}
+            onChange={(e) => setSupplierName(e.currentTarget.value)}
+          />
+          <TextInput
+            name="referenceNumber"
+            label="Reference Number"
+            required
+            value={referenceNumber}
+            onChange={(e) => setReferenceNumber(e.currentTarget.value)}
+          />
+          <TextInput
+            name="quantity"
+            label="Quantity"
+            type="number"
+            value={quantity}
+            onChange={(e) => setQuantity(Number(e.currentTarget.value))}
+          />
+          <hr className="my-4" />
+          <TextInput
             name="description"
-            label="Description : "
+            label="Description"
             required
             value={description}
             onChange={(e) => setDescription(e.currentTarget.value)}
           />
           <TextInput
             name="category"
-            label="Category: "
+            label="Category"
             required
             value={category}
             onChange={(e) => setCategory(e.currentTarget.value)}
           />
           <TextInput
             name="amount"
-            label="Amount: "
+            label="Amount"
             type="number"
             required
             value={amount}
