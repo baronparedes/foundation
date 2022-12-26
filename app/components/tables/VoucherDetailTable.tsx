@@ -25,6 +25,8 @@ export default function VoucherDetailTable({ data }: Props) {
             <TableCell>Description</TableCell>
             <TableCell>Category</TableCell>
             <TableCell>Amount</TableCell>
+            <TableCell>Supplier</TableCell>
+            <TableCell>Reference Number</TableCell>
           </tr>
         </TableHeader>
         <TableBody>
@@ -42,31 +44,19 @@ export default function VoucherDetailTable({ data }: Props) {
               return (
                 <TableRow key={key}>
                   <TableCell className="w-96">
-                    <div className="flex items-center text-sm">
-                      <div>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
-                          {d.description}
-                        </p>
-                      </div>
-                    </div>
+                    <p>{d.description}</p>
                   </TableCell>
-                  <TableCell>
-                    <div className="flex items-center text-sm">
-                      <div>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
-                          {d.category}
-                        </p>
-                      </div>
-                    </div>
-                  </TableCell>
+                  <TableCell>{d.category}</TableCell>
                   <TableCell>
                     <Badge
                       type={isNegative ? "danger" : "success"}
-                      className="currency text-sm"
+                      className="currency"
                     >
                       {formatCurrencyFixed(amount)}
                     </Badge>
                   </TableCell>
+                  <TableCell>{d.supplierName}</TableCell>
+                  <TableCell>{d.referenceNumber}</TableCell>
                 </TableRow>
               );
             })

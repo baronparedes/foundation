@@ -117,26 +117,26 @@ export default function CollectionsPage() {
       >
         <TextInput
           name="amount"
-          label="Amount: "
+          label="Amount"
           error={actionData?.errors?.amount}
           type="number"
           required
         />
         <TextArea
           name="description"
-          label="Description: "
+          label="Description"
           error={actionData?.errors?.description}
           required
         />
         <TextInput
           name="createdAt"
-          label="Transaction Date: "
+          label="Transaction Date"
           error={actionData?.errors?.amount}
           required
           type="date"
           defaultValue={today}
         />
-        <SelectInput name="projectId" label="Project?: " defaultValue={""}>
+        <SelectInput name="projectId" label="Project" defaultValue={""}>
           <option value={""}>Select a project</option>
           {projects.map((p) => {
             return (

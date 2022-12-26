@@ -3,18 +3,36 @@ import React, {Fragment} from 'react';
 import {Dialog, Transition} from '@headlessui/react';
 import {XIcon} from '@heroicons/react/solid';
 
+type Size = "sm" | "md" | "lg" | "xl";
+
 type Props = {
   onCloseModal?: () => void;
   isOpen: boolean;
   title: React.ReactNode;
   isStatic?: boolean;
+  size?: Size;
 };
+
+function getSize(size?: Size) {
+  switch (size) {
+    case "sm":
+      return "max-w-sm";
+    case "md":
+      return "max-w-lg";
+    case "xl":
+      return "max-w-6xl";
+    case "lg":
+    default:
+      return "max-w-2xl";
+  }
+}
 
 export default function DialogWithTransition({
   title,
   children,
   isStatic,
   isOpen,
+  size,
   onCloseModal,
 }: React.PropsWithChildren<Props>) {
   function handleOnClose() {
@@ -53,7 +71,11 @@ export default function DialogWithTransition({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel
+                className={`w-full ${getSize(
+                  size
+                )} transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all`}
+              >
                 <Dialog.Title
                   as="h3"
                   className="mb-6 text-lg font-medium leading-6 text-gray-900"
