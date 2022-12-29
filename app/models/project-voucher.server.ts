@@ -1,10 +1,15 @@
 import {prisma} from '~/db.server';
 
-import {Prisma, Project, ProjectVoucher} from '@prisma/client';
+import {Prisma} from '@prisma/client';
 
 import {createFundTransaction} from './fund-transaction.server';
 
-export type { ProjectVoucher } from "@prisma/client";
+import type {
+  Project,
+  ProjectVoucher,
+  ProjectVoucherDetail,
+} from "@prisma/client";
+export type { ProjectVoucher, ProjectVoucherDetail } from "@prisma/client";
 
 export type ProjectVoucherWithDetails = Prisma.PromiseReturnType<
   typeof getProjectVouchers
@@ -78,4 +83,28 @@ export async function createProjectVoucher({
   ]);
 
   return projectVoucher;
+}
+
+export async function saveProjectVoucherDetailDraft(
+  projectVoucherId: number,
+  details: Omit<ProjectVoucherDetail, "id">[]
+) {
+  const inserts = details.map((d) =>
+    prisma.projectVoucherDetail.create({
+      data: {
+        amount: new Prisma.Decimal(d.amount),
+        category: d.category,
+        description: d.description,
+        referenceNumber: d.referenceNumber,
+        supplierName: d.supplierName,
+        quantity: d.quantity ? new Prisma.Decimal(d.quantity) : null,
+        projectVoucherId,
+      },
+    })
+  );
+
+  await prisma.$transaction([
+    prisma.projectVoucherDetail.deleteMany({ where: { projectVoucherId } }),
+    ...inserts,
+  ]);
 }

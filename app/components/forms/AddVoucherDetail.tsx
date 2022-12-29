@@ -64,7 +64,7 @@ export function AddVoucherDetails({ onAdd: onAddDetail, maxAmount }: Props) {
             setToggle(true);
           }}
         >
-          Add
+          Add Details
         </Button>
       </div>
       <DialogWithTransition

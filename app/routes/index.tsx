@@ -175,7 +175,7 @@ function FormLogin() {
 
 export default function Index() {
   const user = useOptionalUser();
-  console.log(user);
+  console.info(user);
 
   return (
     <div className="flex min-h-screen items-center bg-gray-50 p-6 dark:bg-gray-900">

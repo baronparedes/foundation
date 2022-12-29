@@ -11,7 +11,6 @@ export function getProject({ id }: Pick<Project, "id">) {
 }
 
 export function getProjectsByUserId({ userId }: { userId: User["id"] }) {
-  console.log(userId);
   return prisma.project.findMany({
     // where: { userId },
     select: { id: true, name: true, code: true },

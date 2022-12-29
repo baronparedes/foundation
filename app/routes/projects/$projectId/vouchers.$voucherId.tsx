@@ -13,7 +13,8 @@ import {getProjectVoucher} from '../../../models/project-voucher.server';
 
 import type { AddVoucher } from "../../../components/forms/AddVoucherDetail";
 import type { LoaderArgs } from "@remix-run/server-runtime";
-export async function loader({ params, request }: LoaderArgs) {
+
+export async function loader({ params }: LoaderArgs) {
   const { projectId, voucherId } = params;
   const voucher = await getProjectVoucher({ id: Number(voucherId) });
 
@@ -70,32 +71,30 @@ export default function VoucherDetails() {
       </div>
       <VoucherDetailTable data={voucherDetails} />
       <hr className="my-4" />
-      {itemizedAmount > 0 && (
-        <div className="text-right">
-          <div className="my-2">
-            <small>
-              <i>
-                Note: Unitemized amount will be refunded to the fund this
-                disbursment came from.
-              </i>
-            </small>
-          </div>
-          <Button
-            type="submit"
-            disabled={transition.state === "submitting"}
-            onClick={(e) => {
-              if (
-                !confirm(
-                  "Unitemized amount will be refunded to the fund this disbursment came from."
-                )
-              )
-                e.preventDefault();
-            }}
-          >
-            Save and Close Voucher
-          </Button>
+      <div className="text-right">
+        <div className="my-2">
+          <small>
+            <i>
+              Note: Unitemized amount will be refunded to the fund this
+              disbursment came from.
+            </i>
+          </small>
         </div>
-      )}
+        <Button
+          type="submit"
+          disabled={transition.state === "submitting" || itemizedAmount === 0}
+          onClick={(e) => {
+            if (
+              !confirm(
+                "Unitemized amount will be refunded to the fund this disbursment came from."
+              )
+            )
+              e.preventDefault();
+          }}
+        >
+          Save and Close Voucher
+        </Button>
+      </div>
     </DialogWithTransition>
   );
 }
