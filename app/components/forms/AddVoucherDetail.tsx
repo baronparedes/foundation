@@ -2,17 +2,24 @@ import {useEffect, useState} from 'react';
 
 import {useFetcher} from '@remix-run/react';
 
-import {DialogWithTransition, LabeledCurrency, TextInput} from '../@ui';
+import {DialogWithTransition, LabeledCurrency, SelectInput, TextInput} from '../@ui';
 import {Button} from '../@windmill';
 
+import type { DetailCategoryWithChildren } from "../../models/detail-category.server";
 type Props = {
   projectVoucherId: number;
   userId: string;
   maxAmount: number;
+  categories: DetailCategoryWithChildren[];
 };
-export function AddVoucherDetails({ maxAmount, projectVoucherId, userId }: Props) {
+export function AddVoucherDetails({
+  maxAmount,
+  projectVoucherId,
+  userId,
+  categories,
+}: Props) {
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<number>();
   const [amount, setAmount] = useState(0);
   const [supplierName, setSupplierName] = useState("");
   const [referenceNumber, setReferenceNumber] = useState("");
@@ -22,7 +29,7 @@ export function AddVoucherDetails({ maxAmount, projectVoucherId, userId }: Props
     supplierName !== "" &&
     referenceNumber !== "" &&
     description !== "" &&
-    category !== "" &&
+    category &&
     amount > 0 &&
     amount <= maxAmount;
 
@@ -34,7 +41,7 @@ export function AddVoucherDetails({ maxAmount, projectVoucherId, userId }: Props
   function onResetForm() {
     setToggle(false);
     setDescription("");
-    setCategory("");
+    setCategory(undefined);
     setAmount(0);
     setSupplierName("");
     setReferenceNumber("");
@@ -44,6 +51,22 @@ export function AddVoucherDetails({ maxAmount, projectVoucherId, userId }: Props
   useEffect(() => {
     !isAdding && onResetForm();
   }, [isAdding]);
+
+  function renderOptionGroup(item: DetailCategoryWithChildren) {
+    if (item.children.length > 0) {
+      return (
+        <optgroup label={item.description}>
+          {item.children.map((c) => renderOptionGroup(c))}
+        </optgroup>
+      );
+    }
+
+    return (
+      <option key={item.id} value={item.id}>
+        {item.description}
+      </option>
+    );
+  }
 
   return (
     <>
@@ -82,6 +105,45 @@ export function AddVoucherDetails({ maxAmount, projectVoucherId, userId }: Props
             <TextInput name="updatedById" required defaultValue={userId} />
             <TextInput name="projectVoucherId" required defaultValue={projectVoucherId} />
           </div>
+
+          <TextInput
+            name="description"
+            label="Description"
+            required
+            value={description}
+            onChange={(e) => setDescription(e.currentTarget.value)}
+          />
+
+          <SelectInput
+            name="detailCategoryId"
+            label="Category"
+            defaultValue={""}
+            required
+            onChange={(e) => {
+              setCategory(Number(e.currentTarget.value));
+            }}
+          >
+            <option value={undefined}>Select a category</option>
+            {categories.map((c) => {
+              return renderOptionGroup(c);
+            })}
+          </SelectInput>
+          <TextInput
+            name="amount"
+            label="Amount"
+            type="number"
+            required
+            value={amount}
+            min={1}
+            max={maxAmount}
+            error={
+              amount > maxAmount
+                ? `should not exceed available amount of ${maxAmount}`
+                : undefined
+            }
+            onChange={(e) => setAmount(Number(e.currentTarget.value))}
+          />
+          <hr className="my-4" />
           <TextInput
             name="supplierName"
             label="Supplier Name"
@@ -103,36 +165,6 @@ export function AddVoucherDetails({ maxAmount, projectVoucherId, userId }: Props
             type="number"
             value={quantity}
             onChange={(e) => setQuantity(Number(e.currentTarget.value))}
-          />
-          <hr className="my-4" />
-          <TextInput
-            name="description"
-            label="Description"
-            required
-            value={description}
-            onChange={(e) => setDescription(e.currentTarget.value)}
-          />
-          <TextInput
-            name="category"
-            label="Category"
-            required
-            value={category}
-            onChange={(e) => setCategory(e.currentTarget.value)}
-          />
-          <TextInput
-            name="amount"
-            label="Amount"
-            type="number"
-            required
-            value={amount}
-            min={1}
-            max={maxAmount}
-            error={
-              amount > maxAmount
-                ? `should not exceed available amount of ${maxAmount}`
-                : undefined
-            }
-            onChange={(e) => setAmount(Number(e.currentTarget.value))}
           />
           <hr className="my-4" />
           <div className="text-right">

@@ -97,7 +97,6 @@ model ProjectVoucher {
 model ProjectVoucherDetail {
   id              Int      @id @default(autoincrement())
   description     String
-  category        String
   amount          Decimal
   supplierName    String
   referenceNumber String
@@ -105,10 +104,15 @@ model ProjectVoucherDetail {
 
   projectVoucher   ProjectVoucher @relation(fields: [projectVoucherId], references: [id])
   projectVoucherId Int
+
+  detailCategory   DetailCategory @relation(fields: [detailCategoryId], references: [id])
+  detailCategoryId Int
 }
 
 model DetailCategory {
   id          Int    @id @default(autoincrement())
   description String @unique
   parentId    Int?
+
+  ProjectVoucherDetail ProjectVoucherDetail[]
 }

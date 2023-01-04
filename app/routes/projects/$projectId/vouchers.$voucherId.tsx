@@ -8,10 +8,12 @@ import {DialogWithTransition, LabeledCurrency} from '../../../components/@ui';
 import {Button} from '../../../components/@windmill';
 import {AddVoucherDetails} from '../../../components/forms/AddVoucherDetail';
 import VoucherDetailTable from '../../../components/tables/VoucherDetailTable';
+import {getDetailCategories} from '../../../models/detail-category.server';
 import {
   addProjectVoucherDetail,
   deleteProjectVoucherDetail,
   getProjectVoucherDetails,
+  ProjectVoucherDetailslWithCategory,
 } from '../../../models/project-voucher-detail.server';
 import {closeProjectVoucher, getProjectVoucher} from '../../../models/project-voucher.server';
 import {requireUserId} from '../../../session.server';
@@ -26,11 +28,12 @@ export async function loader({ params, request }: LoaderArgs) {
   const voucherDetails = await getProjectVoucherDetails({
     id: Number(voucherId),
   });
+  const categories = await getDetailCategories();
 
   invariant(projectId, "project not found");
   invariant(voucher, "voucher not found");
 
-  return json({ projectId, voucher, userId, voucherDetails });
+  return json({ projectId, voucher, userId, voucherDetails, categories });
 }
 
 export async function action({ params, request }: ActionArgs) {
@@ -71,7 +74,8 @@ export async function action({ params, request }: ActionArgs) {
 }
 
 export default function VoucherDetails() {
-  const { projectId, voucher, userId, voucherDetails } = useLoaderData<typeof loader>();
+  const { projectId, voucher, userId, voucherDetails, categories } =
+    useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const transition = useTransition();
   const itemizedAmount = sum(voucherDetails.map((d) => Number(d.amount)));
@@ -121,11 +125,12 @@ export default function VoucherDetails() {
               projectVoucherId={voucher.id}
               userId={userId}
               maxAmount={remainingAmount}
+              categories={categories}
             />
           </div>
         )}
         <VoucherDetailTable
-          data={voucherDetails as unknown as ProjectVoucherDetail[]}
+          data={voucherDetails as unknown as ProjectVoucherDetailslWithCategory}
           projectVoucherId={voucher.id}
           userId={userId}
           isClosed={voucher.isClosed}

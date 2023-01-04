@@ -1,6 +1,7 @@
-import {XIcon} from '@heroicons/react/solid';
+import {TrashIcon} from '@heroicons/react/solid';
 import {Form, useFetcher} from '@remix-run/react';
 
+import {ProjectVoucherDetailslWithCategory} from '../../models/project-voucher-detail.server';
 import {formatCurrencyFixed} from '../../utils';
 import {TextInput} from '../@ui';
 import {
@@ -15,9 +16,8 @@ import {
   TableRow,
 } from '../@windmill';
 
-import type { ProjectVoucherDetail } from "@prisma/client";
 type Props = {
-  data: ProjectVoucherDetail[];
+  data: ProjectVoucherDetailslWithCategory;
   projectVoucherId: number;
   isClosed: boolean;
   userId: string;
@@ -59,7 +59,7 @@ export default function VoucherDetailTable({
                   <TableCell className="w-96">
                     <p>{d.description}</p>
                   </TableCell>
-                  <TableCell>{d.category}</TableCell>
+                  <TableCell>{d.detailCategory.description}</TableCell>
                   <TableCell>
                     <Badge type={isNegative ? "danger" : "success"} className="currency">
                       {formatCurrencyFixed(amount)}
@@ -117,14 +117,12 @@ function DeleteVoucherDetail({
           name="_action"
           value="delete"
           disabled={isDeleting}
-          layout="outline"
-          className="cursor-pointer"
+          className="cursor-pointer "
           size="small"
           type="submit"
           aria-label="delete"
         >
-          {projectVoucherDetailId}
-          <XIcon className="h-5 w-5 text-red-600 hover:text-red-800" />
+          <TrashIcon className="h-5 w-5" />
         </Button>
       </Form>
     </>
