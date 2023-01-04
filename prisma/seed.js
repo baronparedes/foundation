@@ -74,7 +74,7 @@ async function seedDetailCategories() {
 }
 
 async function seed() {
-  // await seedUsers();
+  await seedUsers();
   await seedDetailCategories();
   console.log(`Database has been seeded. 🌱`);
 }

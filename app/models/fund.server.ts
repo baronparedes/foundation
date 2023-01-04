@@ -1,4 +1,4 @@
-import {prisma} from '~/db.server';
+import { prisma } from "~/db.server";
 
 import type { Fund, Prisma } from "@prisma/client";
 export type { Fund } from "@prisma/client";

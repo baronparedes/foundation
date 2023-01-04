@@ -1,5 +1,5 @@
-import moment from 'moment';
-import invariant from 'tiny-invariant';
+import moment from "moment";
+import invariant from "tiny-invariant";
 
 import {
   Form,
@@ -7,16 +7,21 @@ import {
   useLoaderData,
   useNavigate,
   useTransition,
-} from '@remix-run/react';
-import {json, redirect} from '@remix-run/server-runtime';
+} from "@remix-run/react";
+import { json, redirect } from "@remix-run/server-runtime";
 
-import {DialogWithTransition, SelectInput, TextArea, TextInput} from '../../../components/@ui';
-import {Button} from '../../../components/@windmill';
-import {createFundTransaction} from '../../../models/fund-transaction.server';
-import {getFund} from '../../../models/fund.server';
-import {getProjectsByUserId} from '../../../models/project.server';
-import {requireUserId} from '../../../session.server';
-import {validateRequiredString} from '../../../utils';
+import {
+  DialogWithTransition,
+  SelectInput,
+  TextArea,
+  TextInput,
+} from "../../../components/@ui";
+import { Button } from "../../../components/@windmill";
+import { createFundTransaction } from "../../../models/fund-transaction.server";
+import { getFund } from "../../../models/fund.server";
+import { getProjectsByUserId } from "../../../models/project.server";
+import { requireUserId } from "../../../session.server";
+import { validateRequiredString } from "../../../utils";
 
 import type { FundTransaction } from "@prisma/client";
 import type { LoaderArgs, ActionArgs } from "@remix-run/server-runtime";

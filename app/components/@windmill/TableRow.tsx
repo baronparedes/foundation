@@ -1,7 +1,7 @@
-import classNames from 'classnames';
-import React from 'react';
+import classNames from "classnames";
+import React from "react";
 
-import theme from './theme';
+import theme from "./theme";
 
 interface Props extends React.HTMLAttributes<HTMLTableRowElement> {}
 

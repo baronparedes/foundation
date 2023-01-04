@@ -1,6 +1,6 @@
 import type { DetailCategory } from "@prisma/client";
 
-import {prisma} from '../db.server';
+import { prisma } from "../db.server";
 
 export type DetailCategoryWithChildren = DetailCategory & {
   children: DetailCategoryWithChildren[];

@@ -1,7 +1,7 @@
-import classNames from 'classnames';
-import React from 'react';
+import classNames from "classnames";
+import React from "react";
 
-import theme from './theme';
+import theme from "./theme";
 
 import type { ReactNode } from "react";
 type IconType =
@@ -66,10 +66,7 @@ export interface ButtonAsOtherProps
   tag: string;
 }
 
-export type ButtonProps =
-  | ButtonAsButtonProps
-  | ButtonAsAnchorProps
-  | ButtonAsOtherProps;
+export type ButtonProps = ButtonAsButtonProps | ButtonAsAnchorProps | ButtonAsOtherProps;
 
 type Ref = ReactNode | HTMLElement | string;
 
@@ -159,14 +156,8 @@ const Button = React.forwardRef<Ref, ButtonProps>(function Button(props, ref) {
           className
         );
 
-  const iconLeftStyles = classNames(
-    iconStyle,
-    children ? button.icon.left : ""
-  );
-  const iconRightStyles = classNames(
-    iconStyle,
-    children ? button.icon.right : ""
-  );
+  const iconLeftStyles = classNames(iconStyle, children ? button.icon.left : "");
+  const iconRightStyles = classNames(iconStyle, children ? button.icon.right : "");
 
   return React.createElement(
     tag,

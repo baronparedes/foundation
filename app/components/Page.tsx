@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
 
-import {Transition} from '@headlessui/react';
-import {Form, NavLink} from '@remix-run/react';
+import { Transition } from "@headlessui/react";
+import { Form, NavLink } from "@remix-run/react";
 
-import {useUser} from '../utils';
-import {Button} from './@windmill';
+import { useUser } from "../utils";
+import { Button } from "./@windmill";
 
 type Props = {
   currentPage: string;
@@ -15,10 +15,7 @@ const PAGES = [
   { label: "Funds", route: "/funds" },
 ];
 
-export default function Page({
-  children,
-  currentPage,
-}: React.PropsWithChildren<Props>) {
+export default function Page({ children, currentPage }: React.PropsWithChildren<Props>) {
   const user = useUser();
   const [isOpen, setIsOpen] = useState(false);
   return (

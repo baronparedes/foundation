@@ -1,4 +1,4 @@
-import {formatCurrencyFixed} from '../../utils';
+import { formatCurrencyFixed } from "../../utils";
 import {
   Badge,
   Table,
@@ -8,7 +8,7 @@ import {
   TableFooter,
   TableHeader,
   TableRow,
-} from '../@windmill';
+} from "../@windmill";
 
 import type { FundWithTransaction } from "../../models/fund.server";
 type Props = {

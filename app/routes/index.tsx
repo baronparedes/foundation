@@ -1,19 +1,15 @@
-import React from 'react';
-import {safeRedirect, useOptionalUser, validateEmail} from '~/utils';
+import React from "react";
+import { safeRedirect, useOptionalUser, validateEmail } from "~/utils";
 
-import {Form, Link, useActionData, useSearchParams} from '@remix-run/react';
-import {json, redirect} from '@remix-run/server-runtime';
+import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
+import { json, redirect } from "@remix-run/server-runtime";
 
-import ImageLight from '../assets/img/login-office.jpeg';
-import {Button} from '../components/@windmill';
-import {verifyLogin} from '../models/user.server';
-import {createUserSession, getUserId} from '../session.server';
+import ImageLight from "../assets/img/login-office.jpeg";
+import { Button } from "../components/@windmill";
+import { verifyLogin } from "../models/user.server";
+import { createUserSession, getUserId } from "../session.server";
 
-import type {
-  ActionArgs,
-  LoaderArgs,
-  MetaFunction,
-} from "@remix-run/server-runtime";
+import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/server-runtime";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
@@ -29,10 +25,7 @@ export async function action({ request }: ActionArgs) {
   const remember = formData.get("remember");
 
   if (!validateEmail(email)) {
-    return json(
-      { errors: { email: "Email is invalid", password: null } },
-      { status: 400 }
-    );
+    return json({ errors: { email: "Email is invalid", password: null } }, { status: 400 });
   }
 
   if (typeof password !== "string" || password.length === 0) {
@@ -82,10 +75,7 @@ function FormLogin() {
   return (
     <Form method="post" className="space-y-6">
       <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium text-gray-700"
-        >
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
           Email address
         </label>
         <div className="mt-1">
@@ -110,10 +100,7 @@ function FormLogin() {
       </div>
 
       <div>
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium text-gray-700"
-        >
+        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
           Password
         </label>
         <div className="mt-1">
@@ -149,10 +136,7 @@ function FormLogin() {
             type="checkbox"
             className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
           />
-          <label
-            htmlFor="remember"
-            className="ml-2 block text-sm text-gray-900"
-          >
+          <label htmlFor="remember" className="ml-2 block text-sm text-gray-900">
             Remember me
           </label>
         </div>

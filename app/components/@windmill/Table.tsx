@@ -1,12 +1,8 @@
-import React from 'react';
+import React from "react";
 
-export interface TableProps
-  extends React.TableHTMLAttributes<HTMLTableElement> {}
+export interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> {}
 
-const Table = React.forwardRef<HTMLTableElement, TableProps>(function Table(
-  props,
-  ref
-) {
+const Table = React.forwardRef<HTMLTableElement, TableProps>(function Table(props, ref) {
   const { children, ...other } = props;
   return (
     <div className="w-full overflow-x-auto">

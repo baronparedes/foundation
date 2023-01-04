@@ -1,9 +1,9 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from "react";
 
-import {useFetcher} from '@remix-run/react';
+import { useFetcher } from "@remix-run/react";
 
-import {DialogWithTransition, LabeledCurrency, SelectInput, TextInput} from '../@ui';
-import {Button} from '../@windmill';
+import { DialogWithTransition, LabeledCurrency, SelectInput, TextInput } from "../@ui";
+import { Button } from "../@windmill";
 
 import type { DetailCategoryWithChildren } from "../../models/detail-category.server";
 type Props = {

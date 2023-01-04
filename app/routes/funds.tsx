@@ -1,11 +1,11 @@
-import {DocumentIcon} from '@heroicons/react/solid';
-import {Link, NavLink, Outlet, useLoaderData} from '@remix-run/react';
-import {json} from '@remix-run/server-runtime';
+import { DocumentIcon } from "@heroicons/react/solid";
+import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import { json } from "@remix-run/server-runtime";
 
-import {LabeledCurrency, RoundIcon} from '../components/@ui';
-import {Card, CardBody} from '../components/@windmill';
-import Page from '../components/Page';
-import {getFunds} from '../models/fund.server';
+import { LabeledCurrency, RoundIcon } from "../components/@ui";
+import { Card, CardBody } from "../components/@windmill";
+import Page from "../components/Page";
+import { getFunds } from "../models/fund.server";
 
 export async function loader() {
   const funds = await getFunds();
@@ -19,10 +19,7 @@ export default function FundsPage() {
     <Page currentPage="Funds">
       <div className="py-4">
         <div className="flex-none">
-          <Link
-            to="new"
-            className="block p-4 text-xl text-blue-500 hover:bg-sky-100"
-          >
+          <Link to="new" className="block p-4 text-xl text-blue-500 hover:bg-sky-100">
             + Wallet
           </Link>
           {data.funds.length === 0 ? (
@@ -38,10 +35,7 @@ export default function FundsPage() {
                         <p className="mb-2 text-lg font-medium text-gray-600">
                           {fund.name}
                         </p>
-                        <LabeledCurrency
-                          label="balance"
-                          value={Number(fund.balance)}
-                        />
+                        <LabeledCurrency label="balance" value={Number(fund.balance)} />
                       </div>
                     </CardBody>
                   </NavLink>

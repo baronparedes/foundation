@@ -1,5 +1,5 @@
-import moment from 'moment';
-import invariant from 'tiny-invariant';
+import moment from "moment";
+import invariant from "tiny-invariant";
 
 import {
   Form,
@@ -8,8 +8,8 @@ import {
   useNavigate,
   useParams,
   useTransition,
-} from '@remix-run/react';
-import {ActionArgs, json, redirect} from '@remix-run/server-runtime';
+} from "@remix-run/react";
+import { json, redirect } from "@remix-run/server-runtime";
 
 import {
   DialogWithTransition,
@@ -17,17 +17,15 @@ import {
   SelectInput,
   TextArea,
   TextInput,
-} from '../../../components/@ui';
-import {Button} from '../../../components/@windmill';
-import {
-  FundTransaction,
-  transferFundTransaction,
-} from '../../../models/fund-transaction.server';
-import {getFund, getFunds} from '../../../models/fund.server';
-import {requireUserId} from '../../../session.server';
-import {validateRequiredString} from '../../../utils';
+} from "../../../components/@ui";
+import { Button } from "../../../components/@windmill";
+import { transferFundTransaction } from "../../../models/fund-transaction.server";
+import { getFund, getFunds } from "../../../models/fund.server";
+import { requireUserId } from "../../../session.server";
+import { validateRequiredString } from "../../../utils";
 
-import type { LoaderArgs } from "@remix-run/server-runtime";
+import type { FundTransaction } from "../../../models/fund-transaction.server";
+import type { LoaderArgs, ActionArgs } from "@remix-run/server-runtime";
 type FormErrors = {
   amount?: string;
   description?: string;

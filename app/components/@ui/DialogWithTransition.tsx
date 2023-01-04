@@ -1,7 +1,7 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from "react";
 
-import {Dialog, Transition} from '@headlessui/react';
-import {XIcon} from '@heroicons/react/solid';
+import { Dialog, Transition } from "@headlessui/react";
+import { XIcon } from "@heroicons/react/solid";
 
 type Size = "sm" | "md" | "lg" | "xl";
 

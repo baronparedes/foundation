@@ -1,11 +1,11 @@
 import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
-import * as React from 'react';
-import {createUser, getUserByEmail} from '~/models/user.server';
-import {createUserSession, getUserId} from '~/session.server';
-import {safeRedirect, validateEmail} from '~/utils';
+import * as React from "react";
+import { createUser, getUserByEmail } from "~/models/user.server";
+import { createUserSession, getUserId } from "~/session.server";
+import { safeRedirect, validateEmail } from "~/utils";
 
-import {json, redirect} from '@remix-run/node';
-import {Form, Link, useActionData, useSearchParams} from '@remix-run/react';
+import { json, redirect } from "@remix-run/node";
+import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
@@ -20,10 +20,7 @@ export async function action({ request }: ActionArgs) {
   const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
 
   if (!validateEmail(email)) {
-    return json(
-      { errors: { email: "Email is invalid", password: null } },
-      { status: 400 }
-    );
+    return json({ errors: { email: "Email is invalid", password: null } }, { status: 400 });
   }
 
   if (typeof password !== "string" || password.length === 0) {
@@ -89,10 +86,7 @@ export default function Join() {
       <div className="mx-auto w-full max-w-md px-8">
         <Form method="post" className="space-y-6">
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email address
             </label>
             <div className="mt-1">
@@ -117,10 +111,7 @@ export default function Join() {
           </div>
 
           <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
             </label>
             <div className="mt-1">

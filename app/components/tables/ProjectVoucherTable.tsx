@@ -1,7 +1,7 @@
-import {LockClosedIcon, LockOpenIcon} from '@heroicons/react/solid';
+import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/solid";
 
-import {formatCurrencyFixed} from '../../utils';
-import {LinkStyled} from '../@ui';
+import { formatCurrencyFixed } from "../../utils";
+import { LinkStyled } from "../@ui";
 import {
   Badge,
   Table,
@@ -11,7 +11,7 @@ import {
   TableFooter,
   TableHeader,
   TableRow,
-} from '../@windmill';
+} from "../@windmill";
 
 import type { ProjectVoucherWithDetails } from "../../models/project-voucher.server";
 type Props = {

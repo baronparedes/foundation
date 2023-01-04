@@ -1,7 +1,7 @@
-import classNames from 'classnames';
-import React from 'react';
+import classNames from "classnames";
+import React from "react";
 
-import theme from './theme';
+import theme from "./theme";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   /**
@@ -10,10 +10,7 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   type?: "success" | "danger" | "warning" | "neutral" | "primary";
 }
 
-const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(function Badge(
-  props,
-  ref
-) {
+const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(function Badge(props, ref) {
   const { className, children, type = "primary", ...other } = props;
 
   const { badge } = theme;

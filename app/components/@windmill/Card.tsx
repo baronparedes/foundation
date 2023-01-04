@@ -1,7 +1,7 @@
-import classNames from 'classnames';
-import React from 'react';
+import classNames from "classnames";
+import React from "react";
 
-import theme from './theme';
+import theme from "./theme";
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -10,10 +10,7 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   colored?: boolean;
 }
 
-const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
-  props,
-  ref
-) {
+const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(props, ref) {
   const { className, children, colored = false, ...other } = props;
   const { card } = theme;
 

@@ -7,13 +7,7 @@ type Props = React.HTMLProps<HTMLInputElement> & {
   textTransform?: TextTransform;
 };
 
-export default function TextInput({
-  error,
-  name,
-  label,
-  textTransform,
-  ...rest
-}: Props) {
+export default function TextInput({ error, name, label, textTransform, ...rest }: Props) {
   return (
     <div>
       <label className="flex w-full flex-col gap-1">

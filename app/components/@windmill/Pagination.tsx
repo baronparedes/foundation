@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 
-import Button from './Button';
-import theme from './theme';
+import Button from "./Button";
+import theme from "./theme";
 
 import type { ButtonAsButtonProps } from "./Button";
 const PrevIcon: React.FC = function PrevIcon(props) {
@@ -32,23 +32,26 @@ interface NavigationButtonProps extends ButtonAsButtonProps {
   directionIcon: "prev" | "next";
 }
 
-export const NavigationButton: React.FC<NavigationButtonProps> =
-  function NavigationButton({ onClick, disabled, directionIcon }) {
-    const ariaLabel = directionIcon === "prev" ? "Previous" : "Next";
+export const NavigationButton: React.FC<NavigationButtonProps> = function NavigationButton({
+  onClick,
+  disabled,
+  directionIcon,
+}) {
+  const ariaLabel = directionIcon === "prev" ? "Previous" : "Next";
 
-    const icon = directionIcon === "prev" ? PrevIcon : NextIcon;
+  const icon = directionIcon === "prev" ? PrevIcon : NextIcon;
 
-    return (
-      <Button
-        size="small"
-        layout="link"
-        icon={icon}
-        onClick={onClick}
-        disabled={disabled}
-        aria-label={ariaLabel}
-      />
-    );
-  };
+  return (
+    <Button
+      size="small"
+      layout="link"
+      icon={icon}
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={ariaLabel}
+    />
+  );
+};
 
 interface PageButtonProps extends ButtonAsButtonProps {
   /**
@@ -67,11 +70,7 @@ export const PageButton: React.FC<PageButtonProps> = function PageButton({
   onClick,
 }) {
   return (
-    <Button
-      size="pagination"
-      layout={isActive ? "primary" : "link"}
-      onClick={onClick}
-    >
+    <Button size="pagination" layout={isActive ? "primary" : "link"} onClick={onClick}>
       {page}
     </Button>
   );
@@ -100,17 +99,8 @@ export interface PaginationProps {
 
 type Ref = HTMLDivElement;
 
-const Pagination = React.forwardRef<Ref, PaginationProps>(function Pagination(
-  props,
-  ref
-) {
-  const {
-    totalResults,
-    resultsPerPage = 10,
-    label,
-    onChange,
-    ...other
-  } = props;
+const Pagination = React.forwardRef<Ref, PaginationProps>(function Pagination(props, ref) {
+  const { totalResults, resultsPerPage = 10, label, onChange, ...other } = props;
   const [pages, setPages] = useState<(number | string)[]>([]);
   const [activePage, setActivePage] = useState(1);
 
@@ -150,15 +140,7 @@ const Pagination = React.forwardRef<Ref, PaginationProps>(function Pagination(
       setPages([1, 2, 3, 4, 5, "...", TOTAL_PAGES]);
     } else if (activePage >= 5 && activePage < TOTAL_PAGES - 3) {
       // #2 active page >= 5 && < TOTAL_PAGES - 3
-      setPages([
-        1,
-        "...",
-        activePage - 1,
-        activePage,
-        activePage + 1,
-        "...",
-        TOTAL_PAGES,
-      ]);
+      setPages([1, "...", activePage - 1, activePage, activePage + 1, "...", TOTAL_PAGES]);
     } else {
       // #3 active page >= TOTAL_PAGES - 3 -> show last
       setPages([

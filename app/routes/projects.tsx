@@ -1,11 +1,11 @@
 import type { LoaderArgs } from "@remix-run/node";
-import {requireUserId} from '~/session.server';
+import { requireUserId } from "~/session.server";
 
-import {json} from '@remix-run/node';
-import {Link, NavLink, Outlet, useLoaderData} from '@remix-run/react';
+import { json } from "@remix-run/node";
+import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
-import Page from '../components/Page';
-import {getProjectsByUserId} from '../models/project.server';
+import Page from "../components/Page";
+import { getProjectsByUserId } from "../models/project.server";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await requireUserId(request);
@@ -20,10 +20,7 @@ export default function ProjectsPage() {
     <Page currentPage="Projects">
       <div className="sm:py-4 md:flex">
         <div className="flex-none">
-          <Link
-            to="new"
-            className="block p-4 text-xl text-blue-500 hover:bg-sky-100"
-          >
+          <Link to="new" className="block p-4 text-xl text-blue-500 hover:bg-sky-100">
             + Project
           </Link>
           {data.projects.length === 0 ? (
@@ -34,9 +31,7 @@ export default function ProjectsPage() {
                 <li key={project.id}>
                   <NavLink
                     className={({ isActive }) =>
-                      `block p-4 text-xl hover:bg-sky-100 ${
-                        isActive ? "bg-white" : ""
-                      }`
+                      `block p-4 text-xl hover:bg-sky-100 ${isActive ? "bg-white" : ""}`
                     }
                     to={project.id}
                   >

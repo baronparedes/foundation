@@ -1,10 +1,10 @@
-import {Form, useActionData, useNavigate, useTransition} from '@remix-run/react';
-import {json, redirect} from '@remix-run/server-runtime';
+import { Form, useActionData, useNavigate, useTransition } from "@remix-run/react";
+import { json, redirect } from "@remix-run/server-runtime";
 
-import {DialogWithTransition, TextArea, TextInput} from '../../components/@ui';
-import {Button} from '../../components/@windmill';
-import {createFund} from '../../models/fund.server';
-import {validateRequiredString} from '../../utils';
+import { DialogWithTransition, TextArea, TextInput } from "../../components/@ui";
+import { Button } from "../../components/@windmill";
+import { createFund } from "../../models/fund.server";
+import { validateRequiredString } from "../../utils";
 
 import type { Fund } from "../../models/fund.server";
 import type { ActionArgs } from "@remix-run/server-runtime";

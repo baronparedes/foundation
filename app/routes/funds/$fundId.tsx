@@ -1,13 +1,13 @@
-import invariant from 'tiny-invariant';
-import {getFund} from '~/models/fund.server';
+import invariant from "tiny-invariant";
+import { getFund } from "~/models/fund.server";
 
-import {json} from '@remix-run/node';
-import {Outlet, useCatch, useLoaderData, useNavigate} from '@remix-run/react';
+import { json } from "@remix-run/node";
+import { Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
 
-import {LabeledCurrency} from '../../components/@ui';
-import {Button} from '../../components/@windmill';
-import FundTransactionTable from '../../components/tables/FundTransactionTable';
-import {sum} from '../../utils';
+import { LabeledCurrency } from "../../components/@ui";
+import { Button } from "../../components/@windmill";
+import FundTransactionTable from "../../components/tables/FundTransactionTable";
+import { sum } from "../../utils";
 
 import type { LoaderArgs } from "@remix-run/node";
 import type { FundWithTransaction } from "~/models/fund.server";
@@ -42,9 +42,7 @@ export default function FundDetailsPage() {
       <Outlet />
       <hr className="my-4" />
       <div>
-        <FundTransactionTable
-          data={data.fund as unknown as FundWithTransaction}
-        />
+        <FundTransactionTable data={data.fund as unknown as FundWithTransaction} />
       </div>
     </div>
   );
