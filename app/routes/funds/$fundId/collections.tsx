@@ -28,16 +28,8 @@ type FormErrors = {
 
 function getFormData(formData: FormData) {
   const errors: FormErrors = {};
-  const fields = [
-    "amount",
-    "description",
-    "fundId",
-    "projectId",
-    "createdById",
-    "createdAt",
-  ];
-  const [amount, description, fundId, projectId, createdById, createdAt] =
-    fields.map((field) => formData.get(field));
+  const { amount, description, fundId, projectId, createdById, createdAt } =
+    Object.fromEntries(formData);
 
   let hasErrors = false;
   if (!validateRequiredString(description)) {

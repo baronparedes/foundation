@@ -18,10 +18,7 @@ type FormErrors = {
 
 function getFormData(formData: FormData) {
   const errors: FormErrors = {};
-  const fields = ["name", "code", "description", "location", "estimatedCost"];
-  const [name, code, description, location, estimatedCost] = fields.map(
-    (field) => formData.get(field)
-  );
+  const { name, code, description, location, estimatedCost } = Object.fromEntries(formData);
 
   let hasErrors = false;
   if (!validateRequiredString(name)) {
@@ -92,12 +89,7 @@ export default function NewProjectPage() {
             width: "100%",
           }}
         >
-          <TextInput
-            name="name"
-            label="Name"
-            error={actionData?.errors?.name}
-            required
-          />
+          <TextInput name="name" label="Name" error={actionData?.errors?.name} required />
           <TextInput
             name="code"
             label="Code"

@@ -32,17 +32,7 @@ type FormErrors = {
 
 function getFormData(formData: FormData) {
   const errors: FormErrors = {};
-  const fields = [
-    "voucherNumber",
-    "description",
-    "disbursedAmount",
-    "transactionDate",
-    "updatedById",
-    "projectId",
-    "code",
-    "fundId",
-  ];
-  const [
+  const {
     voucherNumber,
     description,
     disbursedAmount,
@@ -51,7 +41,7 @@ function getFormData(formData: FormData) {
     projectId,
     code,
     fundId,
-  ] = fields.map((field) => formData.get(field));
+  } = Object.fromEntries(formData);
 
   let hasErrors = false;
   if (!validateRequiredString(description)) {
@@ -98,11 +88,11 @@ export async function action({ params, request }: ActionArgs) {
 
   if (errors) return json({ errors }, { status: 400 });
 
-  await createProjectVoucher({
+  const newVoucher = await createProjectVoucher({
     ...data,
   });
 
-  return redirect(`/projects/${params.projectId}`);
+  return redirect(`/projects/${params.projectId}/vouchers/${newVoucher.id}`);
 }
 
 export async function loader({ params, request }: LoaderArgs) {
@@ -130,9 +120,7 @@ export default function VoucherPage() {
 
   function handleOnSelectFund(e: React.FormEvent<HTMLSelectElement>) {
     const index = e.currentTarget.selectedIndex;
-    const optionElement = e.currentTarget.childNodes[
-      index
-    ] as HTMLOptionElement;
+    const optionElement = e.currentTarget.childNodes[index] as HTMLOptionElement;
     const dataBalance = optionElement.dataset.balance;
     setMaxBalance(Number(dataBalance) ?? 0);
   }

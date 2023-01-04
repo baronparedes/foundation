@@ -16,8 +16,7 @@ type FormErrors = {
 
 function getFormData(formData: FormData) {
   const errors: FormErrors = {};
-  const fields = ["name", "code", "description"];
-  const [name, code, description] = fields.map((field) => formData.get(field));
+  const { name, code, description } = Object.fromEntries(formData);
 
   let hasErrors = false;
   if (!validateRequiredString(name)) {
@@ -77,12 +76,7 @@ export default function NewFundPage() {
             width: "100%",
           }}
         >
-          <TextInput
-            name="name"
-            label="Name"
-            error={actionData?.errors?.name}
-            required
-          />
+          <TextInput name="name" label="Name" error={actionData?.errors?.name} required />
           <TextInput
             name="code"
             label="Code"
