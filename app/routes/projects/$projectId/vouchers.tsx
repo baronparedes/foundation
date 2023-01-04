@@ -52,8 +52,12 @@ function getFormData(formData: FormData) {
     errors.disbursedAmount = "Amount is required";
     hasErrors = true;
   }
+  if (Number(disbursedAmount) === 0) {
+    errors.disbursedAmount = "Amount cannot be zero";
+    hasErrors = true;
+  }
   if (!validateRequiredString(fundId)) {
-    errors.disbursedAmount = "Fund is required";
+    errors.fundId = "Fund is required";
     hasErrors = true;
   }
   if (!validateRequiredString(voucherNumber)) {
@@ -154,7 +158,6 @@ export default function VoucherPage() {
           type="number"
           required
           max={maxBalance}
-          min={1}
         />
         <TextArea
           name="description"
