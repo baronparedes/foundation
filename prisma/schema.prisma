@@ -77,8 +77,8 @@ model ProjectVoucher {
   description     String   @default("")
   disbursedAmount Decimal
   consumedAmount  Decimal?
-  isClosed        Boolean?
-  isDeleted       Boolean?
+  isClosed        Boolean  @default(false)
+  isDeleted       Boolean  @default(false)
   transactionDate DateTime
   updatedAt       DateTime @default(now())
 

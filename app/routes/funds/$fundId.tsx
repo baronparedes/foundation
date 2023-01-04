@@ -4,14 +4,13 @@ import {getFund} from '~/models/fund.server';
 import {json} from '@remix-run/node';
 import {Outlet, useCatch, useLoaderData, useNavigate} from '@remix-run/react';
 
+import {LabeledCurrency} from '../../components/@ui';
 import {Button} from '../../components/@windmill';
-import LabeledCurrency from '../../components/LabeledCurrency';
 import FundTransactionTable from '../../components/tables/FundTransactionTable';
 import {sum} from '../../utils';
 
 import type { LoaderArgs } from "@remix-run/node";
 import type { FundWithTransaction } from "~/models/fund.server";
-
 export async function loader({ params }: LoaderArgs) {
   invariant(params.fundId, "fund not found");
 

@@ -4,8 +4,8 @@ import {getProject} from '~/models/project.server';
 import {json} from '@remix-run/node';
 import {Outlet, useCatch, useLoaderData, useNavigate} from '@remix-run/react';
 
+import {LabeledCurrency} from '../../components/@ui';
 import {Button} from '../../components/@windmill';
-import LabeledCurrency from '../../components/LabeledCurrency';
 import ProjectVoucherTable from '../../components/tables/ProjectVoucherTable';
 import {getProjectFundDetails} from '../../models/fund-transaction.server';
 import {getProjectVouchers} from '../../models/project-voucher.server';

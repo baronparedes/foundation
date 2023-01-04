@@ -4,25 +4,21 @@ import {Prisma} from '@prisma/client';
 
 import {createFundTransaction} from './fund-transaction.server';
 
-import type {
-  Project,
-  ProjectVoucher,
-  ProjectVoucherDetail,
-} from "@prisma/client";
+import type { Project, ProjectVoucher } from "@prisma/client";
 export type { ProjectVoucher, ProjectVoucherDetail } from "@prisma/client";
 
-export type ProjectVoucherWithDetails = Prisma.PromiseReturnType<
-  typeof getProjectVouchers
->;
+export type ProjectVoucherWithDetails = Prisma.PromiseReturnType<typeof getProjectVouchers>;
 
 export function getProjectVoucher({ id }: Pick<ProjectVoucher, "id">) {
-  return prisma.projectVoucher.findFirst({ where: { id } });
+  return prisma.projectVoucher.findFirst({
+    where: { id },
+  });
 }
 
 export function getProjectVouchers({ id }: Pick<Project, "id">) {
   return prisma.projectVoucher.findMany({
-    where: { projectId: id },
-    orderBy: { transactionDate: "desc" },
+    where: { projectId: id, isDeleted: false },
+    orderBy: { transactionDate: "asc" },
     include: {
       fund: {
         select: {
@@ -85,26 +81,56 @@ export async function createProjectVoucher({
   return projectVoucher;
 }
 
-export async function saveProjectVoucherDetailDraft(
+export async function closeProjectVoucher(
   projectVoucherId: number,
-  details: Omit<ProjectVoucherDetail, "id">[]
+  fundId: string,
+  updatedById: string
 ) {
-  const inserts = details.map((d) =>
-    prisma.projectVoucherDetail.create({
-      data: {
-        amount: new Prisma.Decimal(d.amount),
-        category: d.category,
-        description: d.description,
-        referenceNumber: d.referenceNumber,
-        supplierName: d.supplierName,
-        quantity: d.quantity ? new Prisma.Decimal(d.quantity) : null,
-        projectVoucherId,
-      },
-    })
-  );
+  const projectVoucher = await prisma.projectVoucher.findFirstOrThrow({
+    where: {
+      id: projectVoucherId,
+      OR: [{ isClosed: { not: true } }, { isDeleted: { not: true } }],
+    },
+  });
+
+  if (projectVoucher.isClosed || projectVoucher.isDeleted) {
+    console.log("is deleted");
+  }
+
+  const closedConsumedAmount = await prisma.projectVoucherDetail.aggregate({
+    where: { projectVoucherId },
+    _sum: {
+      amount: true,
+    },
+  });
+
+  const refundAmount =
+    Number(projectVoucher.disbursedAmount) - Number(closedConsumedAmount._sum.amount);
+
+  const isDeleted = refundAmount === Number(projectVoucher.disbursedAmount);
 
   await prisma.$transaction([
-    prisma.projectVoucherDetail.deleteMany({ where: { projectVoucherId } }),
-    ...inserts,
+    prisma.projectVoucher.update({
+      where: {
+        id: projectVoucherId,
+      },
+      data: {
+        consumedAmount: closedConsumedAmount._sum.amount,
+        isClosed: true,
+        isDeleted,
+        updatedById,
+        updatedAt: new Date(),
+      },
+    }),
+    createFundTransaction({
+      amount: new Prisma.Decimal(refundAmount),
+      description: `refund from voucher ${projectVoucher.voucherNumber}`,
+      createdAt: new Date(),
+      createdById: updatedById,
+      fundId,
+      projectId: projectVoucher.projectId,
+      comments: `refunded from voucher ${projectVoucher.id}`,
+      type: "refund",
+    }),
   ]);
 }

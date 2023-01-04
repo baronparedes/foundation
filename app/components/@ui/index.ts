@@ -7,3 +7,4 @@ export { default as RoundIcon } from "./RoundIcon";
 export { default as DialogWithTransition } from "./DialogWithTransition";
 
 export { default as LinkStyled } from "./LinkStyled";
+export { default as LabeledCurrency } from "./LabeledCurrency";

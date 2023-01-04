@@ -1,34 +1,23 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
-import {Form} from '@remix-run/react';
+import {useFetcher} from '@remix-run/react';
 
-import {DialogWithTransition, TextInput} from '../@ui';
+import {DialogWithTransition, LabeledCurrency, TextInput} from '../@ui';
 import {Button} from '../@windmill';
-import LabeledCurrency from '../LabeledCurrency';
 
 type Props = {
+  projectVoucherId: number;
+  userId: string;
   maxAmount: number;
-  onAdd?: (details: AddVoucher) => void;
 };
-
-export type AddVoucher = {
-  description: string;
-  category: string;
-  amount: number;
-  supplierName: string;
-  referenceNumber: string;
-  quantity?: number;
-};
-
-//TODO: Refactor to a better form implementation
-export function AddVoucherDetails({ onAdd: onAddDetail, maxAmount }: Props) {
-  const [toggle, setToggle] = useState(false);
+export function AddVoucherDetails({ maxAmount, projectVoucherId, userId }: Props) {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState(0);
   const [supplierName, setSupplierName] = useState("");
   const [referenceNumber, setReferenceNumber] = useState("");
   const [quantity, setQuantity] = useState<number>();
+  const [toggle, setToggle] = useState(false);
   const isValid =
     supplierName !== "" &&
     referenceNumber !== "" &&
@@ -37,29 +26,30 @@ export function AddVoucherDetails({ onAdd: onAddDetail, maxAmount }: Props) {
     amount > 0 &&
     amount <= maxAmount;
 
-  const handleOnAdd = () => {
-    onAddDetail &&
-      onAddDetail({
-        description,
-        category,
-        amount,
-        supplierName,
-        referenceNumber,
-        quantity,
-      });
+  const fetcher = useFetcher();
+  const isAdding =
+    fetcher.submission?.formData.get("_action") === "create" &&
+    fetcher.state === "submitting";
+
+  function onResetForm() {
     setToggle(false);
     setDescription("");
     setCategory("");
-    setReferenceNumber("");
-    setSupplierName("");
-    setQuantity(undefined);
     setAmount(0);
-  };
+    setSupplierName("");
+    setReferenceNumber("");
+    setQuantity(undefined);
+  }
+
+  useEffect(() => {
+    !isAdding && onResetForm();
+  }, [isAdding]);
 
   return (
     <>
       <div className="my-2 text-right">
         <Button
+          disabled={maxAmount === 0}
           onClick={() => {
             setToggle(true);
           }}
@@ -76,20 +66,22 @@ export function AddVoucherDetails({ onAdd: onAddDetail, maxAmount }: Props) {
       >
         <div className="my-4 text-center">
           <small>
-            <LabeledCurrency
-              label="available amount"
-              value={Number(maxAmount)}
-            />
+            <LabeledCurrency label="available amount" value={Number(maxAmount)} />
           </small>
         </div>
-        <Form
+        <fetcher.Form
           style={{
             display: "flex",
             flexDirection: "column",
             gap: 8,
             width: "100%",
           }}
+          method="post"
         >
+          <div className="disable hidden">
+            <TextInput name="updatedById" required defaultValue={userId} />
+            <TextInput name="projectVoucherId" required defaultValue={projectVoucherId} />
+          </div>
           <TextInput
             name="supplierName"
             label="Supplier Name"
@@ -133,6 +125,7 @@ export function AddVoucherDetails({ onAdd: onAddDetail, maxAmount }: Props) {
             type="number"
             required
             value={amount}
+            min={1}
             max={maxAmount}
             error={
               amount > maxAmount
@@ -141,13 +134,18 @@ export function AddVoucherDetails({ onAdd: onAddDetail, maxAmount }: Props) {
             }
             onChange={(e) => setAmount(Number(e.currentTarget.value))}
           />
-        </Form>
-        <hr className="my-4" />
-        <div className="text-right">
-          <Button disabled={!isValid} onClick={handleOnAdd}>
-            Add
-          </Button>
-        </div>
+          <hr className="my-4" />
+          <div className="text-right">
+            <Button
+              disabled={!isValid || fetcher.state === "submitting"}
+              name="_action"
+              value="create"
+              type="submit"
+            >
+              Add
+            </Button>
+          </div>
+        </fetcher.Form>
       </DialogWithTransition>
     </>
   );

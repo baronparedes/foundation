@@ -4,6 +4,8 @@ import {prisma} from '~/db.server';
 
 export type { FundTransaction } from "@prisma/client";
 
+export type FundTransactionType = "collection" | "refund" | "disbursement";
+
 export function getTransactionsByFundId({ id }: Pick<Fund, "id">) {
   return prisma.fundTransaction.findMany({
     where: { fundId: id },
@@ -21,7 +23,7 @@ export function createFundTransaction({
   comments,
   type,
 }: Omit<FundTransaction, "id" | "type"> & {
-  type: "collection" | "disbursement";
+  type: FundTransactionType;
 }) {
   const data = {
     amount,
@@ -53,7 +55,7 @@ export async function getProjectFundDetails(id: string) {
   const disbursedFundsData = await prisma.fundTransaction.aggregate({
     where: {
       projectId: id,
-      type: "disbursement",
+      type: { in: ["disbursement", "refund"] },
     },
     _sum: {
       amount: true,

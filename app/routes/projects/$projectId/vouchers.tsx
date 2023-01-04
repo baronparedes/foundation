@@ -128,14 +128,14 @@ export default function VoucherPage() {
 
   const [maxBalance, setMaxBalance] = useState(0);
 
-  const handleOnSelectFund = (e: React.FormEvent<HTMLSelectElement>) => {
+  function handleOnSelectFund(e: React.FormEvent<HTMLSelectElement>) {
     const index = e.currentTarget.selectedIndex;
     const optionElement = e.currentTarget.childNodes[
       index
     ] as HTMLOptionElement;
     const dataBalance = optionElement.dataset.balance;
     setMaxBalance(Number(dataBalance) ?? 0);
-  };
+  }
 
   return (
     <DialogWithTransition

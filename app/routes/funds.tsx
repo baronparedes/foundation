@@ -2,9 +2,8 @@ import {DocumentIcon} from '@heroicons/react/solid';
 import {Link, NavLink, Outlet, useLoaderData} from '@remix-run/react';
 import {json} from '@remix-run/server-runtime';
 
-import {RoundIcon} from '../components/@ui';
+import {LabeledCurrency, RoundIcon} from '../components/@ui';
 import {Card, CardBody} from '../components/@windmill';
-import LabeledCurrency from '../components/LabeledCurrency';
 import Page from '../components/Page';
 import {getFunds} from '../models/fund.server';
 
