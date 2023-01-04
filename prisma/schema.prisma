@@ -106,3 +106,9 @@ model ProjectVoucherDetail {
   projectVoucher   ProjectVoucher @relation(fields: [projectVoucherId], references: [id])
   projectVoucherId Int
 }
+
+model DetailCategory {
+  id          Int    @id @default(autoincrement())
+  description String @unique
+  parentId    Int?
+}

@@ -73,7 +73,7 @@ export async function createProjectVoucher({
       createdById: updatedById,
       fundId,
       projectId,
-      comments: `Disbursed to project ${code}`,
+      comments: `disbursed to project ${code}`,
       type: "disbursement",
     }),
   ]);

@@ -1,5 +1,6 @@
 import invariant from 'tiny-invariant';
 
+import {LockClosedIcon, LockOpenIcon} from '@heroicons/react/solid';
 import {Form, useLoaderData, useNavigate, useTransition} from '@remix-run/react';
 import {json, redirect} from '@remix-run/server-runtime';
 
@@ -84,7 +85,18 @@ export default function VoucherDetails() {
         title={
           <>
             Input voucher details
-            <h1 className="pt-4">{voucher.voucherNumber}</h1>
+            <div className="mt-4 flex">
+              <h1 className="flex-1">{voucher.voucherNumber}</h1>
+              <div className="flex-1">
+                <div className="float-right">
+                  {voucher.isClosed ? (
+                    <LockClosedIcon className="h-5 w-5 text-red-600" aria-label="closed" />
+                  ) : (
+                    <LockOpenIcon className="h-5 w-5 text-green-600" aria-label="open" />
+                  )}
+                </div>
+              </div>
+            </div>
           </>
         }
         onCloseModal={() => navigate(`/projects/${projectId}`)}
@@ -95,7 +107,12 @@ export default function VoucherDetails() {
             value={Number(voucher.disbursedAmount)}
           />
           <LabeledCurrency label="itemized amount" value={Number(itemizedAmount)} />
-          <LabeledCurrency label="remaining amount" value={remainingAmount} />
+          {!voucher.isClosed && (
+            <LabeledCurrency label="remaining amount" value={remainingAmount} />
+          )}
+          {voucher.isClosed && (
+            <LabeledCurrency label="refunded amount" value={remainingAmount} />
+          )}
         </div>
         <hr className="my-4" />
         {!voucher.isClosed && (
@@ -115,7 +132,7 @@ export default function VoucherDetails() {
         />
         <hr className="my-4" />
         <div className="text-right">
-          {remainingAmount !== 0 && (
+          {!voucher.isClosed && remainingAmount !== 0 && (
             <div className="my-2">
               <small>
                 <i>

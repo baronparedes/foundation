@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 
 const prisma = new PrismaClient();
 
-async function seed() {
+async function seedUsers() {
   const email = "admin@foundation.ph";
 
   // cleanup the existing database
@@ -23,7 +23,15 @@ async function seed() {
       },
     },
   });
+}
 
+async function seedDetailCategories() {
+  await prisma.detailCategory.createMany([]);
+}
+
+async function seed() {
+  await seedUsers();
+  await seedDetailCategories();
   console.log(`Database has been seeded. 🌱`);
 }
 

@@ -1,3 +1,5 @@
+import {LockClosedIcon, LockOpenIcon} from '@heroicons/react/solid';
+
 import {formatCurrencyFixed} from '../../utils';
 import {LinkStyled} from '../@ui';
 import {
@@ -28,6 +30,7 @@ export default function ProjectVoucherTable({ data }: Props) {
             <TableCell>Fund</TableCell>
             <TableCell>Date</TableCell>
             <TableCell>By</TableCell>
+            <TableCell></TableCell>
           </tr>
         </TableHeader>
         <TableBody>
@@ -76,6 +79,16 @@ export default function ProjectVoucherTable({ data }: Props) {
                   </TableCell>
                   <TableCell>
                     <Badge type="primary">{voucher.updatedBy.email}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    {voucher.isClosed ? (
+                      <LockClosedIcon
+                        className="h-5 w-5 text-red-600"
+                        aria-label="closed"
+                      />
+                    ) : (
+                      <LockOpenIcon className="h-5 w-5 text-green-600" aria-label="open" />
+                    )}
                   </TableCell>
                 </TableRow>
               );
