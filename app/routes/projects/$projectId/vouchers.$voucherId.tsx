@@ -1,25 +1,22 @@
-import invariant from "tiny-invariant";
+import invariant from 'tiny-invariant';
 
-import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/solid";
-import { Form, useLoaderData, useNavigate, useTransition } from "@remix-run/react";
-import { json, redirect } from "@remix-run/server-runtime";
+import {LockClosedIcon, LockOpenIcon} from '@heroicons/react/solid';
+import {Form, useLoaderData, useNavigate, useTransition} from '@remix-run/react';
+import {json, redirect} from '@remix-run/server-runtime';
 
-import { DialogWithTransition, LabeledCurrency } from "../../../components/@ui";
-import { Button } from "../../../components/@windmill";
-import { AddVoucherDetails } from "../../../components/forms/AddVoucherDetail";
-import VoucherDetailTable from "../../../components/tables/VoucherDetailTable";
-import { getDetailCategories } from "../../../models/detail-category.server";
+import {DialogWithTransition, LabeledCurrency} from '../../../components/@ui';
+import {Button} from '../../../components/@windmill';
+import {AddVoucherDetails} from '../../../components/forms/AddVoucherDetail';
+import VoucherDetailTable from '../../../components/tables/VoucherDetailTable';
+import {getDetailCategories} from '../../../models/detail-category.server';
 import {
   addProjectVoucherDetail,
   deleteProjectVoucherDetail,
   getProjectVoucherDetails,
-} from "../../../models/project-voucher-detail.server";
-import {
-  closeProjectVoucher,
-  getProjectVoucher,
-} from "../../../models/project-voucher.server";
-import { requireUserId } from "../../../session.server";
-import { formatCurrencyFixed, sum } from "../../../utils";
+} from '../../../models/project-voucher-detail.server';
+import {closeProjectVoucher, getProjectVoucher} from '../../../models/project-voucher.server';
+import {requireUserId} from '../../../session.server';
+import {formatCurrencyFixed, sum} from '../../../utils';
 
 import type { ProjectVoucherDetailslWithCategory } from "../../../models/project-voucher-detail.server";
 import type { ProjectVoucherDetail } from "../../../models/project-voucher.server";
@@ -46,8 +43,9 @@ export async function action({ params, request }: ActionArgs) {
 
   if (_action === "create") {
     const data = {
-      projectVoucherId: Number(projectVoucherId),
       ...values,
+      projectVoucherId: Number(projectVoucherId),
+      quantity: values.quantity === "" ? null : values.quantity,
     } as unknown as ProjectVoucherDetail;
 
     await addProjectVoucherDetail(data, updatedById as string, Number(projectVoucherId));

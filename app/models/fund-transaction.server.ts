@@ -1,7 +1,7 @@
 import type { Fund, FundTransaction } from "@prisma/client";
-import { prisma } from "~/db.server";
+import {prisma} from '~/db.server';
 
-import { Decimal } from "@prisma/client/runtime";
+import {Decimal} from '@prisma/client/runtime';
 
 export type { FundTransaction } from "@prisma/client";
 
@@ -97,8 +97,13 @@ export async function getProjectFundDetails(id: string) {
     },
   });
 
+  const collectedFunds = collectedFundsData._sum.amount;
+  const disbursedFunds = disbursedFundsData._sum.amount;
+  const remainingFunds = Number(collectedFunds) - Number(disbursedFunds) * -1;
+
   return {
-    collectedFunds: collectedFundsData._sum.amount,
-    disbursedFunds: disbursedFundsData._sum.amount,
+    collectedFunds,
+    disbursedFunds,
+    remainingFunds,
   };
 }

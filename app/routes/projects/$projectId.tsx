@@ -1,14 +1,15 @@
-import invariant from "tiny-invariant";
-import { getProject } from "~/models/project.server";
+import classNames from 'classnames';
+import invariant from 'tiny-invariant';
+import {getProject} from '~/models/project.server';
 
-import { json } from "@remix-run/node";
-import { Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
+import {json} from '@remix-run/node';
+import {Outlet, useCatch, useLoaderData, useNavigate} from '@remix-run/react';
 
-import { LabeledCurrency } from "../../components/@ui";
-import { Button } from "../../components/@windmill";
-import ProjectVoucherTable from "../../components/tables/ProjectVoucherTable";
-import { getProjectFundDetails } from "../../models/fund-transaction.server";
-import { getProjectVouchers } from "../../models/project-voucher.server";
+import {LabeledCurrency} from '../../components/@ui';
+import {Button} from '../../components/@windmill';
+import ProjectVoucherTable from '../../components/tables/ProjectVoucherTable';
+import {getProjectFundDetails} from '../../models/fund-transaction.server';
+import {getProjectVouchers} from '../../models/project-voucher.server';
 
 import type { LoaderArgs } from "@remix-run/node";
 import type { ProjectVoucherWithDetails } from "../../models/project-voucher.server";
@@ -21,16 +22,17 @@ export async function loader({ params }: LoaderArgs) {
   }
 
   const projectVouchers = await getProjectVouchers({ id: params.projectId });
-  const { collectedFunds, disbursedFunds } = await getProjectFundDetails(params.projectId);
+  const { collectedFunds, disbursedFunds, remainingFunds } = await getProjectFundDetails(
+    params.projectId
+  );
 
-  return json({ project, collectedFunds, disbursedFunds, projectVouchers });
+  return json({ project, collectedFunds, disbursedFunds, remainingFunds, projectVouchers });
 }
 
 export default function ProjectDetailsPage() {
-  const { project, collectedFunds, disbursedFunds, projectVouchers } =
+  const { project, collectedFunds, disbursedFunds, remainingFunds, projectVouchers } =
     useLoaderData<typeof loader>();
   const navigate = useNavigate();
-  const remainingFunds = Number(collectedFunds) - Number(disbursedFunds) * -1;
 
   return (
     <div className="w-full">
@@ -40,7 +42,14 @@ export default function ProjectDetailsPage() {
           <h3 className="text-2xl font-bold">{project.name}</h3>
         </div>
         <div className="text-right">
-          <LabeledCurrency label="remaining funds" value={remainingFunds} />
+          <LabeledCurrency
+            label="remaining funds"
+            value={remainingFunds}
+            valueClassName={classNames(
+              "text-2xl",
+              remainingFunds < 200000 ? "text-red-500" : "text-green-500"
+            )}
+          />
         </div>
       </div>
       <hr className="my-4" />
@@ -49,7 +58,7 @@ export default function ProjectDetailsPage() {
       <div className="grid grid-cols-3 gap-3 text-center">
         <LabeledCurrency label="estimated cost" value={Number(project.estimatedCost)} />
         <LabeledCurrency label="collected funds" value={Number(collectedFunds)} />
-        <LabeledCurrency label="disbursed funds" value={Number(disbursedFunds)} />
+        <LabeledCurrency label="disbursed funds" value={Math.abs(Number(disbursedFunds))} />
       </div>
 
       <hr className="my-4" />

@@ -1,7 +1,7 @@
-import React, { Fragment } from "react";
+import React, {Fragment} from 'react';
 
-import { Dialog, Transition } from "@headlessui/react";
-import { XIcon } from "@heroicons/react/solid";
+import {Dialog, Transition} from '@headlessui/react';
+import {XIcon} from '@heroicons/react/solid';
 
 type Size = "sm" | "md" | "lg" | "xl";
 
@@ -78,7 +78,7 @@ export default function DialogWithTransition({
               >
                 <Dialog.Title
                   as="h3"
-                  className="mb-6 text-lg font-medium leading-6 text-gray-900"
+                  className=" mb-6 text-lg font-medium leading-6 text-gray-900"
                 >
                   <div className="flex">
                     <div className="flex-1">{title}</div>
