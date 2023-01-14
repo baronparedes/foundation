@@ -63,7 +63,8 @@ export default function ProjectDetailsPage() {
 
       <hr className="my-4" />
       <div className="w-full space-x-2 text-right">
-        <Button onClick={() => navigate("./summary")}>Summary</Button>
+        <Button onClick={() => navigate("./settings")}>Settings</Button>
+        <Button onClick={() => navigate("./dashboard")}>Dashboard</Button>
         <Button onClick={() => navigate("./vouchers")}>New Voucher</Button>
         <Outlet />
       </div>

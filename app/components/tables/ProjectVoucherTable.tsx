@@ -1,7 +1,7 @@
-import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/solid";
+import {LockClosedIcon, LockOpenIcon} from '@heroicons/react/solid';
 
-import { formatCurrencyFixed } from "../../utils";
-import { LinkStyled } from "../@ui";
+import {formatCurrencyFixed} from '../../utils';
+import {LinkStyled} from '../@ui';
 import {
   Badge,
   Table,
@@ -11,7 +11,7 @@ import {
   TableFooter,
   TableHeader,
   TableRow,
-} from "../@windmill";
+} from '../@windmill';
 
 import type { ProjectVoucherWithDetails } from "../../models/project-voucher.server";
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
 export default function ProjectVoucherTable({ data }: Props) {
   return (
     <TableContainer>
-      <Table>
+      <Table className="table-auto">
         <TableHeader>
           <tr>
             <TableCell>Voucher Number</TableCell>
@@ -52,10 +52,10 @@ export default function ProjectVoucherTable({ data }: Props) {
                       {voucher.voucherNumber}
                     </LinkStyled>
                   </TableCell>
-                  <TableCell className="w-96">
+                  <TableCell className="mw-96 ">
                     <div className="flex items-center text-sm">
                       <div>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
+                        <p className="break-all text-xs text-gray-600 dark:text-gray-400">
                           {voucher.description}
                         </p>
                       </div>

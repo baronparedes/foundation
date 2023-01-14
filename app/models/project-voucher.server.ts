@@ -1,8 +1,8 @@
-import { prisma } from "~/db.server";
+import {prisma} from '~/db.server';
 
-import { Prisma } from "@prisma/client";
+import {Prisma} from '@prisma/client';
 
-import { createFundTransaction } from "./fund-transaction.server";
+import {createFundTransaction} from './fund-transaction.server';
 
 import type { Project, ProjectVoucher } from "@prisma/client";
 export type { ProjectVoucher, ProjectVoucherDetail } from "@prisma/client";
@@ -56,7 +56,6 @@ export async function createProjectVoucher({
     fundId,
     projectId,
     updatedById,
-    updatedAt: new Date(),
     transactionDate: new Date(transactionDate),
     voucherNumber,
   };
@@ -119,7 +118,6 @@ export async function closeProjectVoucher(
         isClosed: true,
         isDeleted,
         updatedById,
-        updatedAt: new Date(),
       },
     }),
     createFundTransaction({

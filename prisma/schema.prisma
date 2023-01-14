@@ -38,6 +38,7 @@ model Project {
 
   fundTransactions FundTransaction[]
   projectVouchers  ProjectVoucher[]
+  projectSetting   ProjectSetting[]
 }
 
 model Fund {
@@ -80,7 +81,7 @@ model ProjectVoucher {
   isClosed        Boolean  @default(false)
   isDeleted       Boolean  @default(false)
   transactionDate DateTime
-  updatedAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   updatedBy   User   @relation(fields: [updatedById], references: [id])
   updatedById String
@@ -91,7 +92,7 @@ model ProjectVoucher {
   fund   Fund   @relation(fields: [fundId], references: [id])
   fundId String
 
-  ProjectVoucherDetail ProjectVoucherDetail[]
+  projectVoucherDetail ProjectVoucherDetail[]
 }
 
 model ProjectVoucherDetail {
@@ -114,5 +115,15 @@ model DetailCategory {
   description String @unique
   parentId    Int?
 
-  ProjectVoucherDetail ProjectVoucherDetail[]
+  projectVoucherDetail ProjectVoucherDetail[]
+}
+
+model ProjectSetting {
+  id                 Int     @id @default(autoincrement())
+  description        String
+  percentageAddOn    Decimal
+  categoryExclusions String
+
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId String
 }

@@ -1,9 +1,13 @@
-import type { Prisma, ProjectVoucherDetail } from "@prisma/client";
+import type { Prisma, ProjectVoucher, ProjectVoucherDetail } from "@prisma/client";
 import {prisma} from '../db.server';
 
 export type ProjectVoucherDetailslWithCategory = Prisma.PromiseReturnType<
   typeof getProjectVoucherDetails
 >;
+
+export type ProjectVoucherDetailsWithVoucherNumber = ProjectVoucherDetail & {
+  projectVoucher: Pick<ProjectVoucher, "voucherNumber">;
+};
 
 export async function getProjectVoucherDetails({ id }: Pick<ProjectVoucherDetail, "id">) {
   return prisma.projectVoucherDetail.findMany({
@@ -32,7 +36,7 @@ export async function addProjectVoucherDetail(
     }),
     prisma.projectVoucher.update({
       where: { id: projectVoucherId },
-      data: { updatedById, updatedAt: new Date() },
+      data: { updatedById },
     }),
   ]);
 }
@@ -46,7 +50,7 @@ export async function deleteProjectVoucherDetail(
     prisma.projectVoucherDetail.delete({ where: { id } }),
     prisma.projectVoucher.update({
       where: { id: projectVoucherId },
-      data: { updatedById, updatedAt: new Date() },
+      data: { updatedById },
     }),
   ]);
 }

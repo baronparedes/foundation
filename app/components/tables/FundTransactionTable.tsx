@@ -1,4 +1,4 @@
-import { formatCurrencyFixed } from "../../utils";
+import {formatCurrencyFixed} from '../../utils';
 import {
   Badge,
   Table,
@@ -8,7 +8,7 @@ import {
   TableFooter,
   TableHeader,
   TableRow,
-} from "../@windmill";
+} from '../@windmill';
 
 import type { FundWithTransaction } from "../../models/fund.server";
 type Props = {
@@ -18,7 +18,7 @@ type Props = {
 export default function FundTransactionTable({ data }: Props) {
   return (
     <TableContainer>
-      <Table>
+      <Table className="table-auto">
         <TableHeader>
           <tr>
             <TableCell>Description</TableCell>
@@ -45,7 +45,7 @@ export default function FundTransactionTable({ data }: Props) {
                   <TableCell className="w-96">
                     <div className="flex items-center text-sm">
                       <div>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
+                        <p className="break-all text-xs text-gray-600 dark:text-gray-400">
                           {transaction.description}
                         </p>
                       </div>

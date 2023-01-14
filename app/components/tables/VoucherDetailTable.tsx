@@ -1,8 +1,8 @@
-import { TrashIcon } from "@heroicons/react/solid";
-import { Form, useFetcher } from "@remix-run/react";
+import {TrashIcon} from '@heroicons/react/solid';
+import {Form, useFetcher} from '@remix-run/react';
 
-import { formatCurrencyFixed } from "../../utils";
-import { TextInput } from "../@ui";
+import {formatCurrencyFixed} from '../../utils';
+import {TextInput} from '../@ui';
 import {
   Badge,
   Button,
@@ -13,7 +13,7 @@ import {
   TableFooter,
   TableHeader,
   TableRow,
-} from "../@windmill";
+} from '../@windmill';
 
 import type { ProjectVoucherDetailslWithCategory } from "../../models/project-voucher-detail.server";
 type Props = {
@@ -29,9 +29,11 @@ export default function VoucherDetailTable({
   projectVoucherId,
   isClosed,
 }: Props) {
+  const columns = isClosed ? 5 : 6;
+
   return (
     <TableContainer>
-      <Table>
+      <Table className="w-full table-auto">
         <TableHeader>
           <tr>
             <TableCell>Description</TableCell>
@@ -39,13 +41,13 @@ export default function VoucherDetailTable({
             <TableCell>Amount</TableCell>
             <TableCell>Supplier</TableCell>
             <TableCell>Reference Number</TableCell>
-            <TableCell></TableCell>
+            {!isClosed && <TableCell></TableCell>}
           </tr>
         </TableHeader>
         <TableBody>
           {data?.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={5}>
+              <TableCell colSpan={columns}>
                 <p className="text-center">No details yet</p>
               </TableCell>
             </TableRow>
@@ -57,9 +59,17 @@ export default function VoucherDetailTable({
               return (
                 <TableRow key={key}>
                   <TableCell className="w-96">
-                    <p>{d.description}</p>
+                    <div className="flex items-center text-sm">
+                      <div>
+                        <p className="break-all text-xs text-gray-600 dark:text-gray-400">
+                          {d.description}
+                        </p>
+                      </div>
+                    </div>
                   </TableCell>
-                  <TableCell>{d.detailCategory.description}</TableCell>
+                  <TableCell>
+                    <Badge>{d.detailCategory.description}</Badge>
+                  </TableCell>
                   <TableCell>
                     <Badge type={isNegative ? "danger" : "success"} className="currency">
                       {formatCurrencyFixed(amount)}
@@ -67,16 +77,16 @@ export default function VoucherDetailTable({
                   </TableCell>
                   <TableCell>{d.supplierName}</TableCell>
                   <TableCell>{d.referenceNumber}</TableCell>
-                  <TableCell>
-                    {!isClosed && (
+                  {!isClosed && (
+                    <TableCell>
                       <DeleteVoucherDetail
                         projectVoucherId={projectVoucherId}
                         userId={userId}
                         projectVoucherDetailId={d.id}
                         isClosed={isClosed}
                       />
-                    )}
-                  </TableCell>
+                    </TableCell>
+                  )}
                 </TableRow>
               );
             })

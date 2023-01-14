@@ -1,11 +1,11 @@
-import { DocumentIcon } from "@heroicons/react/solid";
-import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
-import { json } from "@remix-run/server-runtime";
+import {DocumentIcon} from '@heroicons/react/solid';
+import {Link, NavLink, Outlet, useLoaderData} from '@remix-run/react';
+import {json} from '@remix-run/server-runtime';
 
-import { LabeledCurrency, RoundIcon } from "../components/@ui";
-import { Card, CardBody } from "../components/@windmill";
-import Page from "../components/Page";
-import { getFunds } from "../models/fund.server";
+import {LabeledCurrency, RoundIcon} from '../components/@ui';
+import {Card, CardBody} from '../components/@windmill';
+import Page from '../components/Page';
+import {getFunds} from '../models/fund.server';
 
 export async function loader() {
   const funds = await getFunds();
@@ -27,7 +27,7 @@ export default function FundsPage() {
           ) : (
             <div className="m-4 mb-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
               {data.funds.map((fund) => (
-                <Card key={fund.id}>
+                <Card colored className="hover:bg-purple-100" key={fund.id}>
                   <NavLink to={fund.id}>
                     <CardBody className="m-1 flex items-center">
                       <RoundIcon icon={DocumentIcon} className="mr-4" />
