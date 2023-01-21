@@ -137,7 +137,7 @@ function ProjectDashboardCard({
         {disbursements && disbursements.length > 0 && (
           <>
             <TableContainer>
-              <Table className="table-auto">
+              <Table className="w-full table-auto">
                 <TableHeader>
                   <tr>
                     <TableCell>Voucher Number</TableCell>
@@ -185,7 +185,7 @@ function ProjectDashboardCard({
         {vouchers && vouchers.length > 0 && (
           <>
             <TableContainer>
-              <Table className="table-auto">
+              <Table className="w-full table-auto">
                 <TableHeader>
                   <tr>
                     <TableCell>Voucher Number</TableCell>

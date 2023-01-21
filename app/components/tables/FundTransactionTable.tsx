@@ -18,7 +18,7 @@ type Props = {
 export default function FundTransactionTable({ data }: Props) {
   return (
     <TableContainer>
-      <Table className="table-auto">
+      <Table className="w-full table-auto">
         <TableHeader>
           <tr>
             <TableCell>Description</TableCell>

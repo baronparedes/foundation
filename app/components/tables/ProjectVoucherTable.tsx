@@ -21,7 +21,7 @@ type Props = {
 export default function ProjectVoucherTable({ data }: Props) {
   return (
     <TableContainer>
-      <Table className="table-auto">
+      <Table className="w-full table-auto">
         <TableHeader>
           <tr>
             <TableCell>Voucher Number</TableCell>
@@ -36,7 +36,7 @@ export default function ProjectVoucherTable({ data }: Props) {
         <TableBody>
           {data?.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={5}>
+              <TableCell colSpan={7}>
                 <p className="text-center">No vouchers yet</p>
               </TableCell>
             </TableRow>
