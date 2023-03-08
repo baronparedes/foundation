@@ -7,8 +7,10 @@ import {json, redirect} from '@remix-run/server-runtime';
 import {DialogWithTransition, LabeledCurrency} from '../../../components/@ui';
 import {Button} from '../../../components/@windmill';
 import {AddVoucherDetails} from '../../../components/forms/AddVoucherDetail';
+import FundPicker from '../../../components/pickers/FundPicker';
 import VoucherDetailTable from '../../../components/tables/VoucherDetailTable';
 import {getDetailCategories} from '../../../models/detail-category.server';
+import {getFunds} from '../../../models/fund.server';
 import {
   addProjectVoucherDetail,
   deleteProjectVoucherDetail,
@@ -18,6 +20,7 @@ import {closeProjectVoucher, getProjectVoucher} from '../../../models/project-vo
 import {requireUserId} from '../../../session.server';
 import {formatCurrencyFixed, sum} from '../../../utils';
 
+import type { FundWithBalance } from "../../../models/fund.server";
 import type { ProjectVoucherDetailslWithCategory } from "../../../models/project-voucher-detail.server";
 import type { ProjectVoucherDetail } from "../../../models/project-voucher.server";
 import type { LoaderArgs, ActionArgs } from "@remix-run/server-runtime";
@@ -33,7 +36,9 @@ export async function loader({ params, request }: LoaderArgs) {
   invariant(projectId, "project not found");
   invariant(voucher, "voucher not found");
 
-  return json({ projectId, voucher, userId, voucherDetails, categories });
+  const funds = await getFunds();
+
+  return json({ projectId, voucher, userId, voucherDetails, categories, funds });
 }
 
 export async function action({ params, request }: ActionArgs) {
@@ -75,7 +80,7 @@ export async function action({ params, request }: ActionArgs) {
 }
 
 export default function VoucherDetails() {
-  const { projectId, voucher, userId, voucherDetails, categories } =
+  const { projectId, voucher, userId, voucherDetails, categories, funds } =
     useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const transition = useTransition();
@@ -138,42 +143,49 @@ export default function VoucherDetails() {
         />
         <hr className="my-4" />
         <div className="text-right">
-          {!voucher.isClosed && remainingAmount !== 0 && (
-            <div className="my-2">
-              <small>
-                <i>
-                  Note: Remaining amount of{" "}
-                  <span className="currency">{formatCurrencyFixed(remainingAmount)}</span>{" "}
-                  will be refunded.
-                </i>
-              </small>
-            </div>
-          )}
           {!voucher.isClosed && (
-            <Form method="post">
-              <input type="hidden" value={userId} name="updatedById" />
-              <input type="hidden" value={voucher.id} name="projectVoucherId" />
-              <input type="hidden" value={"clcet6qzs0015sozariu53pba"} name="fundId" />
-              <Button
-                name="_action"
-                value="close-voucher"
-                type="submit"
-                disabled={transition.state === "submitting"}
-                onClick={(e) => {
-                  if (
-                    remainingAmount !== 0 &&
-                    !confirm(
-                      `Remaining amount of ${formatCurrencyFixed(
-                        remainingAmount
-                      )} will be refunded.`
-                    )
-                  )
-                    e.preventDefault();
-                }}
-              >
-                {itemizedAmount === 0 ? "Delete Voucher" : "Close Voucher"}
-              </Button>
-            </Form>
+            <>
+              <Form method="post">
+                <input type="hidden" value={userId} name="updatedById" />
+                <input type="hidden" value={voucher.id} name="projectVoucherId" />
+
+                <div className="text-right">
+                  {remainingAmount === 0 && (
+                    <input type="hidden" value={""} name="fundId" />
+                  )}
+                  {remainingAmount !== 0 && (
+                    <>
+                      <div className="my-2">
+                        <small>
+                          <i>
+                            Note: Remaining amount of{" "}
+                            <span className="currency">
+                              {formatCurrencyFixed(remainingAmount)}
+                            </span>{" "}
+                            will be refunded. Please select a fund.
+                          </i>
+                        </small>
+                      </div>
+                      <FundPicker
+                        name="fundId"
+                        defaultValue={""}
+                        required
+                        funds={funds as unknown as FundWithBalance[]}
+                      />
+                      <hr className="my-4" />
+                    </>
+                  )}
+                  <Button
+                    name="_action"
+                    value="close-voucher"
+                    type="submit"
+                    disabled={transition.state === "submitting"}
+                  >
+                    {itemizedAmount === 0 ? "Delete Voucher" : "Close Voucher"}
+                  </Button>
+                </div>
+              </Form>
+            </>
           )}
         </div>
       </DialogWithTransition>

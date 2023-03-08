@@ -1,6 +1,6 @@
-import moment from "moment";
-import React, { useState } from "react";
-import invariant from "tiny-invariant";
+import moment from 'moment';
+import React, {useState} from 'react';
+import invariant from 'tiny-invariant';
 
 import {
   Form,
@@ -8,25 +8,20 @@ import {
   useLoaderData,
   useNavigate,
   useTransition,
-} from "@remix-run/react";
-import { json, redirect } from "@remix-run/server-runtime";
+} from '@remix-run/react';
+import {json, redirect} from '@remix-run/server-runtime';
 
-import {
-  DialogWithTransition,
-  SelectInput,
-  TextArea,
-  TextInput,
-} from "../../../components/@ui";
-import { Button } from "../../../components/@windmill";
-import { getFunds } from "../../../models/fund.server";
-import { createProjectVoucher } from "../../../models/project-voucher.server";
-import { getProject } from "../../../models/project.server";
-import { requireUserId } from "../../../session.server";
-import { formatCurrencyFixed, validateRequiredString } from "../../../utils";
+import {DialogWithTransition, TextArea, TextInput} from '../../../components/@ui';
+import {Button} from '../../../components/@windmill';
+import FundPicker from '../../../components/pickers/FundPicker';
+import {FundWithBalance, getFunds} from '../../../models/fund.server';
+import {createProjectVoucher} from '../../../models/project-voucher.server';
+import {getProject} from '../../../models/project.server';
+import {requireUserId} from '../../../session.server';
+import {validateRequiredString} from '../../../utils';
 
 import type { ProjectVoucher } from "@prisma/client";
 import type { LoaderArgs, ActionArgs } from "@remix-run/server-runtime";
-
 type FormErrors = {
   disbursedAmount?: string;
   description?: string;
@@ -66,7 +61,7 @@ function getFormData(formData: FormData) {
     hasErrors = true;
   }
   if (!validateRequiredString(voucherNumber)) {
-    errors.disbursedAmount = "Voucher number is required";
+    errors.voucherNumber = "Voucher number is required";
     hasErrors = true;
   }
   if (!validateRequiredString(transactionDate)) {
@@ -97,11 +92,21 @@ export async function action({ params, request }: ActionArgs) {
 
   if (errors) return json({ errors }, { status: 400 });
 
-  const newVoucher = await createProjectVoucher({
-    ...data,
-  });
-
-  return redirect(`/projects/${params.projectId}/vouchers/${newVoucher.id}`);
+  try {
+    const newVoucher = await createProjectVoucher({
+      ...data,
+    });
+    return redirect(`/projects/${params.projectId}/vouchers/${newVoucher.id}`);
+  } catch (e) {
+    const errors: FormErrors = {};
+    errors.voucherNumber = "Voucher number exists";
+    return json(
+      {
+        errors,
+      },
+      { status: 400 }
+    );
+  }
 }
 
 export async function loader({ params, request }: LoaderArgs) {
@@ -178,25 +183,15 @@ export default function VoucherPage() {
           type="date"
           defaultValue={today}
         />
-        <SelectInput
+        <FundPicker
           name="fundId"
           label="Fund"
           defaultValue={""}
           required
           error={actionData?.errors?.fundId}
           onChange={handleOnSelectFund}
-        >
-          <option value={""} data-balance={0}>
-            Select a fund
-          </option>
-          {funds.map((f) => {
-            return (
-              <option key={f.id} value={f.id} data-balance={f.balance}>
-                {f.name} - {formatCurrencyFixed(Number(f.balance))}
-              </option>
-            );
-          })}
-        </SelectInput>
+          funds={funds as unknown as FundWithBalance[]}
+        />
         <div className="disable hidden">
           <TextInput name="updatedById" required defaultValue={userId} />
           <TextInput name="projectId" required defaultValue={project.id} />

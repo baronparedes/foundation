@@ -1,8 +1,12 @@
-import { prisma } from "~/db.server";
+import {prisma} from '~/db.server';
 
 import type { Fund, Prisma } from "@prisma/client";
 export type { Fund } from "@prisma/client";
+
 export type FundWithTransaction = Prisma.PromiseReturnType<typeof getFund>;
+export type FundWithBalance = Pick<Fund, "id" | "name" | "code"> & {
+  balance: Prisma.Decimal | number;
+};
 
 export async function getFund({ id }: Pick<Fund, "id">) {
   return prisma.fund.findFirst({
@@ -52,10 +56,11 @@ export async function getFunds() {
 
   return funds.map((f) => {
     const fb = fundBalance.find((fb) => fb.fundId === f.id);
-    return {
+    const result: FundWithBalance = {
       ...f,
       balance: fb?._sum.amount ?? 0,
     };
+    return result;
   });
 }
 

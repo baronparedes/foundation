@@ -8,6 +8,7 @@ import {json} from '@remix-run/server-runtime';
 import {DialogWithTransition} from '../../../components/@ui';
 import {
   Badge,
+  Button,
   Card,
   CardBody,
   Table,
@@ -93,6 +94,10 @@ export default function ProjectDashboard() {
           </div>
         </div>
       </div>
+      <hr className="my-4" />
+      <div className="text-right">
+        <Button>Report Preview</Button>
+      </div>
     </DialogWithTransition>
   );
 }
@@ -143,6 +148,8 @@ function ProjectDashboardCard({
                     <TableCell>Voucher Number</TableCell>
                     <TableCell>Ref #</TableCell>
                     <TableCell>Description</TableCell>
+                    <TableCell>Supplier</TableCell>
+                    <TableCell>Quantity</TableCell>
                     <TableCell>Amount</TableCell>
                     <TableCell></TableCell>
                   </tr>
@@ -164,6 +171,11 @@ function ProjectDashboardCard({
                               </p>
                             </div>
                           </div>
+                        </TableCell>
+
+                        <TableCell>{data.supplierName}</TableCell>
+                        <TableCell>
+                          <Badge className="text-sm">{Number(data.quantity)}</Badge>
                         </TableCell>
                         <TableCell>
                           <Badge

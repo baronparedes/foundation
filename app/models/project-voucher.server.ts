@@ -57,7 +57,7 @@ export async function createProjectVoucher({
     projectId,
     updatedById,
     transactionDate: new Date(transactionDate),
-    voucherNumber,
+    voucherNumber: voucherNumber.toUpperCase(),
   };
 
   const amt = parseFloat(disbursedAmount.toString()) * -1;
@@ -92,10 +92,6 @@ export async function closeProjectVoucher(
     },
   });
 
-  if (projectVoucher.isClosed || projectVoucher.isDeleted) {
-    console.log("is deleted");
-  }
-
   const closedConsumedAmount = await prisma.projectVoucherDetail.aggregate({
     where: { projectVoucherId },
     _sum: {
@@ -107,6 +103,23 @@ export async function closeProjectVoucher(
     Number(projectVoucher.disbursedAmount) - Number(closedConsumedAmount._sum.amount);
 
   const isDeleted = refundAmount === Number(projectVoucher.disbursedAmount);
+  const deletedDesc = `deleted voucher ${projectVoucher.voucherNumber}`;
+  const closedDesc = `refund from voucher ${projectVoucher.voucherNumber}`;
+
+  if (refundAmount === 0) {
+    await prisma.projectVoucher.update({
+      where: {
+        id: projectVoucherId,
+      },
+      data: {
+        consumedAmount: closedConsumedAmount._sum.amount,
+        isClosed: true,
+        isDeleted,
+        updatedById,
+      },
+    });
+    return;
+  }
 
   await prisma.$transaction([
     prisma.projectVoucher.update({
@@ -122,12 +135,12 @@ export async function closeProjectVoucher(
     }),
     createFundTransaction({
       amount: new Prisma.Decimal(refundAmount),
-      description: `refund from voucher ${projectVoucher.voucherNumber}`,
+      description: isDeleted ? deletedDesc : closedDesc,
+      comments: isDeleted ? deletedDesc : closedDesc,
       createdAt: new Date(),
       createdById: updatedById,
       fundId,
       projectId: projectVoucher.projectId,
-      comments: `refunded from voucher ${projectVoucher.id}`,
       type: "refund",
     }),
   ]);
