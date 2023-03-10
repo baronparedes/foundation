@@ -16,6 +16,8 @@ model User {
 
   fundTransactions FundTransaction[]
   projectVouchers  ProjectVoucher[]
+  projectSetting   ProjectSetting[]
+  projectAddOn     ProjectAddOn[]
 }
 
 model Password {
@@ -39,6 +41,7 @@ model Project {
   fundTransactions FundTransaction[]
   projectVouchers  ProjectVoucher[]
   projectSetting   ProjectSetting[]
+  projectAddOn     ProjectAddOn[]
 }
 
 model Fund {
@@ -92,6 +95,8 @@ model ProjectVoucher {
   fund   Fund   @relation(fields: [fundId], references: [id])
   fundId String
 
+  costPlus Boolean @default(true)
+
   projectVoucherDetail ProjectVoucherDetail[]
 }
 
@@ -119,10 +124,33 @@ model DetailCategory {
 }
 
 model ProjectSetting {
-  id                 Int     @id @default(autoincrement())
-  description        String
-  percentageAddOn    Decimal
-  categoryExclusions String
+  id              Int     @id @default(autoincrement())
+  description     String
+  percentageAddOn Decimal
+
+  updatedAt   DateTime @updatedAt
+  updatedBy   User     @relation(fields: [updatedById], references: [id])
+  updatedById String
+
+  startDate DateTime
+  endDate   DateTime?
+
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId String
+}
+
+model ProjectAddOn {
+  id          Int     @id @default(autoincrement())
+  description String
+  amount      Decimal
+  quantity    Decimal
+  total       Decimal
+
+  updatedAt   DateTime @updatedAt
+  updatedBy   User     @relation(fields: [updatedById], references: [id])
+  updatedById String
+
+  costPlus Boolean @default(true)
 
   project   Project @relation(fields: [projectId], references: [id])
   projectId String

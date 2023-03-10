@@ -14,12 +14,13 @@ import {json, redirect} from '@remix-run/server-runtime';
 import {DialogWithTransition, TextArea, TextInput} from '../../../components/@ui';
 import {Button} from '../../../components/@windmill';
 import FundPicker from '../../../components/pickers/FundPicker';
-import {FundWithBalance, getFunds} from '../../../models/fund.server';
+import {getFunds} from '../../../models/fund.server';
 import {createProjectVoucher} from '../../../models/project-voucher.server';
 import {getProject} from '../../../models/project.server';
 import {requireUserId} from '../../../session.server';
 import {validateRequiredString} from '../../../utils';
 
+import type { FundWithBalance } from "../../../models/fund.server";
 import type { ProjectVoucher } from "@prisma/client";
 import type { LoaderArgs, ActionArgs } from "@remix-run/server-runtime";
 type FormErrors = {
