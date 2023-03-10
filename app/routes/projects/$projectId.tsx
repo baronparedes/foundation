@@ -8,7 +8,7 @@ import {Outlet, useCatch, useLoaderData, useNavigate} from '@remix-run/react';
 import {LabeledCurrency} from '../../components/@ui';
 import {Button} from '../../components/@windmill';
 import ProjectVoucherTable from '../../components/tables/ProjectVoucherTable';
-import {getProjectFundDetails} from '../../models/fund-transaction.server';
+import {getProjectFundDetails} from '../../models/project-dashboard.server';
 import {getProjectVouchers} from '../../models/project-voucher.server';
 
 import type { LoaderArgs } from "@remix-run/node";
@@ -22,16 +22,38 @@ export async function loader({ params }: LoaderArgs) {
   }
 
   const projectVouchers = await getProjectVouchers({ id: params.projectId });
-  const { collectedFunds, disbursedFunds, remainingFunds } = await getProjectFundDetails(
-    params.projectId
-  );
+  const {
+    collectedFunds,
+    disbursedFunds,
+    remainingFunds,
+    addOnTotals,
+    costPlusTotals,
+    totalProjectCost,
+  } = await getProjectFundDetails(params.projectId);
 
-  return json({ project, collectedFunds, disbursedFunds, remainingFunds, projectVouchers });
+  return json({
+    project,
+    collectedFunds,
+    disbursedFunds,
+    remainingFunds,
+    projectVouchers,
+    addOnTotals,
+    costPlusTotals,
+    totalProjectCost,
+  });
 }
 
 export default function ProjectDetailsPage() {
-  const { project, collectedFunds, disbursedFunds, remainingFunds, projectVouchers } =
-    useLoaderData<typeof loader>();
+  const {
+    project,
+    collectedFunds,
+    disbursedFunds,
+    remainingFunds,
+    projectVouchers,
+    addOnTotals,
+    costPlusTotals,
+    totalProjectCost,
+  } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
 
   return (
@@ -42,25 +64,39 @@ export default function ProjectDetailsPage() {
           <h3 className="text-2xl font-bold">{project.name}</h3>
         </div>
         <div className="text-right">
+          <h5>{project.description}</h5>
+          <h5>📍 {project.location}</h5>
+        </div>
+      </div>
+
+      <hr className="my-4" />
+      <div className="grid grid-cols-2 gap-2">
+        <div className="text-center">
+          <LabeledCurrency
+            label="total project cost"
+            value={totalProjectCost}
+            valueClassName={classNames("text-4xl")}
+          />
+        </div>
+        <div className="text-center">
           <LabeledCurrency
             label="remaining funds"
             value={remainingFunds}
             valueClassName={classNames(
-              "text-2xl",
+              "text-4xl",
               remainingFunds < 200000 ? "text-red-500" : "text-green-500"
             )}
           />
         </div>
       </div>
       <hr className="my-4" />
-      <p className="py-4">{project.description}</p>
-      <p className="py-4">📍 {project.location}</p>
-      <div className="grid grid-cols-3 gap-3 text-center">
+      <div className="grid grid-cols-5 text-center">
         <LabeledCurrency label="estimated cost" value={Number(project.estimatedCost)} />
         <LabeledCurrency label="collected funds" value={Number(collectedFunds)} />
         <LabeledCurrency label="disbursed funds" value={Math.abs(Number(disbursedFunds))} />
+        <LabeledCurrency label="additional expenses" value={Number(addOnTotals)} />
+        <LabeledCurrency label="project expenses" value={Number(costPlusTotals)} />
       </div>
-
       <hr className="my-4" />
       <div className="w-full space-x-2 text-right">
         <Button onClick={() => navigate("./settings")}>Settings</Button>

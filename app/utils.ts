@@ -1,9 +1,9 @@
-import { useMemo } from "react";
+import moment from 'moment';
+import {useMemo} from 'react';
 
-import { useMatches } from "@remix-run/react";
+import {useMatches} from '@remix-run/react';
 
 import type { User } from "~/models/user.server";
-
 const DEFAULT_REDIRECT = "/";
 
 /**
@@ -91,4 +91,9 @@ export function validateEmail(email: unknown): email is string {
 
 export function validateRequiredString(value: unknown): value is string {
   return typeof value === "string" && value.length > 0;
+}
+
+export function isBetweenDates(from: Date, to: Date | null, target: Date) {
+  const result = moment(target).isBetween(from, to, "days", "[]");
+  return result;
 }

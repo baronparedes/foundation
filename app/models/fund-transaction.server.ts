@@ -75,35 +75,3 @@ export function createFundTransaction({
     data,
   });
 }
-
-export async function getProjectFundDetails(id: string) {
-  const collectedFundsData = await prisma.fundTransaction.aggregate({
-    where: {
-      projectId: id,
-      type: "collection",
-    },
-    _sum: {
-      amount: true,
-    },
-  });
-
-  const disbursedFundsData = await prisma.fundTransaction.aggregate({
-    where: {
-      projectId: id,
-      type: { in: ["disbursement", "refund"] },
-    },
-    _sum: {
-      amount: true,
-    },
-  });
-
-  const collectedFunds = collectedFundsData._sum.amount;
-  const disbursedFunds = disbursedFundsData._sum.amount;
-  const remainingFunds = Number(collectedFunds) - Number(disbursedFunds) * -1;
-
-  return {
-    collectedFunds,
-    disbursedFunds,
-    remainingFunds,
-  };
-}
