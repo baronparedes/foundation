@@ -26,6 +26,7 @@ export async function loader({ params, request }: LoaderArgs) {
     addOnExpenses,
     costPlusTotals,
     totalProjectCost,
+    totalExempt,
   } = await getProjectDashboard({ id: params.projectId });
 
   if (!project) {
@@ -42,6 +43,7 @@ export async function loader({ params, request }: LoaderArgs) {
     addOnExpenses,
     costPlusTotals,
     totalProjectCost,
+    totalExempt,
   });
 }
 

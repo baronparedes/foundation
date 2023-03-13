@@ -1,7 +1,7 @@
-import moment from 'moment';
-import {useMemo} from 'react';
+import moment from "moment";
+import { useMemo } from "react";
 
-import {useMatches} from '@remix-run/react';
+import { useMatches } from "@remix-run/react";
 
 import type { User } from "~/models/user.server";
 const DEFAULT_REDIRECT = "/";
@@ -95,5 +95,10 @@ export function validateRequiredString(value: unknown): value is string {
 
 export function isBetweenDates(from: Date, to: Date | null, target: Date) {
   const result = moment(target).isBetween(from, to, "days", "[]");
+  return result;
+}
+
+export function isBeforeDate(target: Date, beforeDate: Date) {
+  const result = moment(target).isBefore(beforeDate);
   return result;
 }

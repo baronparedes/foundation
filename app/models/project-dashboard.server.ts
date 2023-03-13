@@ -1,6 +1,6 @@
 import type { Project, ProjectAddOn, ProjectSetting, ProjectVoucher } from "@prisma/client";
 import { prisma } from "../db.server";
-import { isBetweenDates, sum } from "../utils";
+import { isBeforeDate, isBetweenDates, sum } from "../utils";
 
 async function getClosedVoucherDetails(vouchers: ProjectVoucher[]) {
   const closedVouchers = vouchers.filter((v) => v.isClosed);
@@ -97,7 +97,7 @@ async function getCostPlusTotals(
   });
 
   const getTotalsFn = (setting: ProjectSetting) => {
-    let exemptTotals = 0;
+    let totalExempted = 0;
     const totals = sum(targetVouchers.map((v) => Number(v.consumedAmount)));
     const addOnTotals = sum(addOns.filter((a) => a.costPlus).map((a) => Number(a.total)));
     const percentage = Number(setting.percentageAddOn) / 100;
@@ -106,16 +106,24 @@ async function getCostPlusTotals(
       const exemptedVouchers = targetVouchers.filter(
         (v) => !isBetweenDates(setting.startDate, setting.endDate, v.transactionDate)
       );
-      exemptTotals = sum(exemptedVouchers.map((v) => Number(v.consumedAmount)));
+      totalExempted = sum(exemptedVouchers.map((v) => Number(v.consumedAmount)));
+    } else {
+      const exemptedVouchers = targetVouchers.filter(
+        (v) => !isBeforeDate(setting.startDate, v.transactionDate)
+      );
+      totalExempted = sum(exemptedVouchers.map((v) => Number(v.consumedAmount)));
     }
 
-    return (addOnTotals + totals - exemptTotals) * percentage;
+    return {
+      total: (addOnTotals + totals - totalExempted) * percentage,
+      totalExempted,
+    };
   };
 
   const result = settings.map((s) => {
     return {
       ...s,
-      total: getTotalsFn(s),
+      ...getTotalsFn(s),
     };
   });
 
@@ -139,6 +147,7 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
 
   const addOnExpenses = await getAddOnExpenses({ id });
   const costPlusTotals = await getCostPlusTotals({ id }, vouchers, addOnExpenses.addOns);
+  const totalExempt = sum(costPlusTotals.map((_) => _.totalExempted));
 
   const totalProjectCost =
     addOnExpenses.totalAddOns +
@@ -153,6 +162,7 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
     addOnExpenses,
     costPlusTotals,
     totalProjectCost,
+    totalExempt,
   };
 }
 
