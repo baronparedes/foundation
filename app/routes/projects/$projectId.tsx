@@ -3,9 +3,10 @@ import invariant from "tiny-invariant";
 import { getProject } from "~/models/project.server";
 
 import { json } from "@remix-run/node";
-import { Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
+import { Form, Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
 
 import { LabeledCurrency } from "../../components/@ui";
+import { SearchInput } from "../../components/@ui/SearchInput";
 import { Button } from "../../components/@windmill";
 import ProjectVoucherTable from "../../components/tables/ProjectVoucherTable";
 import { getProjectFundDetails } from "../../models/project-dashboard.server";
@@ -13,7 +14,7 @@ import { getProjectVouchers } from "../../models/project-voucher.server";
 
 import type { LoaderArgs } from "@remix-run/node";
 import type { ProjectVoucherWithDetails } from "../../models/project-voucher.server";
-export async function loader({ params }: LoaderArgs) {
+export async function loader({ params, request }: LoaderArgs) {
   invariant(params.projectId, "projectId not found");
 
   const project = await getProject({ id: params.projectId });
@@ -21,7 +22,14 @@ export async function loader({ params }: LoaderArgs) {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const projectVouchers = await getProjectVouchers({ id: params.projectId });
+  const url = new URL(request.url);
+  const urlParams = new URLSearchParams(url.search);
+
+  const projectVouchers = await getProjectVouchers({
+    id: params.projectId,
+    criteria: urlParams.get("search") ?? undefined,
+  });
+
   const {
     collectedFunds,
     disbursedFunds,
@@ -120,6 +128,10 @@ export default function ProjectDetailsPage() {
         <Button onClick={() => navigate("./vouchers")}>New Voucher</Button>
         <Outlet />
       </div>
+      <hr className="my-4" />
+      <Form>
+        <SearchInput />
+      </Form>
       <hr className="my-4" />
       <div>
         <ProjectVoucherTable

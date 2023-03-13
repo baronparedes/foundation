@@ -15,10 +15,43 @@ export function getProjectVoucher({ id }: Pick<ProjectVoucher, "id">) {
   });
 }
 
-export function getProjectVouchers({ id }: Pick<Project, "id">) {
-  return prisma.projectVoucher.findMany({
+export function getProjectVouchers({
+  id,
+  criteria,
+}: Pick<Project, "id"> & { criteria?: string }) {
+  let args: Prisma.ProjectVoucherFindManyArgs = {
     where: { projectId: id, isDeleted: false },
-    orderBy: { transactionDate: "asc" },
+  };
+
+  if (criteria) {
+    args = {
+      where: {
+        AND: [
+          { projectId: id, isDeleted: false },
+          {
+            OR: [
+              {
+                voucherNumber: {
+                  contains: criteria,
+                  mode: "insensitive",
+                },
+              },
+              {
+                description: {
+                  contains: criteria,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          },
+        ],
+      },
+    };
+  }
+
+  return prisma.projectVoucher.findMany({
+    ...args,
+    orderBy: { transactionDate: "desc" },
     include: {
       fund: {
         select: {
