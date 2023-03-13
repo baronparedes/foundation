@@ -1,24 +1,27 @@
-import invariant from 'tiny-invariant';
+import invariant from "tiny-invariant";
 
-import {LockClosedIcon, LockOpenIcon} from '@heroicons/react/solid';
-import {Form, useLoaderData, useNavigate, useTransition} from '@remix-run/react';
-import {json, redirect} from '@remix-run/server-runtime';
+import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/solid";
+import { Form, useLoaderData, useNavigate, useTransition } from "@remix-run/react";
+import { json, redirect } from "@remix-run/server-runtime";
 
-import {DialogWithTransition, LabeledCurrency} from '../../../components/@ui';
-import {Button} from '../../../components/@windmill';
-import {AddVoucherDetails} from '../../../components/forms/AddVoucherDetail';
-import FundPicker from '../../../components/pickers/FundPicker';
-import VoucherDetailTable from '../../../components/tables/VoucherDetailTable';
-import {getDetailCategories} from '../../../models/detail-category.server';
-import {getFunds} from '../../../models/fund.server';
+import { DialogWithTransition, LabeledCurrency } from "../../../components/@ui";
+import { Button } from "../../../components/@windmill";
+import { NewVoucherDetails } from "../../../components/forms/NewVoucherDetail";
+import FundPicker from "../../../components/pickers/FundPicker";
+import VoucherDetailTable from "../../../components/tables/VoucherDetailTable";
+import { getDetailCategories } from "../../../models/detail-category.server";
+import { getFunds } from "../../../models/fund.server";
 import {
   addProjectVoucherDetail,
   deleteProjectVoucherDetail,
   getProjectVoucherDetails,
-} from '../../../models/project-voucher-detail.server';
-import {closeProjectVoucher, getProjectVoucher} from '../../../models/project-voucher.server';
-import {requireUserId} from '../../../session.server';
-import {formatCurrencyFixed, sum} from '../../../utils';
+} from "../../../models/project-voucher-detail.server";
+import {
+  closeProjectVoucher,
+  getProjectVoucher,
+} from "../../../models/project-voucher.server";
+import { requireUserId } from "../../../session.server";
+import { formatCurrencyFixed, sum } from "../../../utils";
 
 import type { FundWithBalance } from "../../../models/fund.server";
 import type { ProjectVoucherDetailslWithCategory } from "../../../models/project-voucher-detail.server";
@@ -127,7 +130,7 @@ export default function VoucherDetails() {
         <hr className="my-4" />
         {!voucher.isClosed && (
           <div className="my-4 mx-4">
-            <AddVoucherDetails
+            <NewVoucherDetails
               projectVoucherId={voucher.id}
               userId={userId}
               maxAmount={remainingAmount}

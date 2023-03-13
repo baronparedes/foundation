@@ -14,10 +14,9 @@ export type CostPlusFormErrors = {
   description?: string;
   percentageAddOn?: string;
   startDate?: string;
-  onCostPlusCreated?: () => void;
 };
 
-export function getAddCostPlusFormData(formData: FormData) {
+export function getNewCostPlusFormData(formData: FormData) {
   const errors: CostPlusFormErrors = {};
   const { description, percentageAddOn, startDate, endDate, projectId, updatedById } =
     Object.fromEntries(formData);
@@ -63,7 +62,7 @@ type Props = {
   errors?: CostPlusFormErrors;
 };
 
-export function AddCostPlus({ projectId, userId, errors }: Props) {
+export function NewCostPlus({ projectId, userId, errors }: Props) {
   const [toggle, setToggle] = useState(false);
   const fetcher = useFetcher();
   const isAdding =

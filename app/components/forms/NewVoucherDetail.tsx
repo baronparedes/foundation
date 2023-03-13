@@ -1,9 +1,15 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from "react";
 
-import {useFetcher} from '@remix-run/react';
+import { useFetcher } from "@remix-run/react";
 
-import {DialogWithTransition, LabeledCurrency, SelectInput, TextArea, TextInput} from '../@ui';
-import {Button} from '../@windmill';
+import {
+  DialogWithTransition,
+  LabeledCurrency,
+  SelectInput,
+  TextArea,
+  TextInput,
+} from "../@ui";
+import { Button } from "../@windmill";
 
 import type { DetailCategoryWithChildren } from "../../models/detail-category.server";
 type Props = {
@@ -12,7 +18,7 @@ type Props = {
   maxAmount: number;
   categories: DetailCategoryWithChildren[];
 };
-export function AddVoucherDetails({
+export function NewVoucherDetails({
   maxAmount,
   projectVoucherId,
   userId,

@@ -4,11 +4,12 @@ import { useLoaderData, useNavigate } from "@remix-run/react";
 import { json, redirect } from "@remix-run/server-runtime";
 
 import { DialogWithTransition } from "../../../components/@ui";
-import { Button } from "../../../components/@windmill";
-import { AddCostPlus, getAddCostPlusFormData } from "../../../components/forms/AddCostPlus";
+import { getNewAddOnFormData, NewAddOn } from "../../../components/forms/NewAddOn";
+import { getNewCostPlusFormData, NewCostPlus } from "../../../components/forms/NewCostPlus";
 import ProjectAddOnTable from "../../../components/tables/ProjectAddOnTable";
 import ProjectSettingTable from "../../../components/tables/ProjectSettingTable";
 import {
+  createProjectAddOn,
   deleteProjectAddOn,
   getProjectAddOns,
 } from "../../../models/project-add-on.server";
@@ -62,9 +63,17 @@ export async function action({ params, request }: ActionArgs) {
   }
 
   if (_action === "create-project-setting") {
-    const costPlusFormData = getAddCostPlusFormData(formData);
+    const costPlusFormData = getNewCostPlusFormData(formData);
     if (!costPlusFormData.errors) {
       await createProjectSetting(costPlusFormData.data);
+      return redirect(`/projects/${params.projectId}/settings`);
+    }
+  }
+
+  if (_action === "create-project-add-on") {
+    const addOnFormData = getNewAddOnFormData(formData);
+    if (!addOnFormData.errors) {
+      await createProjectAddOn(addOnFormData.data);
       return redirect(`/projects/${params.projectId}/settings`);
     }
   }
@@ -85,13 +94,13 @@ export default function ProjectSettings() {
       onCloseModal={() => navigate(`/projects/${project.id}`)}
     >
       <div className="text-right">
-        <AddCostPlus projectId={projectId} userId={userId} />
+        <NewCostPlus projectId={projectId} userId={userId} />
       </div>
       <br />
       <ProjectSettingTable data={projectSettings as unknown as ProjectSettingWithDetails} />
       <hr className="my-4" />
       <div className="text-right">
-        <Button>New Add On</Button>
+        <NewAddOn projectId={projectId} userId={userId} />
       </div>
       <br />
       <ProjectAddOnTable data={projectAddOns as unknown as ProjectAddOnWithDetails} />

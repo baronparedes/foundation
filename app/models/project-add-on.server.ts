@@ -25,3 +25,29 @@ export function getProjectAddOns({ id }: Pick<Project, "id">) {
 export async function deleteProjectAddOn({ id }: Pick<ProjectAddOn, "id">) {
   await prisma.projectAddOn.delete({ where: { id } });
 }
+
+export async function createProjectAddOn({
+  description,
+  amount,
+  quantity,
+  total,
+  costPlus,
+  projectId,
+  updatedById,
+}: Omit<ProjectAddOn, "id" | "updatedAt">) {
+  const data = {
+    description,
+    amount,
+    quantity,
+    total,
+    costPlus,
+    projectId,
+    updatedById,
+  };
+
+  const projectAddOn = await prisma.projectAddOn.create({
+    data,
+  });
+
+  return projectAddOn;
+}
