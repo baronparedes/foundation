@@ -51,7 +51,7 @@ export function getProjectVouchers({
 
   return prisma.projectVoucher.findMany({
     ...args,
-    orderBy: { transactionDate: "desc" },
+    orderBy: { createdAt: "desc" },
     include: {
       fund: {
         select: {
@@ -179,4 +179,20 @@ export async function closeProjectVoucher(
       type: "refund",
     }),
   ]);
+}
+
+export async function toggleCostPlus(
+  projectVoucherId: number,
+  updatedById: string,
+  costPlus: boolean
+) {
+  await prisma.projectVoucher.update({
+    where: {
+      id: projectVoucherId,
+    },
+    data: {
+      updatedById,
+      costPlus,
+    },
+  });
 }

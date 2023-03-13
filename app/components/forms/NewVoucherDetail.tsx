@@ -76,16 +76,14 @@ export function NewVoucherDetails({
 
   return (
     <>
-      <div className="my-2 text-right">
-        <Button
-          disabled={maxAmount === 0}
-          onClick={() => {
-            setToggle(true);
-          }}
-        >
-          Add Details
-        </Button>
-      </div>
+      <Button
+        disabled={maxAmount === 0}
+        onClick={() => {
+          setToggle(true);
+        }}
+      >
+        Add Details
+      </Button>
       <DialogWithTransition
         isOpen={toggle}
         title={<>Fill out voucher details</>}

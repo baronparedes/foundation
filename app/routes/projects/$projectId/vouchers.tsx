@@ -42,6 +42,7 @@ function getFormData(formData: FormData) {
     projectId,
     code,
     fundId,
+    costPlus,
   } = Object.fromEntries(formData);
 
   let hasErrors = false;
@@ -81,6 +82,7 @@ function getFormData(formData: FormData) {
       projectId,
       code,
       fundId,
+      costPlus: costPlus ? true : false,
     } as unknown as ProjectVoucher & { code: string },
   };
 }

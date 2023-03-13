@@ -87,10 +87,10 @@ export default function ProjectDashboard() {
       <hr className="my-4" />
       <div className="my-4">
         <div className="flex">
-          {costPlusTotals.map((cp) => {
+          {costPlusTotals.map((cp, key) => {
             return (
               <>
-                <Card colored className="m-2 flex-auto bg-purple-100">
+                <Card colored className="m-2 flex-auto bg-purple-100" key={key}>
                   <CardBody>
                     <p className="mb-4 font-semibold">{cp.description}</p>
                     <p className="currency">{formatCurrencyFixed(cp.total)}</p>

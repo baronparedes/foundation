@@ -79,7 +79,11 @@ export function NewCostPlus({ projectId, userId, errors }: Props) {
       >
         New Cost Plus
       </Button>
-      <DialogWithTransition isOpen={toggle} title={<>Fill cost plus details</>}>
+      <DialogWithTransition
+        onCloseModal={() => setToggle(false)}
+        isOpen={toggle}
+        title={<>Fill cost plus details</>}
+      >
         <fetcher.Form
           style={{
             display: "flex",

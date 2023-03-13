@@ -83,7 +83,11 @@ export function NewAddOn({ projectId, userId, errors }: Props) {
       >
         New Add On
       </Button>
-      <DialogWithTransition isOpen={toggle} title={<>Fill add on details</>}>
+      <DialogWithTransition
+        isOpen={toggle}
+        title={<>Fill add on details</>}
+        onCloseModal={() => setToggle(false)}
+      >
         <fetcher.Form
           style={{
             display: "flex",
@@ -99,7 +103,7 @@ export function NewAddOn({ projectId, userId, errors }: Props) {
           <div className="disable hidden">
             <TextInput name="updatedById" required defaultValue={userId} />
             <TextInput name="projectId" required defaultValue={projectId} />
-            <TextInput name="total" required value={totalAmount} />
+            <TextInput name="total" required value={totalAmount} readOnly />
           </div>
           <TextArea
             name="description"
