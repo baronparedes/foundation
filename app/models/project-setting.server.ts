@@ -1,6 +1,6 @@
-import {prisma} from '~/db.server';
+import { prisma } from "~/db.server";
 
-import type { Prisma, Project } from "@prisma/client";
+import type { Prisma, Project, ProjectSetting } from "@prisma/client";
 
 export type ProjectSettingWithDetails = Prisma.PromiseReturnType<typeof getProjectSettings>;
 
@@ -20,4 +20,8 @@ export function getProjectSettings({ id }: Pick<Project, "id">) {
       },
     },
   });
+}
+
+export async function deleteProjectSetting({ id }: Pick<ProjectSetting, "id">) {
+  await prisma.projectSetting.delete({ where: { id } });
 }

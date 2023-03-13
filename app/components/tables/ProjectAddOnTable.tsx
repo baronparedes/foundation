@@ -1,8 +1,8 @@
-import {ExclamationCircleIcon, TrashIcon} from '@heroicons/react/solid';
-import {Form, useFetcher} from '@remix-run/react';
+import { ExclamationCircleIcon, TrashIcon } from "@heroicons/react/solid";
+import { Form, useFetcher } from "@remix-run/react";
 
-import {formatCurrencyFixed} from '../../utils';
-import {TextInput} from '../@ui';
+import { formatCurrencyFixed } from "../../utils";
+import { TextInput } from "../@ui";
 import {
   Badge,
   Button,
@@ -12,7 +12,7 @@ import {
   TableContainer,
   TableHeader,
   TableRow,
-} from '../@windmill';
+} from "../@windmill";
 
 import type { ProjectAddOnWithDetails } from "../../models/project-add-on.server";
 type Props = {
@@ -121,6 +121,7 @@ function DeleteProjectAddOn({ projectAddOnId }: { projectAddOnId: number }) {
           size="small"
           type="submit"
           aria-label="delete"
+          onClick={(e) => !confirm("continue?") && e.preventDefault()}
         >
           <TrashIcon className="h-5 w-5" />
         </Button>

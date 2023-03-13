@@ -1,20 +1,27 @@
-import invariant from 'tiny-invariant';
+import invariant from "tiny-invariant";
 
-import {useLoaderData, useNavigate} from '@remix-run/react';
-import {json} from '@remix-run/server-runtime';
+import { useLoaderData, useNavigate } from "@remix-run/react";
+import { json } from "@remix-run/server-runtime";
 
-import {DialogWithTransition} from '../../../components/@ui';
-import {Button} from '../../../components/@windmill';
-import ProjectAddOnTable from '../../../components/tables/ProjectAddOnTable';
-import ProjectSettingTable from '../../../components/tables/ProjectSettingTable';
-import {getProjectAddOns} from '../../../models/project-add-on.server';
-import {getProjectSettings} from '../../../models/project-setting.server';
-import {getProject} from '../../../models/project.server';
-import {requireUserId} from '../../../session.server';
+import { DialogWithTransition } from "../../../components/@ui";
+import { Button } from "../../../components/@windmill";
+import ProjectAddOnTable from "../../../components/tables/ProjectAddOnTable";
+import ProjectSettingTable from "../../../components/tables/ProjectSettingTable";
+import {
+  deleteProjectAddOn,
+  getProjectAddOns,
+} from "../../../models/project-add-on.server";
+import {
+  deleteProjectSetting,
+  getProjectSettings,
+} from "../../../models/project-setting.server";
+import { getProject } from "../../../models/project.server";
+import { requireUserId } from "../../../session.server";
 
 import type { ProjectAddOnWithDetails } from "../../../models/project-add-on.server";
 import type { ProjectSettingWithDetails } from "../../../models/project-setting.server";
-import type { LoaderArgs } from "@remix-run/server-runtime";
+import type { LoaderArgs, ActionArgs } from "@remix-run/server-runtime";
+
 export async function loader({ params, request }: LoaderArgs) {
   invariant(params.projectId, "project not found");
 
@@ -29,6 +36,25 @@ export async function loader({ params, request }: LoaderArgs) {
   const userId = await requireUserId(request);
 
   return json({ project, userId, projectSettings, projectAddOns });
+}
+
+export async function action({ params, request }: ActionArgs) {
+  invariant(params.projectId, "project not found");
+
+  const { _action, projectSettingId, projectAddOnId } = Object.fromEntries(
+    await request.formData()
+  );
+  if (_action === "delete-project-add-on") {
+    await deleteProjectAddOn({ id: Number(projectAddOnId) });
+    return json({ state: "deleted project add on", projectAddOnId });
+  }
+
+  if (_action === "delete-project-setting") {
+    await deleteProjectSetting({ id: Number(projectSettingId) });
+    return json({ state: "deleted project setting", projectSettingId });
+  }
+
+  return null;
 }
 
 export default function ProjectSettings() {
