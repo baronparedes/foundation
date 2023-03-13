@@ -1,6 +1,6 @@
 import type { Project, ProjectAddOn, ProjectSetting, ProjectVoucher } from "@prisma/client";
-import {prisma} from '../db.server';
-import {isBetweenDates, sum} from '../utils';
+import { prisma } from "../db.server";
+import { isBetweenDates, sum } from "../utils";
 
 async function getClosedVoucherDetails(vouchers: ProjectVoucher[]) {
   const closedVouchers = vouchers.filter((v) => v.isClosed);
@@ -69,7 +69,7 @@ async function getAddOnExpenses({ id }: Pick<Project, "id">) {
 
   return {
     addOns,
-    totalAddOns: sum(addOns.map((a) => Number(a.amount))),
+    totalAddOns: sum(addOns.map((a) => Number(a.total))),
   };
 }
 

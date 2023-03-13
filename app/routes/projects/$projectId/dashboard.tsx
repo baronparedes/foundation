@@ -1,16 +1,16 @@
-import classNames from 'classnames';
-import invariant from 'tiny-invariant';
+import classNames from "classnames";
+import invariant from "tiny-invariant";
 
-import {useLoaderData, useNavigate} from '@remix-run/react';
-import {json} from '@remix-run/server-runtime';
+import { useLoaderData, useNavigate } from "@remix-run/react";
+import { json } from "@remix-run/server-runtime";
 
-import {DialogWithTransition, LabeledCurrency} from '../../../components/@ui';
-import {Button, Card, CardBody} from '../../../components/@windmill';
-import AddOnExpenseCard from '../../../components/project-dashboard/AddOnExpenseCard';
-import DisbursementCard from '../../../components/project-dashboard/DisbursementCard';
-import {getProjectDashboard} from '../../../models/project-dashboard.server';
-import {requireUserId} from '../../../session.server';
-import {formatCurrencyFixed, sum} from '../../../utils';
+import { DialogWithTransition, LabeledCurrency } from "../../../components/@ui";
+import { Button, Card, CardBody } from "../../../components/@windmill";
+import AddOnExpenseCard from "../../../components/project-dashboard/AddOnExpenseCard";
+import DisbursementCard from "../../../components/project-dashboard/DisbursementCard";
+import { getProjectDashboard } from "../../../models/project-dashboard.server";
+import { requireUserId } from "../../../session.server";
+import { formatCurrencyFixed, sum } from "../../../utils";
 
 import type { ProjectAddOn } from "@prisma/client";
 import type { ProjectVoucherDetailsWithVoucherNumber } from "../../../models/project-voucher-detail.server";
@@ -106,8 +106,8 @@ export default function ProjectDashboard() {
           <p className="currency">{formatCurrencyFixed(totalDisbursed)}</p>
         </CardBody>
       </Card>
-      <div className="my-4">
-        <div className="flex-none">
+      <div>
+        <div className="m-2 flex-none">
           <div className="grid gap-6 md:grid-cols-3 xl:grid-cols-3">
             {categorizedDisbursement
               .filter((data) => data.totalDisbursements > 0)
@@ -116,7 +116,7 @@ export default function ProjectDashboard() {
                   <DisbursementCard
                     key={i}
                     colored
-                    className="m-2 hover:bg-purple-100"
+                    className="hover:bg-purple-100"
                     total={data.totalDisbursements}
                     description={data.category.description}
                     disbursements={
