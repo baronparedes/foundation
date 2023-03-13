@@ -61,7 +61,7 @@ export function NewVoucherDetails({
   function renderOptionGroup(item: DetailCategoryWithChildren) {
     if (item.children.length > 0) {
       return (
-        <optgroup label={item.description}>
+        <optgroup label={item.description} key={item.id}>
           {item.children.map((c) => renderOptionGroup(c))}
         </optgroup>
       );

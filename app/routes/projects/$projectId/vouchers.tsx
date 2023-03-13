@@ -181,10 +181,11 @@ export default function VoucherPage() {
           type="number"
           required
           max={maxBalance}
+          step={0.1}
         />
         <TextArea
           name="description"
-          label="Description: "
+          label="Description"
           error={actionData?.errors?.description}
           required
         />
@@ -196,7 +197,6 @@ export default function VoucherPage() {
           type="date"
           defaultValue={today}
         />
-
         <TextInput
           name="costPlus"
           label="Included in Cost Plus?"

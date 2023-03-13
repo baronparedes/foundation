@@ -1,6 +1,6 @@
-import classNames from 'classnames';
+import classNames from "classnames";
 
-import {formatCurrency} from '../../utils';
+import { formatCurrency, formatCurrencyFixed } from "../../utils";
 
 type Props = {
   label: string;
@@ -27,7 +27,7 @@ export default function LabeledCurrency({
             valueClassName
           )}
         >
-          {formatCurrency(value)}
+          {value % 1 === 0 ? formatCurrency(value) : formatCurrencyFixed(value)}
         </p>
       </div>
     </div>
