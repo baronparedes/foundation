@@ -66,7 +66,7 @@ function getFormData(formData: FormData) {
     hasErrors = true;
   }
   if (!validateRequiredString(transactionDate)) {
-    errors.disbursedAmount = "Transaction date is required";
+    errors.transactionDate = "Transaction date is required";
     hasErrors = true;
   }
 
@@ -155,6 +155,16 @@ export default function VoucherPage() {
           width: "100%",
         }}
       >
+        <FundPicker
+          name="fundId"
+          label="Fund source"
+          defaultValue={""}
+          required
+          error={actionData?.errors?.fundId}
+          onChange={handleOnSelectFund}
+          funds={funds as unknown as FundWithBalance[]}
+        />
+        <hr className="my-4" />
         <TextInput
           name="voucherNumber"
           label="Voucher Number"
@@ -184,15 +194,7 @@ export default function VoucherPage() {
           type="date"
           defaultValue={today}
         />
-        <FundPicker
-          name="fundId"
-          label="Fund"
-          defaultValue={""}
-          required
-          error={actionData?.errors?.fundId}
-          onChange={handleOnSelectFund}
-          funds={funds as unknown as FundWithBalance[]}
-        />
+
         <TextInput
           name="costPlus"
           label="Included in Cost Plus?"

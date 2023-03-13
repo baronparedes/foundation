@@ -175,10 +175,10 @@ export default function VoucherDetails() {
                         required
                         funds={funds as unknown as FundWithBalance[]}
                       />
-                      <hr className="my-4" />
                     </>
                   )}
                   <Button
+                    className="my-4"
                     name="_action"
                     value="close-voucher"
                     type="submit"

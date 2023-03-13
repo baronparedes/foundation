@@ -14,13 +14,13 @@ import { json, redirect } from "@remix-run/server-runtime";
 import {
   DialogWithTransition,
   LabeledCurrency,
-  SelectInput,
   TextArea,
   TextInput,
 } from "../../../components/@ui";
 import { Button } from "../../../components/@windmill";
+import FundPicker from "../../../components/pickers/FundPicker";
 import { transferFundTransaction } from "../../../models/fund-transaction.server";
-import { getFund, getFunds } from "../../../models/fund.server";
+import { FundWithBalance, getFund, getFunds } from "../../../models/fund.server";
 import { requireUserId } from "../../../session.server";
 import { validateRequiredString } from "../../../utils";
 
@@ -47,7 +47,7 @@ function getFormData(formData: FormData) {
     hasErrors = true;
   }
   if (!validateRequiredString(fundId)) {
-    errors.amount = "Fund is required";
+    errors.fundId = "Fund is required";
     hasErrors = true;
   }
 
@@ -125,6 +125,16 @@ export default function CashInPage() {
           width: "100%",
         }}
       >
+        <hr className="my-4" />
+        <FundPicker
+          name="fundId"
+          label="Transfer to"
+          defaultValue={""}
+          required
+          error={actionData?.errors?.fundId}
+          funds={funds.filter((f) => f.id !== fundId) as unknown as FundWithBalance[]}
+        />
+        <hr className="my-4" />
         <TextInput
           name="amount"
           label="Amount"
@@ -147,18 +157,6 @@ export default function CashInPage() {
           type="date"
           defaultValue={today}
         />
-        <SelectInput name="fundId" label="Transfer to" defaultValue={""}>
-          <option value={""}>Select a fund</option>
-          {funds
-            .filter((f) => f.id !== fundId)
-            .map((f) => {
-              return (
-                <option key={f.id} value={f.id}>
-                  {f.code}
-                </option>
-              );
-            })}
-        </SelectInput>
         <div className="disable hidden">
           <TextInput name="createdById" required defaultValue={userId} />
           <TextInput name="selectedFundId" required defaultValue={fund.id} />

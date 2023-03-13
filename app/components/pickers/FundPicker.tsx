@@ -1,6 +1,6 @@
 import type { FundWithBalance } from "../../models/fund.server";
-import {formatCurrencyFixed} from '../../utils';
-import {SelectInput} from '../@ui';
+import { formatCurrencyFixed } from "../../utils";
+import { SelectInput } from "../@ui";
 
 type Props = {
   funds: FundWithBalance[];
@@ -11,6 +11,7 @@ export default function FundPicker({
   funds,
   onFundSelected,
   onChange,
+  error,
   ...props
 }: Props & React.ComponentProps<typeof SelectInput>) {
   return (
@@ -35,6 +36,11 @@ export default function FundPicker({
           );
         })}
       </SelectInput>
+      {error && (
+        <div className="pt-1 text-red-700" id={`${props.name}-error`}>
+          {error}
+        </div>
+      )}
     </div>
   );
 }
