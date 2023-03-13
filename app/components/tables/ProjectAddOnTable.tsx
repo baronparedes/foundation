@@ -44,9 +44,9 @@ export default function ProjectAddOnTable({ data }: Props) {
                 </TableCell>
               </TableRow>
             ) : (
-              data?.map((projectAddOn, key) => {
+              data?.map((projectAddOn) => {
                 return (
-                  <TableRow key={key}>
+                  <TableRow key={`project-add-on-${projectAddOn.id}`}>
                     <TableCell className="w-80">
                       <div className="flex items-center text-sm">
                         <div>

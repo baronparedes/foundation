@@ -45,12 +45,12 @@ export default function ProjectVoucherTable({ data }: Props) {
               </TableCell>
             </TableRow>
           ) : (
-            data?.map((voucher, key) => {
+            data?.map((voucher) => {
               const amount = Number(voucher.consumedAmount);
               const isNegative = amount < 0;
 
               return (
-                <TableRow key={key}>
+                <TableRow key={`voucher-${voucher.id}`}>
                   <TableCell>
                     <LinkStyled to={`./vouchers/${voucher.id}`}>
                       {voucher.voucherNumber}

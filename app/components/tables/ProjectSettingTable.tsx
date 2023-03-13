@@ -43,9 +43,9 @@ export default function ProjectSettingTable({ data }: Props) {
                 </TableCell>
               </TableRow>
             ) : (
-              data?.map((projectSetting, key) => {
+              data?.map((projectSetting) => {
                 return (
-                  <TableRow key={key}>
+                  <TableRow key={`project-setting-${projectSetting.id}`}>
                     <TableCell className="w-80">
                       <div className="flex items-center text-sm">
                         <div>

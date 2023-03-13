@@ -1,10 +1,11 @@
 import invariant from "tiny-invariant";
 
 import { useLoaderData, useNavigate } from "@remix-run/react";
-import { json } from "@remix-run/server-runtime";
+import { json, redirect } from "@remix-run/server-runtime";
 
 import { DialogWithTransition } from "../../../components/@ui";
 import { Button } from "../../../components/@windmill";
+import { AddCostPlus, getAddCostPlusFormData } from "../../../components/forms/AddCostPlus";
 import ProjectAddOnTable from "../../../components/tables/ProjectAddOnTable";
 import ProjectSettingTable from "../../../components/tables/ProjectSettingTable";
 import {
@@ -12,6 +13,7 @@ import {
   getProjectAddOns,
 } from "../../../models/project-add-on.server";
 import {
+  createProjectSetting,
   deleteProjectSetting,
   getProjectSettings,
 } from "../../../models/project-setting.server";
@@ -21,7 +23,6 @@ import { requireUserId } from "../../../session.server";
 import type { ProjectAddOnWithDetails } from "../../../models/project-add-on.server";
 import type { ProjectSettingWithDetails } from "../../../models/project-setting.server";
 import type { LoaderArgs, ActionArgs } from "@remix-run/server-runtime";
-
 export async function loader({ params, request }: LoaderArgs) {
   invariant(params.projectId, "project not found");
 
@@ -35,15 +36,21 @@ export async function loader({ params, request }: LoaderArgs) {
 
   const userId = await requireUserId(request);
 
-  return json({ project, userId, projectSettings, projectAddOns });
+  return json({
+    projectId: params.projectId,
+    project,
+    userId,
+    projectSettings,
+    projectAddOns,
+  });
 }
 
 export async function action({ params, request }: ActionArgs) {
   invariant(params.projectId, "project not found");
 
-  const { _action, projectSettingId, projectAddOnId } = Object.fromEntries(
-    await request.formData()
-  );
+  const formData = await request.formData();
+  const { _action, projectSettingId, projectAddOnId } = Object.fromEntries(formData);
+
   if (_action === "delete-project-add-on") {
     await deleteProjectAddOn({ id: Number(projectAddOnId) });
     return json({ state: "deleted project add on", projectAddOnId });
@@ -54,11 +61,20 @@ export async function action({ params, request }: ActionArgs) {
     return json({ state: "deleted project setting", projectSettingId });
   }
 
+  if (_action === "create-project-setting") {
+    const costPlusFormData = getAddCostPlusFormData(formData);
+    if (!costPlusFormData.errors) {
+      await createProjectSetting(costPlusFormData.data);
+      return redirect(`/projects/${params.projectId}/settings`);
+    }
+  }
+
   return null;
 }
 
 export default function ProjectSettings() {
-  const { project, projectSettings, projectAddOns } = useLoaderData<typeof loader>();
+  const { project, projectSettings, projectAddOns, projectId, userId } =
+    useLoaderData<typeof loader>();
   const navigate = useNavigate();
 
   return (
@@ -69,7 +85,7 @@ export default function ProjectSettings() {
       onCloseModal={() => navigate(`/projects/${project.id}`)}
     >
       <div className="text-right">
-        <Button>New Cost+</Button>
+        <AddCostPlus projectId={projectId} userId={userId} />
       </div>
       <br />
       <ProjectSettingTable data={projectSettings as unknown as ProjectSettingWithDetails} />

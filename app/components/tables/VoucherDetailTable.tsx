@@ -52,12 +52,12 @@ export default function VoucherDetailTable({
               </TableCell>
             </TableRow>
           ) : (
-            data?.map((d, key) => {
+            data?.map((d) => {
               const amount = Number(d.amount);
               const isNegative = amount < 0;
 
               return (
-                <TableRow key={key}>
+                <TableRow key={`project-voucher-detail-${d.id}`}>
                   <TableCell className="w-96">
                     <div className="flex items-center text-sm">
                       <div>

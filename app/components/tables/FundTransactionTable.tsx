@@ -1,4 +1,4 @@
-import {formatCurrencyFixed} from '../../utils';
+import { formatCurrencyFixed } from "../../utils";
 import {
   Badge,
   Table,
@@ -8,7 +8,7 @@ import {
   TableFooter,
   TableHeader,
   TableRow,
-} from '../@windmill';
+} from "../@windmill";
 
 import type { FundWithTransaction } from "../../models/fund.server";
 type Props = {
@@ -36,12 +36,12 @@ export default function FundTransactionTable({ data }: Props) {
               </TableCell>
             </TableRow>
           ) : (
-            data?.fundTransaction.map((transaction, key) => {
+            data?.fundTransaction.map((transaction) => {
               const amount = Number(transaction.amount);
               const isNegative = amount < 0;
 
               return (
-                <TableRow key={key}>
+                <TableRow key={`transaction-${transaction.id}`}>
                   <TableCell className="w-96">
                     <div className="flex items-center text-sm">
                       <div>
