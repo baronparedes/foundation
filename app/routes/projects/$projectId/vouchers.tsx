@@ -1,6 +1,6 @@
-import moment from 'moment';
-import React, {useState} from 'react';
-import invariant from 'tiny-invariant';
+import moment from "moment";
+import React, { useState } from "react";
+import invariant from "tiny-invariant";
 
 import {
   Form,
@@ -8,17 +8,17 @@ import {
   useLoaderData,
   useNavigate,
   useTransition,
-} from '@remix-run/react';
-import {json, redirect} from '@remix-run/server-runtime';
+} from "@remix-run/react";
+import { json, redirect } from "@remix-run/server-runtime";
 
-import {DialogWithTransition, TextArea, TextInput} from '../../../components/@ui';
-import {Button} from '../../../components/@windmill';
-import FundPicker from '../../../components/pickers/FundPicker';
-import {getFunds} from '../../../models/fund.server';
-import {createProjectVoucher} from '../../../models/project-voucher.server';
-import {getProject} from '../../../models/project.server';
-import {requireUserId} from '../../../session.server';
-import {validateRequiredString} from '../../../utils';
+import { DialogWithTransition, TextArea, TextInput } from "../../../components/@ui";
+import { Button } from "../../../components/@windmill";
+import FundPicker from "../../../components/pickers/FundPicker";
+import { getFunds } from "../../../models/fund.server";
+import { createProjectVoucher } from "../../../models/project-voucher.server";
+import { getProject } from "../../../models/project.server";
+import { requireUserId } from "../../../session.server";
+import { validateRequiredString } from "../../../utils";
 
 import type { FundWithBalance } from "../../../models/fund.server";
 import type { ProjectVoucher } from "@prisma/client";
@@ -192,6 +192,13 @@ export default function VoucherPage() {
           error={actionData?.errors?.fundId}
           onChange={handleOnSelectFund}
           funds={funds as unknown as FundWithBalance[]}
+        />
+        <TextInput
+          name="costPlus"
+          label="Included in Cost Plus?"
+          error={actionData?.errors?.transactionDate}
+          type="checkbox"
+          defaultChecked={true}
         />
         <div className="disable hidden">
           <TextInput name="updatedById" required defaultValue={userId} />

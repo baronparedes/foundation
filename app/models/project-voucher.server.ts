@@ -1,8 +1,8 @@
-import {prisma} from '~/db.server';
+import { prisma } from "~/db.server";
 
-import {Prisma} from '@prisma/client';
+import { Prisma } from "@prisma/client";
 
-import {createFundTransaction} from './fund-transaction.server';
+import { createFundTransaction } from "./fund-transaction.server";
 
 import type { Project, ProjectVoucher } from "@prisma/client";
 export type { ProjectVoucher, ProjectVoucherDetail } from "@prisma/client";
@@ -48,6 +48,7 @@ export async function createProjectVoucher({
   transactionDate,
   updatedById,
   voucherNumber,
+  costPlus,
 }: Omit<ProjectVoucher, "id"> & Pick<Project, "code">) {
   const data = {
     disbursedAmount,
@@ -58,6 +59,7 @@ export async function createProjectVoucher({
     updatedById,
     transactionDate: new Date(transactionDate),
     voucherNumber: voucherNumber.toUpperCase(),
+    costPlus,
   };
 
   const amt = parseFloat(disbursedAmount.toString()) * -1;

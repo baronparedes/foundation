@@ -1,7 +1,11 @@
-import {LockClosedIcon, LockOpenIcon} from '@heroicons/react/solid';
+import {
+  ExclamationCircleIcon,
+  LockClosedIcon,
+  LockOpenIcon,
+} from "@heroicons/react/solid";
 
-import {formatCurrencyFixed} from '../../utils';
-import {LinkStyled} from '../@ui';
+import { formatCurrencyFixed } from "../../utils";
+import { LinkStyled } from "../@ui";
 import {
   Badge,
   Table,
@@ -11,7 +15,7 @@ import {
   TableFooter,
   TableHeader,
   TableRow,
-} from '../@windmill';
+} from "../@windmill";
 
 import type { ProjectVoucherWithDetails } from "../../models/project-voucher.server";
 type Props = {
@@ -83,11 +87,22 @@ export default function ProjectVoucherTable({ data }: Props) {
                   <TableCell>
                     {voucher.isClosed ? (
                       <LockClosedIcon
-                        className="h-5 w-5 text-red-600"
+                        className="inline h-5 w-5 text-red-600"
                         aria-label="closed"
                       />
                     ) : (
-                      <LockOpenIcon className="h-5 w-5 text-green-600" aria-label="open" />
+                      <LockOpenIcon
+                        className="inline h-5 w-5 text-green-600"
+                        aria-label="open"
+                      />
+                    )}
+                    {!voucher.costPlus && (
+                      <span title="This is exempted from cost plus">
+                        <ExclamationCircleIcon
+                          className="inline h-5 w-5 text-yellow-600"
+                          aria-label="cost plus exempt"
+                        />
+                      </span>
                     )}
                   </TableCell>
                 </TableRow>

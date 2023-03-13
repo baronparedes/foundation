@@ -1,8 +1,8 @@
-import {TrashIcon} from '@heroicons/react/solid';
-import {Form, useFetcher} from '@remix-run/react';
+import { TrashIcon } from "@heroicons/react/solid";
+import { Form, useFetcher } from "@remix-run/react";
 
-import {formatCurrencyFixed} from '../../utils';
-import {TextInput} from '../@ui';
+import { formatCurrencyFixed } from "../../utils";
+import { TextInput } from "../@ui";
 import {
   Badge,
   Button,
@@ -13,7 +13,7 @@ import {
   TableFooter,
   TableHeader,
   TableRow,
-} from '../@windmill';
+} from "../@windmill";
 
 import type { ProjectVoucherDetailslWithCategory } from "../../models/project-voucher-detail.server";
 type Props = {

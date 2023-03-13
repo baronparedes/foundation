@@ -1,15 +1,15 @@
-import classNames from 'classnames';
-import invariant from 'tiny-invariant';
-import {getProject} from '~/models/project.server';
+import classNames from "classnames";
+import invariant from "tiny-invariant";
+import { getProject } from "~/models/project.server";
 
-import {json} from '@remix-run/node';
-import {Outlet, useCatch, useLoaderData, useNavigate} from '@remix-run/react';
+import { json } from "@remix-run/node";
+import { Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
 
-import {LabeledCurrency} from '../../components/@ui';
-import {Button} from '../../components/@windmill';
-import ProjectVoucherTable from '../../components/tables/ProjectVoucherTable';
-import {getProjectFundDetails} from '../../models/project-dashboard.server';
-import {getProjectVouchers} from '../../models/project-voucher.server';
+import { LabeledCurrency } from "../../components/@ui";
+import { Button } from "../../components/@windmill";
+import ProjectVoucherTable from "../../components/tables/ProjectVoucherTable";
+import { getProjectFundDetails } from "../../models/project-dashboard.server";
+import { getProjectVouchers } from "../../models/project-voucher.server";
 
 import type { LoaderArgs } from "@remix-run/node";
 import type { ProjectVoucherWithDetails } from "../../models/project-voucher.server";
@@ -92,10 +92,26 @@ export default function ProjectDetailsPage() {
       <hr className="my-4" />
       <div className="grid grid-cols-5 text-center">
         <LabeledCurrency label="estimated cost" value={Number(project.estimatedCost)} />
-        <LabeledCurrency label="collected funds" value={Number(collectedFunds)} />
-        <LabeledCurrency label="disbursed funds" value={Math.abs(Number(disbursedFunds))} />
-        <LabeledCurrency label="additional expenses" value={Number(addOnTotals)} />
-        <LabeledCurrency label="project expenses" value={Number(costPlusTotals)} />
+        <LabeledCurrency
+          label="collected funds"
+          value={Number(collectedFunds)}
+          valueClassName="text-green-500"
+        />
+        <LabeledCurrency
+          label="disbursed funds"
+          value={Math.abs(Number(disbursedFunds))}
+          valueClassName="text-red-500"
+        />
+        <LabeledCurrency
+          label="additional expenses"
+          value={Number(addOnTotals)}
+          valueClassName="text-red-500"
+        />
+        <LabeledCurrency
+          label="project expenses"
+          value={Number(costPlusTotals)}
+          valueClassName="text-purple-500"
+        />
       </div>
       <hr className="my-4" />
       <div className="w-full space-x-2 text-right">
