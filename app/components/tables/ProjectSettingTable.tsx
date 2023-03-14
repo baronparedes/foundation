@@ -1,4 +1,6 @@
-import { formatCurrencyFixed } from "../../utils";
+import React from 'react';
+
+import {formatCurrencyFixed} from '../../utils';
 import {
   Badge,
   Table,
@@ -7,15 +9,19 @@ import {
   TableContainer,
   TableHeader,
   TableRow,
-} from "../@windmill";
-import { DeleteProjectSetting } from "../forms/DeleteProjectSetting";
+} from '../@windmill';
+import {DeleteProjectSetting} from '../forms/DeleteProjectSetting';
+import {UpdateProjectSetting} from '../forms/UpdateProjectSetting';
 
 import type { ProjectSettingWithDetails } from "../../models/project-setting.server";
+import type { ProjectSettingFormErrors } from "../forms/NewProjectSetting";
 type Props = {
   data: ProjectSettingWithDetails;
+  errors?: ProjectSettingFormErrors;
+  newComponent?: React.ReactNode;
 };
 
-export function ProjectSettingTable({ data }: Props) {
+export function ProjectSettingTable({ data, errors, newComponent }: Props) {
   return (
     <>
       <TableContainer>
@@ -28,7 +34,7 @@ export function ProjectSettingTable({ data }: Props) {
               <TableCell>Date Added</TableCell>
               <TableCell>Start Date</TableCell>
               <TableCell>End Date</TableCell>
-              <TableCell></TableCell>
+              <TableCell>{newComponent}</TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -76,6 +82,7 @@ export function ProjectSettingTable({ data }: Props) {
                       </span>
                     </TableCell>
                     <TableCell className="inline-flex space-x-2">
+                      <UpdateProjectSetting data={projectSetting} errors={errors} />
                       <DeleteProjectSetting projectSettingId={projectSetting.id} />
                     </TableCell>
                   </TableRow>

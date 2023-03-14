@@ -1,4 +1,4 @@
-import { prisma } from "~/db.server";
+import {prisma} from '~/db.server';
 
 import type { Prisma, Project, ProjectAddOn } from "@prisma/client";
 
@@ -46,6 +46,34 @@ export async function createProjectAddOn({
   };
 
   const projectAddOn = await prisma.projectAddOn.create({
+    data,
+  });
+
+  return projectAddOn;
+}
+
+export async function updateProjectAddOn({
+  description,
+  amount,
+  quantity,
+  total,
+  costPlus,
+  projectId,
+  updatedById,
+  id,
+}: Omit<ProjectAddOn, "updatedAt">) {
+  const data = {
+    description,
+    amount,
+    quantity,
+    total,
+    costPlus,
+    projectId,
+    updatedById,
+  };
+
+  const projectAddOn = await prisma.projectAddOn.update({
+    where: { id },
     data,
   });
 

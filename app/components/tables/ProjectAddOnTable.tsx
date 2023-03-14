@@ -1,6 +1,6 @@
-import { ExclamationCircleIcon } from "@heroicons/react/solid";
+import {ExclamationCircleIcon} from '@heroicons/react/solid';
 
-import { formatCurrencyFixed } from "../../utils";
+import {formatCurrencyFixed} from '../../utils';
 import {
   Badge,
   Table,
@@ -9,15 +9,17 @@ import {
   TableContainer,
   TableHeader,
   TableRow,
-} from "../@windmill";
-import { DeleteProjectAddOn } from "../forms/DeleteProjectAddOn";
+} from '../@windmill';
+import {DeleteProjectAddOn} from '../forms/DeleteProjectAddOn';
+import {UpdateProjectAddOn} from '../forms/UpdateProjectAddOn';
 
 import type { ProjectAddOnWithDetails } from "../../models/project-add-on.server";
 type Props = {
   data: ProjectAddOnWithDetails;
+  newComponent?: React.ReactNode;
 };
 
-export function ProjectAddOnTable({ data }: Props) {
+export function ProjectAddOnTable({ data, newComponent }: Props) {
   return (
     <>
       <TableContainer>
@@ -31,7 +33,7 @@ export function ProjectAddOnTable({ data }: Props) {
               <TableCell>By</TableCell>
               <TableCell>Date Added</TableCell>
               <TableCell></TableCell>
-              <TableCell></TableCell>
+              <TableCell>{newComponent}</TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -85,7 +87,8 @@ export function ProjectAddOnTable({ data }: Props) {
                         </span>
                       )}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="inline-flex space-x-2">
+                      <UpdateProjectAddOn data={projectAddOn} />
                       <DeleteProjectAddOn projectAddOnId={projectAddOn.id} />
                     </TableCell>
                   </TableRow>

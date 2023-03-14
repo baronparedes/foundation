@@ -1,31 +1,33 @@
-import invariant from "tiny-invariant";
+import invariant from 'tiny-invariant';
 
-import { useLoaderData, useNavigate } from "@remix-run/react";
-import { json, redirect } from "@remix-run/server-runtime";
+import {useLoaderData, useNavigate} from '@remix-run/react';
+import {json} from '@remix-run/server-runtime';
 
-import { DialogWithTransition } from "../../../components/@ui";
+import {DialogWithTransition} from '../../../components/@ui';
 import {
   getNewProjectAddOnFormData,
   NewProjectAddOn,
-} from "../../../components/forms/NewProjectAddOn";
+} from '../../../components/forms/NewProjectAddOn';
 import {
   getProjectSettingFormData,
   NewProjectSetting,
-} from "../../../components/forms/NewProjectSetting";
-import { ProjectAddOnTable } from "../../../components/tables/ProjectAddOnTable";
-import { ProjectSettingTable } from "../../../components/tables/ProjectSettingTable";
+} from '../../../components/forms/NewProjectSetting';
+import {ProjectAddOnTable} from '../../../components/tables/ProjectAddOnTable';
+import {ProjectSettingTable} from '../../../components/tables/ProjectSettingTable';
 import {
   createProjectAddOn,
   deleteProjectAddOn,
   getProjectAddOns,
-} from "../../../models/project-add-on.server";
+  updateProjectAddOn,
+} from '../../../models/project-add-on.server';
 import {
   createProjectSetting,
   deleteProjectSetting,
   getProjectSettings,
-} from "../../../models/project-setting.server";
-import { getProject } from "../../../models/project.server";
-import { requireUserId } from "../../../session.server";
+  updateProjectSetting,
+} from '../../../models/project-setting.server';
+import {getProject} from '../../../models/project.server';
+import {requireUserId} from '../../../session.server';
 
 import type { ProjectAddOnWithDetails } from "../../../models/project-add-on.server";
 import type { ProjectSettingWithDetails } from "../../../models/project-setting.server";
@@ -62,6 +64,23 @@ export async function action({ params, request }: ActionArgs) {
     await deleteProjectAddOn({ id: Number(projectAddOnId) });
     return json({ state: "deleted project add on", projectAddOnId });
   }
+  if (_action === "create-project-add-on") {
+    const projectAddOnFormData = getNewProjectAddOnFormData(formData);
+    if (!projectAddOnFormData.errors) {
+      const { id } = await createProjectAddOn(projectAddOnFormData.data);
+      return json({ state: "created project add on", projectAddOnId: id });
+    }
+  }
+  if (_action === "update-project-add-on") {
+    const projectAddOnFormData = getNewProjectAddOnFormData(formData, true);
+    if (!projectAddOnFormData.errors) {
+      await updateProjectAddOn(projectAddOnFormData.data);
+      return json({
+        state: "updated project add on",
+        projectAddOnId: projectAddOnFormData.data.id,
+      });
+    }
+  }
 
   if (_action === "delete-project-setting") {
     await deleteProjectSetting({ id: Number(projectSettingId) });
@@ -69,18 +88,21 @@ export async function action({ params, request }: ActionArgs) {
   }
 
   if (_action === "create-project-setting") {
-    const costPlusFormData = getProjectSettingFormData(formData);
-    if (!costPlusFormData.errors) {
-      await createProjectSetting(costPlusFormData.data);
-      return redirect(`/projects/${params.projectId}/settings`);
+    const projectSettingFormData = getProjectSettingFormData(formData);
+    if (!projectSettingFormData.errors) {
+      const { id } = await createProjectSetting(projectSettingFormData.data);
+      return json({ state: "created project setting", projectSettingId: id });
     }
   }
 
-  if (_action === "create-project-add-on") {
-    const addOnFormData = getNewProjectAddOnFormData(formData);
-    if (!addOnFormData.errors) {
-      await createProjectAddOn(addOnFormData.data);
-      return redirect(`/projects/${params.projectId}/settings`);
+  if (_action === "update-project-setting") {
+    const projectSettingFormData = getProjectSettingFormData(formData, true);
+    if (!projectSettingFormData.errors) {
+      await updateProjectSetting(projectSettingFormData.data);
+      return json({
+        state: "updated project setting",
+        projectSettingId: projectSettingFormData.data.id,
+      });
     }
   }
 
@@ -99,17 +121,23 @@ export default function ProjectSettings() {
       title={<>Project Settings for {project.code}</>}
       onCloseModal={() => navigate(`/projects/${project.id}`)}
     >
-      <div className="text-right">
-        <NewProjectSetting projectId={projectId} userId={userId} />
-      </div>
+      <ProjectSettingTable
+        data={projectSettings as unknown as ProjectSettingWithDetails}
+        newComponent={
+          <div className="text-right">
+            <NewProjectSetting projectId={projectId} userId={userId} />
+          </div>
+        }
+      />
       <br />
-      <ProjectSettingTable data={projectSettings as unknown as ProjectSettingWithDetails} />
-      <hr className="my-4" />
-      <div className="text-right">
-        <NewProjectAddOn projectId={projectId} userId={userId} />
-      </div>
-      <br />
-      <ProjectAddOnTable data={projectAddOns as unknown as ProjectAddOnWithDetails} />
+      <ProjectAddOnTable
+        data={projectAddOns as unknown as ProjectAddOnWithDetails}
+        newComponent={
+          <div className="text-right">
+            <NewProjectAddOn projectId={projectId} userId={userId} />
+          </div>
+        }
+      />
       <br />
     </DialogWithTransition>
   );

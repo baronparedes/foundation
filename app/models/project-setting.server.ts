@@ -1,4 +1,4 @@
-import { prisma } from "~/db.server";
+import {prisma} from '~/db.server';
 
 import type { Prisma, Project, ProjectSetting } from "@prisma/client";
 
@@ -7,6 +7,7 @@ export type ProjectSettingWithDetails = Prisma.PromiseReturnType<typeof getProje
 export function getProjectSettings({ id }: Pick<Project, "id">) {
   return prisma.projectSetting.findMany({
     where: { projectId: id },
+    orderBy: { id: "asc" },
     include: {
       updatedBy: {
         select: {
@@ -44,6 +45,34 @@ export async function createProjectSetting({
   };
 
   const projectSetting = await prisma.projectSetting.create({
+    data,
+  });
+
+  return projectSetting;
+}
+
+export async function updateProjectSetting({
+  description,
+  percentageAddOn,
+  projectId,
+  startDate,
+  endDate,
+  updatedById,
+  id,
+}: Omit<ProjectSetting, "updatedAt">) {
+  const data = {
+    description,
+    percentageAddOn,
+    projectId,
+    startDate: new Date(startDate),
+    endDate: endDate ? new Date(endDate) : null,
+    updatedById,
+  };
+
+  const projectSetting = await prisma.projectSetting.update({
+    where: {
+      id,
+    },
     data,
   });
 

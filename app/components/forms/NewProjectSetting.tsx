@@ -1,11 +1,12 @@
-import moment from "moment";
-import { useState } from "react";
+import moment from 'moment';
+import {useState} from 'react';
 
-import { useFetcher } from "@remix-run/react";
+import {PlusCircleIcon} from '@heroicons/react/solid';
+import {useFetcher} from '@remix-run/react';
 
-import { validateRequiredString } from "../../utils";
-import { DialogWithTransition, TextArea, TextInput } from "../@ui";
-import { Button } from "../@windmill";
+import {validateRequiredString} from '../../utils';
+import {DialogWithTransition, TextArea, TextInput} from '../@ui';
+import {Button} from '../@windmill';
 
 import type { ProjectSetting } from "@prisma/client";
 const today = moment().format("yyyy-MM-DD");
@@ -14,11 +15,12 @@ export type ProjectSettingFormErrors = {
   description?: string;
   percentageAddOn?: string;
   startDate?: string;
+  id?: string;
 };
 
-export function getProjectSettingFormData(formData: FormData) {
+export function getProjectSettingFormData(formData: FormData, isUpdating = false) {
   const errors: ProjectSettingFormErrors = {};
-  const { description, percentageAddOn, startDate, endDate, projectId, updatedById } =
+  const { description, percentageAddOn, startDate, endDate, projectId, updatedById, id } =
     Object.fromEntries(formData);
 
   let hasErrors = false;
@@ -43,6 +45,13 @@ export function getProjectSettingFormData(formData: FormData) {
     hasErrors = true;
   }
 
+  if (isUpdating) {
+    if (!validateRequiredString(id)) {
+      errors.id = "Id is required";
+      hasErrors = true;
+    }
+  }
+
   return {
     errors: hasErrors ? errors : undefined,
     data: {
@@ -52,6 +61,7 @@ export function getProjectSettingFormData(formData: FormData) {
       endDate,
       updatedById,
       projectId,
+      id: Number(id),
     } as unknown as ProjectSetting,
   };
 }
@@ -76,13 +86,15 @@ export function NewProjectSetting({ projectId, userId, errors }: Props) {
         onClick={() => {
           setToggle(true);
         }}
+        size="small"
+        title="new project setting"
       >
-        New Cost Plus
+        <PlusCircleIcon className="h-5 w-5" />
       </Button>
       <DialogWithTransition
         onCloseModal={() => setToggle(false)}
         isOpen={toggle}
-        title={<>Fill cost plus details</>}
+        title={<>Fill project setting details</>}
       >
         <fetcher.Form
           style={{

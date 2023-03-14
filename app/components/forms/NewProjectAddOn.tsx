@@ -1,10 +1,11 @@
-import { useState } from "react";
+import {useState} from 'react';
 
-import { useFetcher } from "@remix-run/react";
+import {PlusCircleIcon} from '@heroicons/react/solid';
+import {useFetcher} from '@remix-run/react';
 
-import { validateRequiredString } from "../../utils";
-import { DialogWithTransition, LabeledCurrency, TextArea, TextInput } from "../@ui";
-import { Button } from "../@windmill";
+import {validateRequiredString} from '../../utils';
+import {DialogWithTransition, LabeledCurrency, TextArea, TextInput} from '../@ui';
+import {Button} from '../@windmill';
 
 import type { ProjectAddOn } from "@prisma/client";
 export type ProjectAddOnFormErrors = {
@@ -12,11 +13,12 @@ export type ProjectAddOnFormErrors = {
   amount?: string;
   quantity?: string;
   total?: string;
+  id?: string;
 };
 
-export function getNewProjectAddOnFormData(formData: FormData) {
+export function getNewProjectAddOnFormData(formData: FormData, isUpdating = false) {
   const errors: ProjectAddOnFormErrors = {};
-  const { description, amount, quantity, total, costPlus, projectId, updatedById } =
+  const { description, amount, quantity, total, costPlus, projectId, updatedById, id } =
     Object.fromEntries(formData);
 
   let hasErrors = false;
@@ -40,6 +42,12 @@ export function getNewProjectAddOnFormData(formData: FormData) {
     errors.amount = "Quantity cannot be zero";
     hasErrors = true;
   }
+  if (isUpdating) {
+    if (!validateRequiredString(id)) {
+      errors.id = "Id is required";
+      hasErrors = true;
+    }
+  }
 
   return {
     errors: hasErrors ? errors : undefined,
@@ -51,6 +59,7 @@ export function getNewProjectAddOnFormData(formData: FormData) {
       costPlus: costPlus ? true : false,
       projectId,
       updatedById,
+      id: Number(id),
     } as unknown as ProjectAddOn,
   };
 }
@@ -80,8 +89,10 @@ export function NewProjectAddOn({ projectId, userId, errors }: Props) {
         onClick={() => {
           setToggle(true);
         }}
+        size="small"
+        title="new project add on"
       >
-        New Add On
+        <PlusCircleIcon className="h-5 w-5" />
       </Button>
       <DialogWithTransition
         isOpen={toggle}
