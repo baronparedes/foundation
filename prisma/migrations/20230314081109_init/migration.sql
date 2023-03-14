@@ -62,13 +62,15 @@ CREATE TABLE "ProjectVoucher" (
     "description" TEXT NOT NULL DEFAULT '',
     "disbursedAmount" DECIMAL(65,30) NOT NULL,
     "consumedAmount" DECIMAL(65,30),
-    "isClosed" BOOLEAN,
-    "isDeleted" BOOLEAN,
+    "isClosed" BOOLEAN NOT NULL DEFAULT false,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "transactionDate" TIMESTAMP(3) NOT NULL,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedById" TEXT NOT NULL,
     "projectId" TEXT NOT NULL,
     "fundId" TEXT NOT NULL,
+    "costPlus" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "ProjectVoucher_pkey" PRIMARY KEY ("id")
 );
@@ -77,14 +79,52 @@ CREATE TABLE "ProjectVoucher" (
 CREATE TABLE "ProjectVoucherDetail" (
     "id" SERIAL NOT NULL,
     "description" TEXT NOT NULL,
-    "category" TEXT NOT NULL,
     "amount" DECIMAL(65,30) NOT NULL,
     "supplierName" TEXT NOT NULL,
     "referenceNumber" TEXT NOT NULL,
     "quantity" DECIMAL(65,30),
     "projectVoucherId" INTEGER NOT NULL,
+    "detailCategoryId" INTEGER NOT NULL,
 
     CONSTRAINT "ProjectVoucherDetail_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "DetailCategory" (
+    "id" SERIAL NOT NULL,
+    "description" TEXT NOT NULL,
+    "parentId" INTEGER,
+
+    CONSTRAINT "DetailCategory_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ProjectSetting" (
+    "id" SERIAL NOT NULL,
+    "description" TEXT NOT NULL,
+    "percentageAddOn" DECIMAL(65,30) NOT NULL,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "updatedById" TEXT NOT NULL,
+    "startDate" TIMESTAMP(3) NOT NULL,
+    "endDate" TIMESTAMP(3),
+    "projectId" TEXT NOT NULL,
+
+    CONSTRAINT "ProjectSetting_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ProjectAddOn" (
+    "id" SERIAL NOT NULL,
+    "description" TEXT NOT NULL,
+    "amount" DECIMAL(65,30) NOT NULL,
+    "quantity" DECIMAL(65,30) NOT NULL,
+    "total" DECIMAL(65,30) NOT NULL,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "updatedById" TEXT NOT NULL,
+    "costPlus" BOOLEAN NOT NULL DEFAULT true,
+    "projectId" TEXT NOT NULL,
+
+    CONSTRAINT "ProjectAddOn_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -101,6 +141,9 @@ CREATE UNIQUE INDEX "Fund_code_key" ON "Fund"("code");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "ProjectVoucher_voucherNumber_key" ON "ProjectVoucher"("voucherNumber");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "DetailCategory_description_key" ON "DetailCategory"("description");
 
 -- AddForeignKey
 ALTER TABLE "Password" ADD CONSTRAINT "Password_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -125,3 +168,18 @@ ALTER TABLE "ProjectVoucher" ADD CONSTRAINT "ProjectVoucher_fundId_fkey" FOREIGN
 
 -- AddForeignKey
 ALTER TABLE "ProjectVoucherDetail" ADD CONSTRAINT "ProjectVoucherDetail_projectVoucherId_fkey" FOREIGN KEY ("projectVoucherId") REFERENCES "ProjectVoucher"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ProjectVoucherDetail" ADD CONSTRAINT "ProjectVoucherDetail_detailCategoryId_fkey" FOREIGN KEY ("detailCategoryId") REFERENCES "DetailCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ProjectSetting" ADD CONSTRAINT "ProjectSetting_updatedById_fkey" FOREIGN KEY ("updatedById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ProjectSetting" ADD CONSTRAINT "ProjectSetting_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ProjectAddOn" ADD CONSTRAINT "ProjectAddOn_updatedById_fkey" FOREIGN KEY ("updatedById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ProjectAddOn" ADD CONSTRAINT "ProjectAddOn_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
