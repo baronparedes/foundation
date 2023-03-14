@@ -12,8 +12,8 @@ import { DialogWithTransition, LabeledCurrency } from "../../../components/@ui";
 import { Button } from "../../../components/@windmill";
 import { NewVoucherDetails } from "../../../components/forms/NewVoucherDetail";
 import { ToggleVoucherCostPlus } from "../../../components/forms/ToggleVoucherCostPlus";
-import FundPicker from "../../../components/pickers/FundPicker";
-import VoucherDetailTable from "../../../components/tables/VoucherDetailTable";
+import { FundPicker } from "../../../components/pickers/FundPicker";
+import { VoucherDetailTable } from "../../../components/tables/VoucherDetailTable";
 import { getDetailCategories } from "../../../models/detail-category.server";
 import { getFunds } from "../../../models/fund.server";
 import {

@@ -8,7 +8,7 @@ import { Form, Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/r
 import { LabeledCurrency } from "../../components/@ui";
 import { SearchInput } from "../../components/@ui/SearchInput";
 import { Button } from "../../components/@windmill";
-import ProjectVoucherTable from "../../components/tables/ProjectVoucherTable";
+import { ProjectVoucherTable } from "../../components/tables/ProjectVoucherTable";
 import { getProjectFundDetails } from "../../models/project-dashboard.server";
 import { getProjectVouchers } from "../../models/project-voucher.server";
 

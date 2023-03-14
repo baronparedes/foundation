@@ -18,12 +18,13 @@ import {
   TextInput,
 } from "../../../components/@ui";
 import { Button } from "../../../components/@windmill";
-import FundPicker from "../../../components/pickers/FundPicker";
+import { FundPicker } from "../../../components/pickers/FundPicker";
 import { transferFundTransaction } from "../../../models/fund-transaction.server";
-import { FundWithBalance, getFund, getFunds } from "../../../models/fund.server";
+import { getFund, getFunds } from "../../../models/fund.server";
 import { requireUserId } from "../../../session.server";
 import { validateRequiredString } from "../../../utils";
 
+import type { FundWithBalance } from "../../../models/fund.server";
 import type { FundTransaction } from "../../../models/fund-transaction.server";
 import type { LoaderArgs, ActionArgs } from "@remix-run/server-runtime";
 type FormErrors = {

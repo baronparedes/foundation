@@ -13,7 +13,7 @@ import { json, redirect } from "@remix-run/server-runtime";
 
 import { DialogWithTransition, TextArea, TextInput } from "../../../components/@ui";
 import { Button } from "../../../components/@windmill";
-import FundPicker from "../../../components/pickers/FundPicker";
+import { FundPicker } from "../../../components/pickers/FundPicker";
 import { getFunds } from "../../../models/fund.server";
 import { createProjectVoucher } from "../../../models/project-voucher.server";
 import { getProject } from "../../../models/project.server";

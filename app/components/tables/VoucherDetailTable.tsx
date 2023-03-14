@@ -1,11 +1,6 @@
-import { TrashIcon } from "@heroicons/react/solid";
-import { Form, useFetcher } from "@remix-run/react";
-
 import { formatCurrencyFixed } from "../../utils";
-import { TextInput } from "../@ui";
 import {
   Badge,
-  Button,
   Table,
   TableBody,
   TableCell,
@@ -14,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "../@windmill";
+import { DeleteVoucherDetail } from "../forms/DeleteVoucherDetail";
 
 import type { ProjectVoucherDetailslWithCategory } from "../../models/project-voucher-detail.server";
 type Props = {
@@ -23,12 +19,7 @@ type Props = {
   userId: string;
 };
 
-export default function VoucherDetailTable({
-  data,
-  userId,
-  projectVoucherId,
-  isClosed,
-}: Props) {
+export function VoucherDetailTable({ data, userId, projectVoucherId, isClosed }: Props) {
   const columns = isClosed ? 5 : 6;
 
   return (
@@ -83,7 +74,6 @@ export default function VoucherDetailTable({
                         projectVoucherId={projectVoucherId}
                         userId={userId}
                         projectVoucherDetailId={d.id}
-                        isClosed={isClosed}
                       />
                     </TableCell>
                   )}
@@ -95,46 +85,5 @@ export default function VoucherDetailTable({
       </Table>
       <TableFooter />
     </TableContainer>
-  );
-}
-
-function DeleteVoucherDetail({
-  userId,
-  projectVoucherId,
-  projectVoucherDetailId,
-}: Omit<Props, "data"> & {
-  projectVoucherDetailId: number;
-}) {
-  const fetcher = useFetcher();
-  const isDeleting =
-    fetcher.state === "submitting" &&
-    Number(fetcher.submission.formData.get("projectVoucherDetailId")) ===
-      projectVoucherDetailId;
-
-  return (
-    <>
-      <Form method="post">
-        <div className="disable hidden">
-          <TextInput name="updatedById" required defaultValue={userId} />
-          <TextInput name="projectVoucherId" required defaultValue={projectVoucherId} />
-          <TextInput
-            name="projectVoucherDetailId"
-            required
-            defaultValue={projectVoucherDetailId}
-          />
-        </div>
-        <Button
-          name="_action"
-          value="delete"
-          disabled={isDeleting}
-          className="cursor-pointer "
-          size="small"
-          type="submit"
-          aria-label="delete"
-        >
-          <TrashIcon className="h-5 w-5" />
-        </Button>
-      </Form>
-    </>
   );
 }

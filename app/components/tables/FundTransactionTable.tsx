@@ -15,7 +15,7 @@ type Props = {
   data: FundWithTransaction;
 };
 
-export default function FundTransactionTable({ data }: Props) {
+export function FundTransactionTable({ data }: Props) {
   return (
     <TableContainer>
       <Table className="w-full table-auto">

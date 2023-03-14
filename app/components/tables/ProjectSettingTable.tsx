@@ -1,11 +1,6 @@
-import { TrashIcon } from "@heroicons/react/solid";
-import { Form, useFetcher } from "@remix-run/react";
-
 import { formatCurrencyFixed } from "../../utils";
-import { TextInput } from "../@ui";
 import {
   Badge,
-  Button,
   Table,
   TableBody,
   TableCell,
@@ -13,13 +8,14 @@ import {
   TableHeader,
   TableRow,
 } from "../@windmill";
+import { DeleteProjectSetting } from "../forms/DeleteProjectSetting";
 
 import type { ProjectSettingWithDetails } from "../../models/project-setting.server";
 type Props = {
   data: ProjectSettingWithDetails;
 };
 
-export default function ProjectSettingTable({ data }: Props) {
+export function ProjectSettingTable({ data }: Props) {
   return (
     <>
       <TableContainer>
@@ -79,7 +75,7 @@ export default function ProjectSettingTable({ data }: Props) {
                           new Date(projectSetting.endDate).toLocaleDateString()}
                       </span>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="inline-flex space-x-2">
                       <DeleteProjectSetting projectSettingId={projectSetting.id} />
                     </TableCell>
                   </TableRow>
@@ -89,35 +85,6 @@ export default function ProjectSettingTable({ data }: Props) {
           </TableBody>
         </Table>
       </TableContainer>
-    </>
-  );
-}
-
-function DeleteProjectSetting({ projectSettingId }: { projectSettingId: number }) {
-  const fetcher = useFetcher();
-  const isDeleting =
-    fetcher.state === "submitting" &&
-    Number(fetcher.submission.formData.get("projectSettingId")) === projectSettingId;
-
-  return (
-    <>
-      <Form method="post">
-        <div className="disable hidden">
-          <TextInput name="projectSettingId" required defaultValue={projectSettingId} />
-        </div>
-        <Button
-          name="_action"
-          value="delete-project-setting"
-          disabled={isDeleting}
-          className="cursor-pointer"
-          size="small"
-          type="submit"
-          aria-label="delete"
-          onClick={(e) => !confirm("continue?") && e.preventDefault()}
-        >
-          <TrashIcon className="h-5 w-5" />
-        </Button>
-      </Form>
     </>
   );
 }

@@ -6,7 +6,7 @@ import { Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
 
 import { LabeledCurrency } from "../../components/@ui";
 import { Button } from "../../components/@windmill";
-import FundTransactionTable from "../../components/tables/FundTransactionTable";
+import { FundTransactionTable } from "../../components/tables/FundTransactionTable";
 import { sum } from "../../utils";
 
 import type { LoaderArgs } from "@remix-run/node";

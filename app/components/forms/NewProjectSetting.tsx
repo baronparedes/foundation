@@ -1,22 +1,24 @@
+import moment from "moment";
 import { useState } from "react";
 
 import { useFetcher } from "@remix-run/react";
 
 import { validateRequiredString } from "../../utils";
-import { DialogWithTransition, LabeledCurrency, TextArea, TextInput } from "../@ui";
+import { DialogWithTransition, TextArea, TextInput } from "../@ui";
 import { Button } from "../@windmill";
 
-import type { ProjectAddOn } from "@prisma/client";
-export type AddOnFormErrors = {
+import type { ProjectSetting } from "@prisma/client";
+const today = moment().format("yyyy-MM-DD");
+
+export type ProjectSettingFormErrors = {
   description?: string;
-  amount?: string;
-  quantity?: string;
-  total?: string;
+  percentageAddOn?: string;
+  startDate?: string;
 };
 
-export function getNewAddOnFormData(formData: FormData) {
-  const errors: AddOnFormErrors = {};
-  const { description, amount, quantity, total, costPlus, projectId, updatedById } =
+export function getProjectSettingFormData(formData: FormData) {
+  const errors: ProjectSettingFormErrors = {};
+  const { description, percentageAddOn, startDate, endDate, projectId, updatedById } =
     Object.fromEntries(formData);
 
   let hasErrors = false;
@@ -24,20 +26,20 @@ export function getNewAddOnFormData(formData: FormData) {
     errors.description = "Description is required";
     hasErrors = true;
   }
-  if (!validateRequiredString(amount)) {
-    errors.amount = "Amount is required";
+  if (!validateRequiredString(percentageAddOn)) {
+    errors.percentageAddOn = "Percentage add on is required";
     hasErrors = true;
   }
-  if (Number(amount) === 0) {
-    errors.amount = "Amount cannot be zero";
+  if (Number(percentageAddOn) === 0) {
+    errors.percentageAddOn = "Percentage add on cannot be zero";
     hasErrors = true;
   }
-  if (!validateRequiredString(quantity)) {
-    errors.amount = "Quantity is required";
+  if (Number(percentageAddOn) > 100) {
+    errors.percentageAddOn = "Percentage add on cannot exceed 100%";
     hasErrors = true;
   }
-  if (Number(quantity) === 0) {
-    errors.amount = "Quantity cannot be zero";
+  if (!validateRequiredString(startDate)) {
+    errors.startDate = "Start date is required";
     hasErrors = true;
   }
 
@@ -45,33 +47,27 @@ export function getNewAddOnFormData(formData: FormData) {
     errors: hasErrors ? errors : undefined,
     data: {
       description,
-      amount,
-      quantity,
-      total,
-      costPlus: costPlus ? true : false,
-      projectId,
+      percentageAddOn,
+      startDate,
+      endDate,
       updatedById,
-    } as unknown as ProjectAddOn,
+      projectId,
+    } as unknown as ProjectSetting,
   };
 }
 
 type Props = {
   projectId: string;
   userId: string;
-  errors?: AddOnFormErrors;
+  errors?: ProjectSettingFormErrors;
 };
 
-export function NewAddOn({ projectId, userId, errors }: Props) {
+export function NewProjectSetting({ projectId, userId, errors }: Props) {
   const [toggle, setToggle] = useState(false);
-  const [quantity, setQuantity] = useState(0);
-  const [amount, setAmount] = useState(0);
-
   const fetcher = useFetcher();
   const isAdding =
     fetcher.submission?.formData.get("_action") === "create" &&
     fetcher.state === "submitting";
-
-  const totalAmount = quantity * amount;
 
   return (
     <>
@@ -81,12 +77,12 @@ export function NewAddOn({ projectId, userId, errors }: Props) {
           setToggle(true);
         }}
       >
-        New Add On
+        New Cost Plus
       </Button>
       <DialogWithTransition
-        isOpen={toggle}
-        title={<>Fill add on details</>}
         onCloseModal={() => setToggle(false)}
+        isOpen={toggle}
+        title={<>Fill cost plus details</>}
       >
         <fetcher.Form
           style={{
@@ -103,7 +99,6 @@ export function NewAddOn({ projectId, userId, errors }: Props) {
           <div className="disable hidden">
             <TextInput name="updatedById" required defaultValue={userId} />
             <TextInput name="projectId" required defaultValue={projectId} />
-            <TextInput name="total" required value={totalAmount} readOnly />
           </div>
           <TextArea
             name="description"
@@ -112,39 +107,31 @@ export function NewAddOn({ projectId, userId, errors }: Props) {
             error={errors?.description}
           />
           <TextInput
-            name="amount"
-            label="Amount"
+            name="percentageAddOn"
+            label="Percentage add on"
             type="number"
             required
-            error={errors?.amount}
-            onChange={(e) => {
-              setAmount(Number(e.currentTarget.value));
-            }}
-          />
-          <TextInput
-            name="quantity"
-            label="Quantity"
-            type="number"
-            required
-            error={errors?.quantity}
-            onChange={(e) => {
-              setQuantity(Number(e.currentTarget.value));
-            }}
-          />
-          <TextInput
-            name="costPlus"
-            label="Included in Cost Plus?"
-            type="checkbox"
-            defaultChecked={true}
+            step={0.1}
+            min={1}
+            max={100}
+            error={errors?.percentageAddOn}
           />
           <hr className="my-4" />
-          <LabeledCurrency label={"Total Amount"} value={totalAmount} />
+          <TextInput
+            name="startDate"
+            label="Start Date"
+            error={errors?.startDate}
+            required
+            type="date"
+            defaultValue={today}
+          />
+          <TextInput name="endDate" label="End Date?" type="date" />
           <hr className="my-4" />
           <div className="text-right">
             <Button
               disabled={fetcher.state === "submitting"}
               name="_action"
-              value="create-project-add-on"
+              value="create-project-setting"
               type="submit"
             >
               Add

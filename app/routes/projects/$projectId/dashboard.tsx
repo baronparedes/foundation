@@ -6,8 +6,8 @@ import { json } from "@remix-run/server-runtime";
 
 import { DialogWithTransition, LabeledCurrency } from "../../../components/@ui";
 import { Button, Card, CardBody } from "../../../components/@windmill";
-import AddOnExpenseCard from "../../../components/project-dashboard/AddOnExpenseCard";
-import DisbursementCard from "../../../components/project-dashboard/DisbursementCard";
+import { AddOnExpenseCard } from "../../../components/cards/AddOnExpenseCard";
+import { DisbursementCard } from "../../../components/cards/DisbursementCard";
 import { getProjectDashboard } from "../../../models/project-dashboard.server";
 import { requireUserId } from "../../../session.server";
 import { formatCurrencyFixed, sum } from "../../../utils";
@@ -84,23 +84,27 @@ export default function ProjectDashboard() {
         total={addOnExpenses.totalAddOns}
         addOns={addOnExpenses.addOns as unknown as ProjectAddOn[]}
       />
-      <hr className="my-4" />
-      <div className="my-4">
-        <div className="flex">
-          {costPlusTotals.map((cp, key) => {
-            return (
-              <>
-                <Card colored className="m-2 flex-auto bg-purple-100" key={key}>
-                  <CardBody>
-                    <p className="mb-4 font-semibold">{cp.description}</p>
-                    <p className="currency">{formatCurrencyFixed(cp.total)}</p>
-                  </CardBody>
-                </Card>
-              </>
-            );
-          })}
-        </div>
-      </div>
+      {costPlusTotals?.length > 0 && (
+        <>
+          <hr className="my-4" />
+          <div className="my-4">
+            <div className="flex">
+              {costPlusTotals.map((cp, key) => {
+                return (
+                  <>
+                    <Card colored className="m-2 flex-auto bg-purple-100" key={key}>
+                      <CardBody>
+                        <p className="mb-4 font-semibold">{cp.description}</p>
+                        <p className="currency">{formatCurrencyFixed(cp.total)}</p>
+                      </CardBody>
+                    </Card>
+                  </>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      )}
       <hr className="my-4" />
       <Card colored className="m-2 bg-purple-600 text-white">
         <CardBody>

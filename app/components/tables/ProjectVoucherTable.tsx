@@ -22,7 +22,7 @@ type Props = {
   data: ProjectVoucherWithDetails;
 };
 
-export default function ProjectVoucherTable({ data }: Props) {
+export function ProjectVoucherTable({ data }: Props) {
   return (
     <TableContainer>
       <Table className="w-full table-auto">

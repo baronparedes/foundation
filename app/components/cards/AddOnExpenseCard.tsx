@@ -1,10 +1,10 @@
-import classNames from 'classnames';
-import {useState} from 'react';
+import classNames from "classnames";
+import { useState } from "react";
 
-import {ExclamationCircleIcon} from '@heroicons/react/solid';
+import { ExclamationCircleIcon } from "@heroicons/react/solid";
 
-import {formatCurrencyFixed} from '../../utils';
-import {DialogWithTransition} from '../@ui';
+import { formatCurrencyFixed } from "../../utils";
+import { DialogWithTransition } from "../@ui";
 import {
   Badge,
   Card,
@@ -16,7 +16,7 @@ import {
   TableFooter,
   TableHeader,
   TableRow,
-} from '../@windmill';
+} from "../@windmill";
 
 import type { ProjectAddOn } from "@prisma/client";
 
@@ -27,7 +27,7 @@ type Props = {
   addOns?: ProjectAddOn[];
 };
 
-export default function AddOnExpenseCard({
+export function AddOnExpenseCard({
   description,
   total,
   addOns,

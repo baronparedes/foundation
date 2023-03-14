@@ -4,10 +4,16 @@ import { useLoaderData, useNavigate } from "@remix-run/react";
 import { json, redirect } from "@remix-run/server-runtime";
 
 import { DialogWithTransition } from "../../../components/@ui";
-import { getNewAddOnFormData, NewAddOn } from "../../../components/forms/NewAddOn";
-import { getNewCostPlusFormData, NewCostPlus } from "../../../components/forms/NewCostPlus";
-import ProjectAddOnTable from "../../../components/tables/ProjectAddOnTable";
-import ProjectSettingTable from "../../../components/tables/ProjectSettingTable";
+import {
+  getNewProjectAddOnFormData,
+  NewProjectAddOn,
+} from "../../../components/forms/NewProjectAddOn";
+import {
+  getProjectSettingFormData,
+  NewProjectSetting,
+} from "../../../components/forms/NewProjectSetting";
+import { ProjectAddOnTable } from "../../../components/tables/ProjectAddOnTable";
+import { ProjectSettingTable } from "../../../components/tables/ProjectSettingTable";
 import {
   createProjectAddOn,
   deleteProjectAddOn,
@@ -63,7 +69,7 @@ export async function action({ params, request }: ActionArgs) {
   }
 
   if (_action === "create-project-setting") {
-    const costPlusFormData = getNewCostPlusFormData(formData);
+    const costPlusFormData = getProjectSettingFormData(formData);
     if (!costPlusFormData.errors) {
       await createProjectSetting(costPlusFormData.data);
       return redirect(`/projects/${params.projectId}/settings`);
@@ -71,7 +77,7 @@ export async function action({ params, request }: ActionArgs) {
   }
 
   if (_action === "create-project-add-on") {
-    const addOnFormData = getNewAddOnFormData(formData);
+    const addOnFormData = getNewProjectAddOnFormData(formData);
     if (!addOnFormData.errors) {
       await createProjectAddOn(addOnFormData.data);
       return redirect(`/projects/${params.projectId}/settings`);
@@ -94,13 +100,13 @@ export default function ProjectSettings() {
       onCloseModal={() => navigate(`/projects/${project.id}`)}
     >
       <div className="text-right">
-        <NewCostPlus projectId={projectId} userId={userId} />
+        <NewProjectSetting projectId={projectId} userId={userId} />
       </div>
       <br />
       <ProjectSettingTable data={projectSettings as unknown as ProjectSettingWithDetails} />
       <hr className="my-4" />
       <div className="text-right">
-        <NewAddOn projectId={projectId} userId={userId} />
+        <NewProjectAddOn projectId={projectId} userId={userId} />
       </div>
       <br />
       <ProjectAddOnTable data={projectAddOns as unknown as ProjectAddOnWithDetails} />

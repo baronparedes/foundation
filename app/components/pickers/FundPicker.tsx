@@ -7,7 +7,7 @@ type Props = {
   onFundSelected?: (fundId: string) => void;
 };
 
-export default function FundPicker({
+export function FundPicker({
   funds,
   onFundSelected,
   onChange,

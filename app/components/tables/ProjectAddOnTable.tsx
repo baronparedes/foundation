@@ -1,11 +1,8 @@
-import { ExclamationCircleIcon, TrashIcon } from "@heroicons/react/solid";
-import { Form, useFetcher } from "@remix-run/react";
+import { ExclamationCircleIcon } from "@heroicons/react/solid";
 
 import { formatCurrencyFixed } from "../../utils";
-import { TextInput } from "../@ui";
 import {
   Badge,
-  Button,
   Table,
   TableBody,
   TableCell,
@@ -13,13 +10,14 @@ import {
   TableHeader,
   TableRow,
 } from "../@windmill";
+import { DeleteProjectAddOn } from "../forms/DeleteProjectAddOn";
 
 import type { ProjectAddOnWithDetails } from "../../models/project-add-on.server";
 type Props = {
   data: ProjectAddOnWithDetails;
 };
 
-export default function ProjectAddOnTable({ data }: Props) {
+export function ProjectAddOnTable({ data }: Props) {
   return (
     <>
       <TableContainer>
@@ -97,35 +95,6 @@ export default function ProjectAddOnTable({ data }: Props) {
           </TableBody>
         </Table>
       </TableContainer>
-    </>
-  );
-}
-
-function DeleteProjectAddOn({ projectAddOnId }: { projectAddOnId: number }) {
-  const fetcher = useFetcher();
-  const isDeleting =
-    fetcher.state === "submitting" &&
-    Number(fetcher.submission.formData.get("projectAddOnId")) === projectAddOnId;
-
-  return (
-    <>
-      <Form method="post">
-        <div className="disable hidden">
-          <TextInput name="projectAddOnId" required defaultValue={projectAddOnId} />
-        </div>
-        <Button
-          name="_action"
-          value="delete-project-add-on"
-          disabled={isDeleting}
-          className="cursor-pointer"
-          size="small"
-          type="submit"
-          aria-label="delete"
-          onClick={(e) => !confirm("continue?") && e.preventDefault()}
-        >
-          <TrashIcon className="h-5 w-5" />
-        </Button>
-      </Form>
     </>
   );
 }

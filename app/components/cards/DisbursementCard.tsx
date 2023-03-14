@@ -1,8 +1,8 @@
-import classNames from 'classnames';
-import {useState} from 'react';
+import classNames from "classnames";
+import { useState } from "react";
 
-import {formatCurrencyFixed} from '../../utils';
-import {DialogWithTransition} from '../@ui';
+import { formatCurrencyFixed } from "../../utils";
+import { DialogWithTransition } from "../@ui";
 import {
   Badge,
   Card,
@@ -14,7 +14,7 @@ import {
   TableFooter,
   TableHeader,
   TableRow,
-} from '../@windmill';
+} from "../@windmill";
 
 import type { ProjectVoucher } from "@prisma/client";
 
@@ -28,7 +28,7 @@ type Props = {
   vouchers?: ProjectVoucher[];
 };
 
-export default function DisbursementCard({
+export function DisbursementCard({
   description,
   total,
   disbursements,
