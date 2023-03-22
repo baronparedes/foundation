@@ -1,7 +1,7 @@
-import moment from "moment";
-import { useMemo } from "react";
+import moment from 'moment';
+import {useMemo} from 'react';
 
-import { useMatches } from "@remix-run/react";
+import {useMatches} from '@remix-run/react';
 
 import type { User } from "~/models/user.server";
 const DEFAULT_REDIRECT = "/";
@@ -98,7 +98,7 @@ export function isBetweenDates(from: Date, to: Date | null, target: Date) {
   return result;
 }
 
-export function isBeforeDate(target: Date, beforeDate: Date) {
+export function isBeforeDate(beforeDate: Date, target: Date) {
   const result = moment(target).isBefore(beforeDate);
   return result;
 }

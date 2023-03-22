@@ -14,6 +14,7 @@ async function getClosedVoucherDetails(vouchers: ProjectVoucher[]) {
       projectVoucher: {
         select: {
           voucherNumber: true,
+          transactionDate: true,
         },
       },
     },
@@ -108,8 +109,8 @@ async function getCostPlusTotals(
       );
       totalExempted = sum(exemptedVouchers.map((v) => Number(v.consumedAmount)));
     } else {
-      const exemptedVouchers = targetVouchers.filter(
-        (v) => !isBeforeDate(setting.startDate, v.transactionDate)
+      const exemptedVouchers = targetVouchers.filter((v) =>
+        isBeforeDate(setting.startDate, v.transactionDate)
       );
       totalExempted = sum(exemptedVouchers.map((v) => Number(v.consumedAmount)));
     }

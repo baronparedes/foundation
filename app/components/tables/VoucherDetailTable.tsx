@@ -1,4 +1,4 @@
-import { formatCurrencyFixed } from "../../utils";
+import {formatCurrencyFixed} from '../../utils';
 import {
   Badge,
   Table,
@@ -8,8 +8,8 @@ import {
   TableFooter,
   TableHeader,
   TableRow,
-} from "../@windmill";
-import { DeleteVoucherDetail } from "../forms/DeleteVoucherDetail";
+} from '../@windmill';
+import {DeleteVoucherDetail} from '../forms/DeleteVoucherDetail';
 
 import type { ProjectVoucherDetailslWithCategory } from "../../models/project-voucher-detail.server";
 type Props = {

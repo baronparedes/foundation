@@ -1,7 +1,7 @@
 import {LabeledCurrency} from './@ui';
 
 type Props = {
-  estimatedCost: number;
+  estimatedCost?: number;
   collectedFunds: number;
   disbursedFunds: number;
   addOnTotals: number;
@@ -17,8 +17,8 @@ export function ProjectCostSummary({
 }: Props) {
   return (
     <>
-      <div className="grid grid-cols-5 text-center">
-        <LabeledCurrency label="estimated cost" value={estimatedCost} />
+      <div className={`flex flex-wrap justify-center gap-9 text-center`}>
+        {estimatedCost && <LabeledCurrency label="estimated cost" value={estimatedCost} />}
         <LabeledCurrency
           label="collected funds"
           value={collectedFunds}
