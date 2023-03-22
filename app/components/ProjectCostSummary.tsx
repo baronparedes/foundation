@@ -25,7 +25,7 @@ export function ProjectCostSummary({
           valueClassName="text-green-500"
         />
         <LabeledCurrency
-          label="disbursed funds"
+          label="disbursements"
           value={Math.abs(disbursedFunds)}
           valueClassName="text-red-500"
         />
