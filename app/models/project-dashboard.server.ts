@@ -1,6 +1,6 @@
 import type { Project, ProjectAddOn, ProjectSetting, ProjectVoucher } from "@prisma/client";
-import { prisma } from "../db.server";
-import { isBeforeDate, isBetweenDates, sum } from "../utils";
+import {prisma} from '../db.server';
+import {isBeforeDate, isBetweenDates, sum} from '../utils';
 
 async function getClosedVoucherDetails(vouchers: ProjectVoucher[]) {
   const closedVouchers = vouchers.filter((v) => v.isClosed);
@@ -140,6 +140,15 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
       projectId: id,
     },
   });
+  const collectedFundsData = await prisma.fundTransaction.aggregate({
+    where: {
+      projectId: id,
+      type: "collection",
+    },
+    _sum: {
+      amount: true,
+    },
+  });
 
   const { uncategorizedDisbursement, categorizedDisbursement } = await getVoucherDetails(
     vouchers
@@ -149,11 +158,20 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
   const costPlusTotals = await getCostPlusTotals({ id }, vouchers, addOnExpenses.addOns);
   const totalExempt = sum(costPlusTotals.map((_) => _.totalExempted));
 
+  const addOnTotals = addOnExpenses.totalAddOns;
+  const uncategorizedDisbursedTotal = uncategorizedDisbursement.totalDisbursements;
+  const categorizedDisbursedTotal = sum(
+    categorizedDisbursement.map((_) => _.totalDisbursements)
+  );
+  const costPlusTotal = sum(costPlusTotals.map((_) => _.total));
+
   const totalProjectCost =
-    addOnExpenses.totalAddOns +
-    uncategorizedDisbursement.totalDisbursements +
-    sum(categorizedDisbursement.map((_) => _.totalDisbursements)) +
-    sum(costPlusTotals.map((_) => _.total));
+    addOnTotals + uncategorizedDisbursedTotal + categorizedDisbursedTotal + costPlusTotal;
+
+  const collectedFunds = collectedFundsData._sum.amount;
+  const disbursedFunds = categorizedDisbursedTotal + uncategorizedDisbursedTotal;
+
+  const remainingFunds = Number(collectedFunds) - totalProjectCost;
 
   return {
     project,
@@ -163,6 +181,10 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
     costPlusTotals,
     totalProjectCost,
     totalExempt,
+    remainingFunds,
+    collectedFunds,
+    disbursedFunds,
+    addOnTotals,
   };
 }
 

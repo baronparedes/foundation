@@ -1,4 +1,11 @@
-export function SearchInput({ ...inputProps }: React.HTMLProps<HTMLInputElement>) {
+type Props = {
+  label?: React.ReactNode;
+};
+
+export function SearchInput({
+  label,
+  ...inputProps
+}: React.HTMLProps<HTMLInputElement & Props>) {
   return (
     <>
       <label
@@ -32,7 +39,7 @@ export function SearchInput({ ...inputProps }: React.HTMLProps<HTMLInputElement>
           type="submit"
           className="absolute right-2.5 bottom-2.5 rounded-lg bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
         >
-          Search
+          {label ?? "Search"}
         </button>
       </div>
     </>

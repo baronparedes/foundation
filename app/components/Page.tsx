@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, {useState} from 'react';
 
-import { Transition } from "@headlessui/react";
-import { Form, NavLink } from "@remix-run/react";
+import {Transition} from '@headlessui/react';
+import {Form, NavLink} from '@remix-run/react';
 
-import { useUser } from "../utils";
-import { Button } from "./@windmill";
+import {useUser} from '../utils';
+import {Button} from './@windmill';
 
 type Props = {
   currentPage: string;
@@ -20,7 +20,7 @@ export default function Page({ children, currentPage }: React.PropsWithChildren<
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <nav className="bg-gray-800">
+      <nav className="bg-gray-800 print:hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between bg-slate-800 p-4 text-white">
             <div className="flex items-center">

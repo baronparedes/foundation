@@ -1,16 +1,16 @@
-import classNames from "classnames";
-import invariant from "tiny-invariant";
+import classNames from 'classnames';
+import invariant from 'tiny-invariant';
 
-import { useLoaderData, useNavigate } from "@remix-run/react";
-import { json } from "@remix-run/server-runtime";
+import {useLoaderData, useNavigate} from '@remix-run/react';
+import {json} from '@remix-run/server-runtime';
 
-import { DialogWithTransition, LabeledCurrency } from "../../../components/@ui";
-import { Button, Card, CardBody } from "../../../components/@windmill";
-import { AddOnExpenseCard } from "../../../components/cards/AddOnExpenseCard";
-import { DisbursementCard } from "../../../components/cards/DisbursementCard";
-import { getProjectDashboard } from "../../../models/project-dashboard.server";
-import { requireUserId } from "../../../session.server";
-import { formatCurrencyFixed, sum } from "../../../utils";
+import {DialogWithTransition, LabeledCurrency} from '../../../components/@ui';
+import {Button, Card, CardBody} from '../../../components/@windmill';
+import {AddOnExpenseCard} from '../../../components/cards/AddOnExpenseCard';
+import {DisbursementCard} from '../../../components/cards/DisbursementCard';
+import {getProjectDashboard} from '../../../models/project-dashboard.server';
+import {requireUserId} from '../../../session.server';
+import {formatCurrencyFixed, sum} from '../../../utils';
 
 import type { ProjectAddOn } from "@prisma/client";
 import type { ProjectVoucherDetailsWithVoucherNumber } from "../../../models/project-voucher-detail.server";
@@ -145,7 +145,13 @@ export default function ProjectDashboard() {
       </div>
       <hr className="my-4" />
       <div className="text-right">
-        <Button>Report Preview</Button>
+        <Button
+          onClick={() => {
+            window.open(`/reports/project/${project.id}`);
+          }}
+        >
+          Report Preview
+        </Button>
       </div>
     </DialogWithTransition>
   );

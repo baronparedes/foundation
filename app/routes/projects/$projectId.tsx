@@ -1,16 +1,16 @@
-import classNames from "classnames";
-import invariant from "tiny-invariant";
-import { getProject } from "~/models/project.server";
+import invariant from 'tiny-invariant';
+import {getProject, Project} from '~/models/project.server';
 
-import { json } from "@remix-run/node";
-import { Form, Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
+import {json} from '@remix-run/node';
+import {Form, Outlet, useCatch, useLoaderData, useNavigate} from '@remix-run/react';
 
-import { LabeledCurrency } from "../../components/@ui";
-import { SearchInput } from "../../components/@ui/SearchInput";
-import { Button } from "../../components/@windmill";
-import { ProjectVoucherTable } from "../../components/tables/ProjectVoucherTable";
-import { getProjectFundDetails } from "../../models/project-dashboard.server";
-import { getProjectVouchers } from "../../models/project-voucher.server";
+import {SearchInput} from '../../components/@ui/SearchInput';
+import {Button} from '../../components/@windmill';
+import {ProjectCostSummary} from '../../components/ProjectCostSummary';
+import {ProjectHeader} from '../../components/ProjectHeader';
+import {ProjectVoucherTable} from '../../components/tables/ProjectVoucherTable';
+import {getProjectFundDetails} from '../../models/project-dashboard.server';
+import {getProjectVouchers} from '../../models/project-voucher.server';
 
 import type { LoaderArgs } from "@remix-run/node";
 import type { ProjectVoucherWithDetails } from "../../models/project-voucher.server";
@@ -66,61 +66,19 @@ export default function ProjectDetailsPage() {
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-2 gap-2">
-        <div>
-          <h4 className="text-lg">{project.code}</h4>
-          <h3 className="text-2xl font-bold">{project.name}</h3>
-        </div>
-        <div className="text-right">
-          <h5>{project.description}</h5>
-          <h5>📍 {project.location}</h5>
-        </div>
-      </div>
-
+      <ProjectHeader
+        project={project as unknown as Project}
+        totalProjectCost={totalProjectCost}
+        remainingFunds={remainingFunds}
+      />
       <hr className="my-4" />
-      <div className="grid grid-cols-2 gap-2">
-        <div className="text-center">
-          <LabeledCurrency
-            label="total project cost"
-            value={totalProjectCost}
-            valueClassName={classNames("text-4xl")}
-          />
-        </div>
-        <div className="text-center">
-          <LabeledCurrency
-            label="remaining funds"
-            value={remainingFunds}
-            valueClassName={classNames(
-              "text-4xl",
-              remainingFunds < 200000 ? "text-red-500" : "text-green-500"
-            )}
-          />
-        </div>
-      </div>
-      <hr className="my-4" />
-      <div className="grid grid-cols-5 text-center">
-        <LabeledCurrency label="estimated cost" value={Number(project.estimatedCost)} />
-        <LabeledCurrency
-          label="collected funds"
-          value={Number(collectedFunds)}
-          valueClassName="text-green-500"
-        />
-        <LabeledCurrency
-          label="disbursed funds"
-          value={Math.abs(Number(disbursedFunds))}
-          valueClassName="text-red-500"
-        />
-        <LabeledCurrency
-          label="additional expenses"
-          value={Number(addOnTotals)}
-          valueClassName="text-red-500"
-        />
-        <LabeledCurrency
-          label="project expenses"
-          value={Number(costPlusTotals)}
-          valueClassName="text-purple-500"
-        />
-      </div>
+      <ProjectCostSummary
+        estimatedCost={Number(project.estimatedCost)}
+        collectedFunds={Number(collectedFunds)}
+        disbursedFunds={Number(disbursedFunds)}
+        addOnTotals={Number(addOnTotals)}
+        costPlusTotals={Number(costPlusTotals)}
+      />
       <hr className="my-4" />
       <div className="w-full space-x-2 text-right">
         <Button onClick={() => navigate("./settings")}>Settings</Button>
@@ -130,7 +88,7 @@ export default function ProjectDetailsPage() {
       </div>
       <hr className="my-4" />
       <Form>
-        <SearchInput />
+        <SearchInput placeholder="search vouchers" />
       </Form>
       <hr className="my-4" />
       <div>
