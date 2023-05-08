@@ -13,7 +13,7 @@ export const sessionStorage = createCookieSessionStorage({
     path: "/",
     sameSite: "lax",
     secrets: [process.env.SESSION_SECRET],
-    secure: process.env.NODE_ENV === "production",
+    // secure: process.env.NODE_ENV === "production",
   },
 });
 
@@ -28,6 +28,7 @@ export async function getUserId(request: Request): Promise<User["id"] | undefine
   const session = await getSession(request);
   const userId = session.get(USER_SESSION_KEY);
   return userId;
+  // return "clf7zg2ar0002jizapoxydng7";
 }
 
 export async function getUser(request: Request) {
