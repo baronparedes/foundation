@@ -7,6 +7,8 @@ import { safeRedirect, validateEmail } from "~/utils";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 
+import { Button } from "../components/@windmill";
+
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
   if (userId) return redirect("/");
@@ -134,17 +136,14 @@ export default function Join() {
           </div>
 
           <input type="hidden" name="redirectTo" value={redirectTo} />
-          <button
-            type="submit"
-            className="w-full rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
-          >
+          <Button type="submit" className="w-full">
             Create Account
-          </button>
+          </Button>
           <div className="flex items-center justify-center">
             <div className="text-center text-sm text-gray-500">
               Already have an account?{" "}
               <Link
-                className="text-blue-500 underline"
+                className="text-blue-400 underline"
                 to={{
                   pathname: "/",
                   search: searchParams.toString(),

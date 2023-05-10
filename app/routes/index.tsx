@@ -4,7 +4,7 @@ import { safeRedirect, useOptionalUser, validateEmail } from "~/utils";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { json, redirect } from "@remix-run/server-runtime";
 
-import ImageLight from "../assets/img/login-office.jpeg";
+import ImageGMD from "../assets/img/gmd-main-logo.jpg";
 import { Button } from "../components/@windmill";
 import { verifyLogin } from "../models/user.server";
 import { createUserSession, getUserId } from "../session.server";
@@ -164,18 +164,20 @@ export default function Index() {
   return (
     <div className="flex min-h-screen items-center bg-gray-50 p-6 dark:bg-gray-900">
       <div className="mx-auto h-full max-w-4xl flex-1 overflow-hidden rounded-lg bg-white shadow-xl dark:bg-gray-800">
-        <div className="flex flex-col overflow-y-auto md:flex-row">
-          <div className="h-32 md:h-auto md:w-1/2">
-            <img
-              aria-hidden="true"
-              className="h-full w-full object-cover dark:hidden"
-              src={ImageLight}
-              alt="Office"
-            />
-          </div>
-          <main className="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
+        <div className="mx-auto p-4 md:h-auto md:w-1/2">
+          <img
+            aria-hidden="true"
+            className="h-full w-full object-cover"
+            src={ImageGMD}
+            alt="Login"
+          />
+        </div>
+        <div>
+          <main className="flex items-center justify-center p-6 sm:p-12">
             <div className="w-full">
-              <FormLogin />
+              <div className="mx-auto md:w-1/2">
+                <FormLogin />
+              </div>
             </div>
           </main>
         </div>
