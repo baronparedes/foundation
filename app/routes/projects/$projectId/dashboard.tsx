@@ -1,16 +1,16 @@
-import classNames from 'classnames';
-import invariant from 'tiny-invariant';
+import classNames from "classnames";
+import invariant from "tiny-invariant";
 
-import {useLoaderData, useNavigate} from '@remix-run/react';
-import {json} from '@remix-run/server-runtime';
+import { useLoaderData, useNavigate } from "@remix-run/react";
+import { json } from "@remix-run/server-runtime";
 
-import {DialogWithTransition, LabeledCurrency} from '../../../components/@ui';
-import {Button, Card, CardBody} from '../../../components/@windmill';
-import {AddOnExpenseCard} from '../../../components/cards/AddOnExpenseCard';
-import {DisbursementCard} from '../../../components/cards/DisbursementCard';
-import {getProjectDashboard} from '../../../models/project-dashboard.server';
-import {requireUserId} from '../../../session.server';
-import {formatCurrencyFixed, sum} from '../../../utils';
+import { DialogWithTransition, LabeledCurrency } from "../../../components/@ui";
+import { Button, Card, CardBody } from "../../../components/@windmill";
+import { AddOnExpenseCard } from "../../../components/cards/AddOnExpenseCard";
+import { DisbursementCard } from "../../../components/cards/DisbursementCard";
+import { getProjectDashboard } from "../../../models/project-dashboard.server";
+import { requireUserId } from "../../../session.server";
+import { formatCurrencyFixed, sum } from "../../../utils";
 
 import type { ProjectAddOn } from "@prisma/client";
 import type { ProjectVoucherDetailsWithVoucherNumber } from "../../../models/project-voucher-detail.server";
@@ -79,7 +79,7 @@ export default function ProjectDashboard() {
       <hr className="my-4" />
       <AddOnExpenseCard
         colored
-        className="m-2 cursor-pointer bg-purple-50 hover:bg-purple-100"
+        className="m-2 cursor-pointer bg-gmd-50 hover:bg-gmd-100"
         description="Total Add On Expenses"
         total={addOnExpenses.totalAddOns}
         addOns={addOnExpenses.addOns as unknown as ProjectAddOn[]}
@@ -92,7 +92,7 @@ export default function ProjectDashboard() {
               {costPlusTotals.map((cp, key) => {
                 return (
                   <>
-                    <Card colored className="m-2 flex-auto bg-purple-100" key={key}>
+                    <Card colored className="m-2 flex-auto bg-gmd-100" key={key}>
                       <CardBody>
                         <p className="mb-4 font-semibold">{cp.description}</p>
                         <p className="currency">{formatCurrencyFixed(cp.total)}</p>
@@ -106,7 +106,7 @@ export default function ProjectDashboard() {
         </>
       )}
       <hr className="my-4" />
-      <Card colored className="m-2 bg-purple-600 text-white">
+      <Card colored className="m-2 bg-gmd-600 text-white">
         <CardBody>
           <p className="mb-4 font-semibold">Total Disbursed</p>
           <p className="currency">{formatCurrencyFixed(totalDisbursed)}</p>
@@ -122,7 +122,7 @@ export default function ProjectDashboard() {
                   <DisbursementCard
                     key={i}
                     colored
-                    className="hover:bg-purple-100"
+                    className="hover:bg-gmd-100"
                     total={data.totalDisbursements}
                     description={data.category.description}
                     disbursements={

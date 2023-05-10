@@ -1,4 +1,4 @@
-import {LabeledCurrency} from './@ui';
+import { LabeledCurrency } from "./@ui";
 
 type Props = {
   estimatedCost?: number;
@@ -37,7 +37,7 @@ export function ProjectCostSummary({
         <LabeledCurrency
           label="project expenses"
           value={costPlusTotals}
-          valueClassName="text-purple-500"
+          valueClassName="text-gmd-500"
         />
       </div>
     </>

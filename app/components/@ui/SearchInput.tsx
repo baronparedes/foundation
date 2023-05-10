@@ -31,13 +31,13 @@ export function SearchInput({
           name="search"
           type="search"
           id="search"
-          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-4 pl-10 text-sm text-gray-900 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
+          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-4 pl-10 text-sm text-gray-900 focus:border-gmd-500 focus:ring-gmd-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-gmd-500 dark:focus:ring-gmd-500"
           placeholder="Search"
           {...inputProps}
         />
         <button
           type="submit"
-          className="absolute right-2.5 bottom-2.5 rounded-lg bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
+          className="absolute right-2.5 bottom-2.5 rounded-lg bg-gmd-700 px-4 py-2 text-sm font-medium text-white hover:bg-gmd-800 focus:outline-none focus:ring-4 focus:ring-gmd-300 dark:bg-gmd-600 dark:hover:bg-gmd-700 dark:focus:ring-gmd-800"
         >
           {label ?? "Search"}
         </button>
