@@ -23,7 +23,7 @@ function getSize(size?: Size) {
       return "max-w-6xl";
     case "lg":
     default:
-      return "max-w-2xl";
+      return "max-w-4xl";
   }
 }
 

@@ -30,6 +30,7 @@ export async function transferFundTransaction({
       description,
       fundId,
       projectId: null,
+      studioId: null,
       createdAt: new Date(createdAt),
       createdById,
       comments: `transfer from ${selectedFundId}`,
@@ -40,6 +41,7 @@ export async function transferFundTransaction({
       description,
       fundId: selectedFundId,
       projectId: null,
+      studioId: null,
       createdAt: new Date(createdAt),
       createdById,
       comments: `transfer to ${fundId}`,
@@ -57,6 +59,7 @@ export function createFundTransaction({
   createdById,
   comments,
   type,
+  studioId,
 }: Omit<FundTransaction, "id" | "type"> & {
   type: FundTransactionType;
 }) {
@@ -65,6 +68,7 @@ export function createFundTransaction({
     description,
     fundId,
     projectId,
+    studioId,
     createdAt: new Date(createdAt),
     createdById,
     comments,

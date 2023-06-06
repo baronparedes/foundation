@@ -1,14 +1,18 @@
-import { useFetcher } from "@remix-run/react";
+import {useFetcher} from '@remix-run/react';
 
-import { TextInput } from "../@ui";
-import { Button } from "../@windmill";
+import {TextInput} from '../@ui';
+import {Button} from '../@windmill';
 
 type Props = {
   projectVoucherId: number;
   userId: string;
   costPlus: boolean;
 };
-export function ToggleVoucherCostPlus({ projectVoucherId, userId, costPlus }: Props) {
+export function ToggleProjectVoucherCostPlus({
+  projectVoucherId,
+  userId,
+  costPlus,
+}: Props) {
   const fetcher = useFetcher();
   return (
     <>

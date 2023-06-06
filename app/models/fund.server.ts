@@ -18,6 +18,7 @@ export async function getFund({ id }: Pick<Fund, "id">) {
           amount: true,
           createdAt: true,
           description: true,
+          comments: true,
           createdBy: {
             select: {
               id: true,
@@ -25,6 +26,13 @@ export async function getFund({ id }: Pick<Fund, "id">) {
             },
           },
           project: {
+            select: {
+              code: true,
+              description: true,
+              id: true,
+            },
+          },
+          studio: {
             select: {
               code: true,
               description: true,

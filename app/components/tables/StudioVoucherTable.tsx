@@ -1,4 +1,7 @@
+import {LockClosedIcon, LockOpenIcon} from '@heroicons/react/solid';
+
 import {formatCurrencyFixed} from '../../utils';
+import {LinkStyled} from '../@ui';
 import {
   Badge,
   Table,
@@ -10,44 +13,50 @@ import {
   TableRow,
 } from '../@windmill';
 
-import type { FundWithTransaction } from "../../models/fund.server";
+import type { StudioVoucherWithDetails } from "../../models/studio-voucher.server";
 type Props = {
-  data: FundWithTransaction;
+  data: StudioVoucherWithDetails;
 };
 
-export function FundTransactionTable({ data }: Props) {
+export function StudioVoucherTable({ data }: Props) {
   return (
     <TableContainer>
       <Table className="w-full table-auto">
         <TableHeader>
           <tr>
+            <TableCell>Voucher Number</TableCell>
             <TableCell>Description</TableCell>
             <TableCell>Amount</TableCell>
-            <TableCell>Project?</TableCell>
-            <TableCell>Studio?</TableCell>
+            <TableCell>Fund</TableCell>
             <TableCell>Date</TableCell>
             <TableCell>By</TableCell>
+            <TableCell></TableCell>
           </tr>
         </TableHeader>
         <TableBody>
-          {data?.fundTransaction.length === 0 ? (
+          {data?.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={5}>
-                <p className="text-center">No transactions yet</p>
+              <TableCell colSpan={7}>
+                <p className="text-center">No vouchers yet</p>
               </TableCell>
             </TableRow>
           ) : (
-            data?.fundTransaction.map((transaction) => {
-              const amount = Number(transaction.amount);
+            data?.map((voucher) => {
+              const amount = Number(voucher.consumedAmount);
               const isNegative = amount < 0;
 
               return (
-                <TableRow key={`transaction-${transaction.id}`}>
-                  <TableCell className="w-96">
+                <TableRow key={`voucher-${voucher.id}`}>
+                  <TableCell>
+                    <LinkStyled to={`./vouchers/${voucher.id}`}>
+                      {voucher.voucherNumber}
+                    </LinkStyled>
+                  </TableCell>
+                  <TableCell className="mw-96 ">
                     <div className="flex items-center text-sm">
                       <div>
                         <p className="break-all text-xs text-gray-600 dark:text-gray-400">
-                          {transaction.description}
+                          {voucher.description}
                         </p>
                       </div>
                     </div>
@@ -61,18 +70,28 @@ export function FundTransactionTable({ data }: Props) {
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge type="neutral">{transaction.project?.code}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge type="neutral">{transaction.studio?.code}</Badge>
+                    <Badge type="neutral">{voucher.fund.code}</Badge>
                   </TableCell>
                   <TableCell>
                     <span className="text-sm">
-                      {new Date(transaction.createdAt).toLocaleDateString()}
+                      {new Date(voucher.transactionDate).toLocaleDateString()}
                     </span>
                   </TableCell>
                   <TableCell>
-                    <Badge type="primary">{transaction.createdBy.email}</Badge>
+                    <Badge type="primary">{voucher.updatedBy.email}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    {voucher.isClosed ? (
+                      <LockClosedIcon
+                        className="inline h-5 w-5 text-red-600"
+                        aria-label="closed"
+                      />
+                    ) : (
+                      <LockOpenIcon
+                        className="inline h-5 w-5 text-green-600"
+                        aria-label="open"
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               );
