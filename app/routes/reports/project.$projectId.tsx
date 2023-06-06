@@ -289,11 +289,11 @@ export default function ReportProjectPage() {
                                 <TableCell>
                                   <span className="text-sm">
                                     {new Date(
-                                      d.projectVoucher.transactionDate
+                                      d.voucher.transactionDate
                                     ).toLocaleDateString()}
                                   </span>
                                 </TableCell>
-                                <TableCell>{d.projectVoucher.voucherNumber}</TableCell>
+                                <TableCell>{d.voucher.voucherNumber}</TableCell>
                                 <TableCell className="w-72">
                                   <div className="flex items-center text-sm">
                                     <div>
