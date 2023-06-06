@@ -1,102 +1,86 @@
 import invariant from 'tiny-invariant';
 
-import {ExclamationCircleIcon, LockClosedIcon, LockOpenIcon} from '@heroicons/react/solid';
+import {LockClosedIcon, LockOpenIcon} from '@heroicons/react/solid';
 import {Form, useLoaderData, useNavigate, useTransition} from '@remix-run/react';
 import {json, redirect} from '@remix-run/server-runtime';
 
 import {DialogWithTransition, LabeledCurrency} from '../../../components/@ui';
 import {Button} from '../../../components/@windmill';
-import {NewProjectVoucherDetails} from '../../../components/forms/NewProjectVoucherDetail';
-import {
-  ToggleProjectVoucherCostPlus,
-} from '../../../components/forms/ToggleProjectVoucherCostPlus';
+import {NewStudioVoucherDetails} from '../../../components/forms/NewStudioVoucherDetail';
 import {FundPicker} from '../../../components/pickers/FundPicker';
-import {ProjectVoucherDetailTable} from '../../../components/tables/ProjectVoucherDetailTable';
+import {StudioVoucherDetailTable} from '../../../components/tables/StudioVoucherDetailTable';
 import {getDetailCategories} from '../../../models/detail-category.server';
 import {getFunds} from '../../../models/fund.server';
 import {
-  addProjectVoucherDetail,
-  deleteProjectVoucherDetail,
-  getProjectVoucherDetails,
-} from '../../../models/project-voucher-detail.server';
-import {
-  closeProjectVoucher,
-  getProjectVoucher,
-  toggleCostPlus,
-} from '../../../models/project-voucher.server';
+  addStudioVoucherDetail,
+  deleteStudioVoucherDetail,
+  getStudioVoucherDetails,
+} from '../../../models/studio-voucher-detail.server';
+import {closeStudioVoucher, getStudioVoucher} from '../../../models/studio-voucher.server';
 import {requireUserId} from '../../../session.server';
 import {formatCurrencyFixed, sum} from '../../../utils';
 
 import type { FundWithBalance } from "../../../models/fund.server";
-import type { ProjectVoucherDetailslWithCategory } from "../../../models/project-voucher-detail.server";
-import type { ProjectVoucherDetail } from "../../../models/project-voucher.server";
+import type { StudioVoucherDetailslWithCategory } from "../../../models/studio-voucher-detail.server";
+import type { StudioVoucherDetail } from "../../../models/studio-voucher.server";
 import type { LoaderArgs, ActionArgs } from "@remix-run/server-runtime";
 export async function loader({ params, request }: LoaderArgs) {
-  const { projectId, voucherId } = params;
-  const voucher = await getProjectVoucher({ id: Number(voucherId) });
+  const { studioId, voucherId } = params;
+  const voucher = await getStudioVoucher({ id: Number(voucherId) });
   const userId = await requireUserId(request);
-  const voucherDetails = await getProjectVoucherDetails({
+  const voucherDetails = await getStudioVoucherDetails({
     id: Number(voucherId),
   });
   const categories = await getDetailCategories();
 
-  invariant(projectId, "project not found");
+  invariant(studioId, "studio not found");
   invariant(voucher, "voucher not found");
 
   const funds = await getFunds();
 
-  return json({ projectId, voucher, userId, voucherDetails, categories, funds });
+  return json({ studioId, voucher, userId, voucherDetails, categories, funds });
 }
 
 export async function action({ params, request }: ActionArgs) {
-  const { projectId } = params;
+  const { studioId } = params;
   const formData = Object.fromEntries(await request.formData());
-  const { _action, updatedById, projectVoucherId, fundId, ...values } = formData;
+  const { _action, updatedById, studioVoucherId, fundId, ...values } = formData;
 
   if (_action === "create") {
     const data = {
       ...values,
-      projectVoucherId: Number(projectVoucherId),
+      studioVoucherId: Number(studioVoucherId),
       quantity: values.quantity === "" ? null : values.quantity,
-    } as unknown as ProjectVoucherDetail;
+    } as unknown as StudioVoucherDetail;
 
-    await addProjectVoucherDetail(data, updatedById as string, Number(projectVoucherId));
+    await addStudioVoucherDetail(data, updatedById as string, Number(studioVoucherId));
     return json({ state: "created" });
   }
 
   if (_action === "delete") {
-    const { projectVoucherDetailId } = formData;
-    await deleteProjectVoucherDetail(
-      { id: Number(projectVoucherDetailId) },
+    const { studioVoucherDetailId } = formData;
+    await deleteStudioVoucherDetail(
+      { id: Number(studioVoucherDetailId) },
       updatedById as string,
-      Number(projectVoucherId)
+      Number(studioVoucherId)
     );
-    return json({ state: "deleted", projectVoucherDetailId });
+    return json({ state: "deleted", studioVoucherDetailId });
   }
 
   if (_action === "close-voucher") {
-    await closeProjectVoucher(
-      Number(projectVoucherId),
+    await closeStudioVoucher(
+      Number(studioVoucherId),
       fundId as string,
       updatedById as string
     );
-    return redirect(`./projects/${projectId}`);
-  }
-
-  if (_action === "toggle-cost-plus") {
-    const { costPlus } = formData;
-    await toggleCostPlus(
-      Number(projectVoucherId),
-      updatedById.toString(),
-      costPlus.toString().toLowerCase() === "true"
-    );
+    return redirect(`./studios/${studioId}`);
   }
 
   return null;
 }
 
 export default function VoucherDetails() {
-  const { projectId, voucher, userId, voucherDetails, categories, funds } =
+  const { studioId, voucher, userId, voucherDetails, categories, funds } =
     useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const transition = useTransition();
@@ -126,20 +110,12 @@ export default function VoucherDetails() {
                       aria-label="open"
                     />
                   )}
-                  {!voucher.costPlus && (
-                    <span title="This is exempted from cost plus">
-                      <ExclamationCircleIcon
-                        className="inline-block h-5 w-5 text-yellow-600"
-                        aria-label="cost plus exempt"
-                      />
-                    </span>
-                  )}
                 </div>
               </div>
             </div>
           </>
         }
-        onCloseModal={() => navigate(`/projects/${projectId}`)}
+        onCloseModal={() => navigate(`/studios/${studioId}`)}
       >
         <div className="grid grid-cols-3 gap-3 text-center">
           <LabeledCurrency
@@ -156,23 +132,18 @@ export default function VoucherDetails() {
         </div>
         <hr className="my-4" />
         <div className="my-4 w-full space-x-2 text-right">
-          <ToggleProjectVoucherCostPlus
-            projectVoucherId={voucher.id}
-            userId={userId}
-            costPlus={voucher.costPlus}
-          />
           {!voucher.isClosed && (
-            <NewProjectVoucherDetails
-              projectVoucherId={voucher.id}
+            <NewStudioVoucherDetails
+              studioVoucherId={voucher.id}
               userId={userId}
               maxAmount={remainingAmount}
               categories={categories}
             />
           )}
         </div>
-        <ProjectVoucherDetailTable
-          data={voucherDetails as unknown as ProjectVoucherDetailslWithCategory}
-          projectVoucherId={voucher.id}
+        <StudioVoucherDetailTable
+          data={voucherDetails as unknown as StudioVoucherDetailslWithCategory}
+          studioVoucherId={voucher.id}
           userId={userId}
           isClosed={voucher.isClosed}
         />
@@ -181,7 +152,7 @@ export default function VoucherDetails() {
           {!voucher.isClosed && (
             <Form method="post">
               <input type="hidden" value={userId} name="updatedById" />
-              <input type="hidden" value={voucher.id} name="projectVoucherId" />
+              <input type="hidden" value={voucher.id} name="studioVoucherId" />
 
               <div className="text-right">
                 {remainingAmount === 0 && <input type="hidden" value={""} name="fundId" />}

@@ -2,8 +2,6 @@ import type { User, Project } from "@prisma/client";
 
 import {prisma} from '~/db.server';
 
-
-
 export type { Project } from "@prisma/client";
 
 export function getProject({ id }: Pick<Project, "id">) {

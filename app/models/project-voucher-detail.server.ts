@@ -6,7 +6,7 @@ export type ProjectVoucherDetailslWithCategory = Prisma.PromiseReturnType<
 >;
 
 export type ProjectVoucherDetailsWithVoucherNumber = ProjectVoucherDetail & {
-  projectVoucher: Pick<ProjectVoucher, "voucherNumber">;
+  voucher: Pick<ProjectVoucher, "voucherNumber" | "transactionDate">;
 };
 
 export async function getProjectVoucherDetails({ id }: Pick<ProjectVoucherDetail, "id">) {

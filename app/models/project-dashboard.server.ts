@@ -25,7 +25,13 @@ async function getClosedVoucherDetails(vouchers: ProjectVoucher[]) {
     },
   });
 
-  return closedVoucherDetails;
+  return closedVoucherDetails.map((v) => {
+    const { projectVoucher, ...rest } = v;
+    return {
+      voucher: { ...projectVoucher },
+      ...rest,
+    };
+  });
 }
 
 async function getVoucherDetails(vouchers: ProjectVoucher[]) {

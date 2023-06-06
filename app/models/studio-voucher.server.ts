@@ -4,30 +4,30 @@ import {Prisma} from '@prisma/client';
 
 import {createFundTransaction} from './fund-transaction.server';
 
-import type { Project, ProjectVoucher } from "@prisma/client";
-export type { ProjectVoucher, ProjectVoucherDetail } from "@prisma/client";
+import type { Studio, StudioVoucher } from "@prisma/client";
+export type { StudioVoucher, StudioVoucherDetail } from "@prisma/client";
 
-export type ProjectVoucherWithDetails = Prisma.PromiseReturnType<typeof getProjectVouchers>;
+export type StudioVoucherWithDetails = Prisma.PromiseReturnType<typeof getStudioVouchers>;
 
-export function getProjectVoucher({ id }: Pick<ProjectVoucher, "id">) {
-  return prisma.projectVoucher.findFirst({
+export function getStudioVoucher({ id }: Pick<StudioVoucher, "id">) {
+  return prisma.studioVoucher.findFirst({
     where: { id },
   });
 }
 
-export function getProjectVouchers({
+export function getStudioVouchers({
   id,
   criteria,
-}: Pick<Project, "id"> & { criteria?: string }) {
-  let args: Prisma.ProjectVoucherFindManyArgs = {
-    where: { projectId: id, isDeleted: false },
+}: Pick<Studio, "id"> & { criteria?: string }) {
+  let args: Prisma.StudioVoucherFindManyArgs = {
+    where: { studioId: id, isDeleted: false },
   };
 
   if (criteria) {
     args = {
       where: {
         AND: [
-          { projectId: id, isDeleted: false },
+          { studioId: id, isDeleted: false },
           {
             OR: [
               {
@@ -49,7 +49,7 @@ export function getProjectVouchers({
     };
   }
 
-  return prisma.projectVoucher.findMany({
+  return prisma.studioVoucher.findMany({
     ...args,
     orderBy: { createdAt: "desc" },
     include: {
@@ -63,7 +63,7 @@ export function getProjectVouchers({
           email: true,
         },
       },
-      project: {
+      studio: {
         select: {
           code: true,
         },
@@ -72,32 +72,30 @@ export function getProjectVouchers({
   });
 }
 
-export async function createProjectVoucher({
+export async function createStudioVoucher({
   disbursedAmount,
   description,
   fundId,
-  projectId,
+  studioId,
   code,
   transactionDate,
   updatedById,
   voucherNumber,
-  costPlus,
-}: Omit<ProjectVoucher, "id"> & Pick<Project, "code">) {
+}: Omit<StudioVoucher, "id"> & Pick<Studio, "code">) {
   const data = {
     disbursedAmount,
     consumedAmount: disbursedAmount,
     description,
     fundId,
-    projectId,
+    studioId,
     updatedById,
     transactionDate: new Date(transactionDate),
     voucherNumber: voucherNumber.toUpperCase(),
-    costPlus,
   };
 
   const amt = parseFloat(disbursedAmount.toString()) * -1;
-  const [projectVoucher] = await prisma.$transaction([
-    prisma.projectVoucher.create({
+  const [studioVoucher] = await prisma.$transaction([
+    prisma.studioVoucher.create({
       data,
     }),
     createFundTransaction({
@@ -106,46 +104,46 @@ export async function createProjectVoucher({
       createdAt: new Date(),
       createdById: updatedById,
       fundId,
-      projectId,
-      studioId: null,
-      comments: `disbursed to project ${code}`,
+      projectId: null,
+      studioId,
+      comments: `disbursed to studio ${code}`,
       type: "disbursement",
     }),
   ]);
 
-  return projectVoucher;
+  return studioVoucher;
 }
 
-export async function closeProjectVoucher(
-  projectVoucherId: number,
+export async function closeStudioVoucher(
+  studioVoucherId: number,
   fundId: string,
   updatedById: string
 ) {
-  const projectVoucher = await prisma.projectVoucher.findFirstOrThrow({
+  const studioVoucher = await prisma.studioVoucher.findFirstOrThrow({
     where: {
-      id: projectVoucherId,
+      id: studioVoucherId,
       OR: [{ isClosed: { not: true } }, { isDeleted: { not: true } }],
     },
   });
 
-  const closedConsumedAmount = await prisma.projectVoucherDetail.aggregate({
-    where: { projectVoucherId },
+  const closedConsumedAmount = await prisma.studioVoucherDetail.aggregate({
+    where: { studioVoucherId },
     _sum: {
       amount: true,
     },
   });
 
   const refundAmount =
-    Number(projectVoucher.disbursedAmount) - Number(closedConsumedAmount._sum.amount);
+    Number(studioVoucher.disbursedAmount) - Number(closedConsumedAmount._sum.amount);
 
-  const isDeleted = refundAmount === Number(projectVoucher.disbursedAmount);
-  const deletedDesc = `deleted voucher ${projectVoucher.voucherNumber}`;
-  const closedDesc = `refund from voucher ${projectVoucher.voucherNumber}`;
+  const isDeleted = refundAmount === Number(studioVoucher.disbursedAmount);
+  const deletedDesc = `deleted voucher ${studioVoucher.voucherNumber}`;
+  const closedDesc = `refund from voucher ${studioVoucher.voucherNumber}`;
 
   if (refundAmount === 0) {
-    await prisma.projectVoucher.update({
+    await prisma.studioVoucher.update({
       where: {
-        id: projectVoucherId,
+        id: studioVoucherId,
       },
       data: {
         consumedAmount: closedConsumedAmount._sum.amount,
@@ -158,9 +156,9 @@ export async function closeProjectVoucher(
   }
 
   await prisma.$transaction([
-    prisma.projectVoucher.update({
+    prisma.studioVoucher.update({
       where: {
-        id: projectVoucherId,
+        id: studioVoucherId,
       },
       data: {
         consumedAmount: closedConsumedAmount._sum.amount,
@@ -176,25 +174,9 @@ export async function closeProjectVoucher(
       createdAt: new Date(),
       createdById: updatedById,
       fundId,
-      projectId: projectVoucher.projectId,
-      studioId: null,
+      projectId: null,
+      studioId: studioVoucher.studioId,
       type: "refund",
     }),
   ]);
-}
-
-export async function toggleCostPlus(
-  projectVoucherId: number,
-  updatedById: string,
-  costPlus: boolean
-) {
-  await prisma.projectVoucher.update({
-    where: {
-      id: projectVoucherId,
-    },
-    data: {
-      updatedById,
-      costPlus,
-    },
-  });
 }

@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '../@windmill';
-import {DeleteVoucherDetail} from '../forms/DeleteVoucherDetail';
+import {DeleteVoucherDetail} from '../forms/DeleteProjectVoucherDetail';
 
 import type { ProjectVoucherDetailslWithCategory } from "../../models/project-voucher-detail.server";
 type Props = {
@@ -19,7 +19,12 @@ type Props = {
   userId: string;
 };
 
-export function VoucherDetailTable({ data, userId, projectVoucherId, isClosed }: Props) {
+export function ProjectVoucherDetailTable({
+  data,
+  userId,
+  projectVoucherId,
+  isClosed,
+}: Props) {
   const columns = isClosed ? 5 : 6;
 
   return (

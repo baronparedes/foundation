@@ -1,8 +1,8 @@
-import classNames from "classnames";
-import { useState } from "react";
+import classNames from 'classnames';
+import {useState} from 'react';
 
-import { formatCurrencyFixed } from "../../utils";
-import { DialogWithTransition } from "../@ui";
+import {formatCurrencyFixed} from '../../utils';
+import {DialogWithTransition} from '../@ui';
 import {
   Badge,
   Card,
@@ -14,18 +14,20 @@ import {
   TableFooter,
   TableHeader,
   TableRow,
-} from "../@windmill";
+} from '../@windmill';
 
-import type { ProjectVoucher } from "@prisma/client";
+import type { StudioVoucherDetailsWithVoucherNumber } from "../../models/studio-voucher-detail.server";
+import type { ProjectVoucher, StudioVoucher } from "@prisma/client";
 
 import type { ProjectVoucherDetailsWithVoucherNumber } from "../../models/project-voucher-detail.server";
 import type { CardProps } from "../@windmill/Card";
-
 type Props = {
   description: string;
   total: number;
-  disbursements?: ProjectVoucherDetailsWithVoucherNumber[];
-  vouchers?: ProjectVoucher[];
+  disbursements?:
+    | ProjectVoucherDetailsWithVoucherNumber[]
+    | StudioVoucherDetailsWithVoucherNumber[];
+  vouchers?: ProjectVoucher[] | StudioVoucher[];
 };
 
 export function DisbursementCard({
@@ -70,7 +72,6 @@ export function DisbursementCard({
                     <TableCell>Supplier</TableCell>
                     <TableCell>Quantity</TableCell>
                     <TableCell>Amount</TableCell>
-                    <TableCell></TableCell>
                   </tr>
                 </TableHeader>
                 <TableBody>
@@ -80,7 +81,7 @@ export function DisbursementCard({
 
                     return (
                       <TableRow key={key}>
-                        <TableCell>{data.projectVoucher.voucherNumber}</TableCell>
+                        <TableCell>{data.voucher?.voucherNumber ?? ""}</TableCell>
                         <TableCell>{data.referenceNumber}</TableCell>
                         <TableCell>
                           <div className="flex items-center text-sm">
@@ -122,7 +123,6 @@ export function DisbursementCard({
                     <TableCell>Voucher Number</TableCell>
                     <TableCell>Description</TableCell>
                     <TableCell>Amount</TableCell>
-                    <TableCell></TableCell>
                   </tr>
                 </TableHeader>
                 <TableBody>
