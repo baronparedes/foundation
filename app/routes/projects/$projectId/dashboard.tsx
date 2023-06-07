@@ -27,6 +27,7 @@ export async function loader({ params, request }: LoaderArgs) {
     costPlusTotals,
     totalProjectCost,
     totalExempt,
+    netProjectCost,
   } = await getProjectDashboard({ id: params.projectId });
 
   if (!project) {
@@ -44,6 +45,7 @@ export async function loader({ params, request }: LoaderArgs) {
     costPlusTotals,
     totalProjectCost,
     totalExempt,
+    netProjectCost,
   });
 }
 
@@ -55,6 +57,7 @@ export default function ProjectDashboard() {
     addOnExpenses,
     costPlusTotals,
     totalProjectCost,
+    netProjectCost,
   } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
 
@@ -69,13 +72,23 @@ export default function ProjectDashboard() {
       title={<>Project Dashboard for {project.code}</>}
       onCloseModal={() => navigate(`/projects/${project.id}`)}
     >
-      <div className="m-6 text-center">
-        <LabeledCurrency
-          label="total project cost"
-          value={totalProjectCost}
-          valueClassName={classNames("text-4xl")}
-        />
+      <div className="grid grid-cols-2">
+        <div className="m-6 text-center">
+          <LabeledCurrency
+            label="total project cost"
+            value={totalProjectCost}
+            valueClassName={classNames("text-4xl")}
+          />
+        </div>
+        <div className="m-6 text-center">
+          <LabeledCurrency
+            label="net project cost"
+            value={netProjectCost}
+            valueClassName={classNames("text-4xl")}
+          />
+        </div>
       </div>
+
       <hr className="my-4" />
       <AddOnExpenseCard
         colored

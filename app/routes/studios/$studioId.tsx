@@ -2,13 +2,19 @@ import invariant from "tiny-invariant";
 import { getStudio } from "~/models/studio.server";
 
 import { json } from "@remix-run/node";
-import { Form, Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
+import {
+  Form,
+  Outlet,
+  useCatch,
+  useLoaderData,
+  useNavigate,
+} from "@remix-run/react";
 
 import { SearchInput } from "../../components/@ui/SearchInput";
 import { Button } from "../../components/@windmill";
 import { StudioHeader } from "../../components/StudioHeader";
 import { StudioVoucherTable } from "../../components/tables/StudioVoucherTable";
-import { getStudioFundDetails } from "../../models/studio-dashboard.server";
+import { getStudioDashboard } from "../../models/studio-dashboard.server";
 import { getStudioVouchers } from "../../models/studio-voucher.server";
 
 import type { Studio } from "~/models/studio.server";
@@ -30,7 +36,9 @@ export async function loader({ params, request }: LoaderArgs) {
     criteria: urlParams.get("search") ?? undefined,
   });
 
-  const { disbursedFunds, remainingFunds } = await getStudioFundDetails(params.studioId);
+  const { disbursedFunds, remainingFunds } = await getStudioDashboard({
+    id: params.studioId,
+  });
 
   return json({
     studio,

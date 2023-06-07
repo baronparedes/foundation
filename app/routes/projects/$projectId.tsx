@@ -1,17 +1,26 @@
 import invariant from "tiny-invariant";
-import { getProject, Project } from "~/models/project.server";
+import { getProject } from "~/models/project.server";
 
 import { json } from "@remix-run/node";
-import { Form, Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
+import {
+  Form,
+  Outlet,
+  useCatch,
+  useLoaderData,
+  useNavigate,
+} from "@remix-run/react";
 
 import { SearchInput } from "../../components/@ui/SearchInput";
 import { Button } from "../../components/@windmill";
 import { ProjectCostSummary } from "../../components/ProjectCostSummary";
 import { ProjectHeader } from "../../components/ProjectHeader";
-import { ProjectVoucherTable } from "../../components/tables/ProjectVoucherTable";
-import { getProjectFundDetails } from "../../models/project-dashboard.server";
+import {
+  ProjectVoucherTable,
+} from "../../components/tables/ProjectVoucherTable";
+import { getProjectDashboard } from "../../models/project-dashboard.server";
 import { getProjectVouchers } from "../../models/project-voucher.server";
 
+import type { Project } from "~/models/project.server";
 import type { LoaderArgs } from "@remix-run/node";
 import type { ProjectVoucherWithDetails } from "../../models/project-voucher.server";
 export async function loader({ params, request }: LoaderArgs) {
@@ -37,7 +46,8 @@ export async function loader({ params, request }: LoaderArgs) {
     addOnTotals,
     costPlusTotals,
     totalProjectCost,
-  } = await getProjectFundDetails(params.projectId);
+    netProjectCost,
+  } = await getProjectDashboard({ id: params.projectId });
 
   return json({
     project,
@@ -48,6 +58,7 @@ export async function loader({ params, request }: LoaderArgs) {
     addOnTotals,
     costPlusTotals,
     totalProjectCost,
+    netProjectCost,
   });
 }
 
@@ -61,6 +72,7 @@ export default function ProjectDetailsPage() {
     addOnTotals,
     costPlusTotals,
     totalProjectCost,
+    netProjectCost,
   } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
 
@@ -69,6 +81,7 @@ export default function ProjectDetailsPage() {
       <ProjectHeader
         project={project as unknown as Project}
         totalProjectCost={totalProjectCost}
+        netProjectCost={netProjectCost}
         remainingFunds={remainingFunds}
       />
       <hr className="my-4" />

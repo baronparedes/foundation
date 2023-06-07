@@ -160,25 +160,26 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
   const { uncategorizedDisbursement, categorizedDisbursement } = await getVoucherDetails(
     vouchers
   );
-
   const addOnExpenses = await getAddOnExpenses({ id });
   const costPlusTotals = await getCostPlusTotals({ id }, vouchers, addOnExpenses.addOns);
   const totalExempt = sum(costPlusTotals.map((_) => _.totalExempted));
-
   const addOnTotals = addOnExpenses.totalAddOns;
   const uncategorizedDisbursedTotal = uncategorizedDisbursement.totalDisbursements;
   const categorizedDisbursedTotal = sum(
     categorizedDisbursement.map((_) => _.totalDisbursements)
   );
+  const permitsDisbursedTotal = sum(
+    categorizedDisbursement
+      .filter((_) => _.category.id !== 4)
+      .map((_) => _.totalDisbursements)
+  );
   const costPlusTotal = sum(costPlusTotals.map((_) => _.total));
-
   const totalProjectCost =
     addOnTotals + uncategorizedDisbursedTotal + categorizedDisbursedTotal + costPlusTotal;
-
   const collectedFunds = collectedFundsData._sum.amount;
   const disbursedFunds = categorizedDisbursedTotal + uncategorizedDisbursedTotal;
-
   const remainingFunds = Number(collectedFunds) - totalProjectCost;
+  const netProjectCost = totalProjectCost - permitsDisbursedTotal;
 
   return {
     project,
@@ -192,55 +193,6 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
     collectedFunds,
     disbursedFunds,
     addOnTotals,
-  };
-}
-
-export async function getProjectFundDetails(id: string) {
-  const collectedFundsData = await prisma.fundTransaction.aggregate({
-    where: {
-      projectId: id,
-      type: "collection",
-    },
-    _sum: {
-      amount: true,
-    },
-  });
-
-  const disbursedFundsData = await prisma.fundTransaction.aggregate({
-    where: {
-      projectId: id,
-      type: { in: ["disbursement", "refund"] },
-    },
-    _sum: {
-      amount: true,
-    },
-  });
-
-  const addOnData = await prisma.projectAddOn.aggregate({
-    where: {
-      projectId: id,
-    },
-    _sum: {
-      total: true,
-    },
-  });
-
-  const costPlusTotalsData = await getCostPlusTotalsByProjectId({ id });
-
-  const costPlusTotals = sum(costPlusTotalsData.map((cp) => cp.total));
-  const addOnTotals = addOnData._sum.total;
-  const collectedFunds = collectedFundsData._sum.amount;
-  const disbursedFunds = disbursedFundsData._sum.amount;
-  const totalProjectCost =
-    Number(costPlusTotals) + Number(addOnTotals) + Number(disbursedFunds) * -1;
-  const remainingFunds = Number(collectedFunds) - totalProjectCost;
-
-  return {
-    collectedFunds,
-    disbursedFunds,
-    remainingFunds,
-    addOnTotals,
-    costPlusTotals,
-    totalProjectCost,
+    netProjectCost,
   };
 }

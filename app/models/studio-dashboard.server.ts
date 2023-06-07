@@ -98,29 +98,3 @@ export async function getStudioDashboard({ id }: Pick<Studio, "id">) {
     disbursedFunds,
   };
 }
-
-export async function getStudioFundDetails(id: string) {
-  const collectedFundsData = await prisma.fundTransaction.aggregate({
-    _sum: {
-      amount: true,
-    },
-  });
-
-  const disbursedFundsData = await prisma.fundTransaction.aggregate({
-    where: {
-      studioId: id,
-      type: { in: ["disbursement", "refund"] },
-    },
-    _sum: {
-      amount: true,
-    },
-  });
-
-  const remainingFunds = Number(collectedFundsData._sum.amount);
-  const disbursedFunds = Number(disbursedFundsData._sum.amount);
-
-  return {
-    disbursedFunds,
-    remainingFunds,
-  };
-}
