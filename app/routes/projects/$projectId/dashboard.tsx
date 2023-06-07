@@ -24,9 +24,8 @@ export async function loader({ params, request }: LoaderArgs) {
     categorizedDisbursement,
     uncategorizedDisbursement,
     addOnExpenses,
-    costPlusTotals,
+    costPlusTotalsData,
     totalProjectCost,
-    totalExempt,
     netProjectCost,
   } = await getProjectDashboard({ id: params.projectId });
 
@@ -42,9 +41,8 @@ export async function loader({ params, request }: LoaderArgs) {
     categorizedDisbursement,
     uncategorizedDisbursement,
     addOnExpenses,
-    costPlusTotals,
+    costPlusTotalsData,
     totalProjectCost,
-    totalExempt,
     netProjectCost,
   });
 }
@@ -55,7 +53,7 @@ export default function ProjectDashboard() {
     categorizedDisbursement,
     uncategorizedDisbursement,
     addOnExpenses,
-    costPlusTotals,
+    costPlusTotalsData,
     totalProjectCost,
     netProjectCost,
   } = useLoaderData<typeof loader>();
@@ -97,12 +95,12 @@ export default function ProjectDashboard() {
         total={addOnExpenses.totalAddOns}
         addOns={addOnExpenses.addOns as unknown as ProjectAddOn[]}
       />
-      {costPlusTotals?.length > 0 && (
+      {costPlusTotalsData?.length > 0 && (
         <>
           <hr className="my-4" />
           <div className="my-4">
             <div className="flex">
-              {costPlusTotals.map((cp, key) => {
+              {costPlusTotalsData.map((cp, key) => {
                 return (
                   <>
                     <Card colored className="m-2 flex-auto bg-gmd-100" key={key}>

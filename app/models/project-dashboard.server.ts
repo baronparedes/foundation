@@ -80,6 +80,17 @@ async function getAddOnExpenses({ id }: Pick<Project, "id">) {
   };
 }
 
+async function getCostPlusTotalsByProjectId({ id }: Pick<Project, "id">) {
+  const vouchers = await prisma.projectVoucher.findMany({
+    where: {
+      isDeleted: false,
+      projectId: id,
+    },
+  });
+  const addOnExpenses = await getAddOnExpenses({ id });
+  return getCostPlusTotals({ id }, vouchers, addOnExpenses.addOns);
+}
+
 async function getCostPlusTotals(
   { id }: Pick<Project, "id">,
   vouchers: ProjectVoucher[],
@@ -149,10 +160,13 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
   const { uncategorizedDisbursement, categorizedDisbursement } = await getVoucherDetails(
     vouchers
   );
+
+  const costPlusTotalsData = await getCostPlusTotalsByProjectId({ id });
+  const costPlusTotals = sum(costPlusTotalsData.map((cp) => cp.total));
+
   const addOnExpenses = await getAddOnExpenses({ id });
-  const costPlusTotals = await getCostPlusTotals({ id }, vouchers, addOnExpenses.addOns);
-  const totalExempt = sum(costPlusTotals.map((_) => _.totalExempted));
   const addOnTotals = addOnExpenses.totalAddOns;
+
   const uncategorizedDisbursedTotal = uncategorizedDisbursement.totalDisbursements;
   const categorizedDisbursedTotal = sum(
     categorizedDisbursement.map((_) => _.totalDisbursements)
@@ -162,13 +176,12 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
       .filter((_) => _.category.id === 4)
       .map((_) => _.totalDisbursements)
   );
-  const costPlusTotal = sum(costPlusTotals.map((_) => _.total));
-  const totalProjectCost =
-    addOnTotals + uncategorizedDisbursedTotal + categorizedDisbursedTotal + costPlusTotal;
+
   const collectedFunds = collectedFundsData._sum.amount;
   const disbursedFunds = categorizedDisbursedTotal + uncategorizedDisbursedTotal;
-  const remainingFunds = Number(collectedFunds) - totalProjectCost;
+  const totalProjectCost = addOnTotals + disbursedFunds + costPlusTotals;
   const netProjectCost = totalProjectCost - permitsDisbursedTotal;
+  const remainingFunds = Number(collectedFunds) - totalProjectCost;
 
   return {
     project,
@@ -177,7 +190,7 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
     addOnExpenses,
     costPlusTotals,
     totalProjectCost,
-    totalExempt,
+    costPlusTotalsData,
     remainingFunds,
     collectedFunds,
     disbursedFunds,

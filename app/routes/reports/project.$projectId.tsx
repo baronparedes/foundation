@@ -17,7 +17,7 @@ import { ProjectCostSummary } from "../../components/ProjectCostSummary";
 import { ProjectHeader } from "../../components/ProjectHeader";
 import { getProjectDashboard } from "../../models/project-dashboard.server";
 import { requireUserId } from "../../session.server";
-import { formatCurrencyFixed, sum } from "../../utils";
+import { formatCurrencyFixed } from "../../utils";
 
 import type { Project } from "@prisma/client";
 import type { LoaderArgs } from "@remix-run/server-runtime";
@@ -50,12 +50,15 @@ export default function ReportProjectPage() {
     categorizedDisbursement,
     uncategorizedDisbursement,
     addOnExpenses,
+    costPlusTotalsData,
+    netProjectCost,
   } = useLoaderData<typeof loader>();
   return (
     <Page currentPage="Report - Projects">
       <div className="w-full py-4">
         <ProjectHeader
           project={project as unknown as Project}
+          netProjectCost={netProjectCost}
           totalProjectCost={totalProjectCost}
           remainingFunds={remainingFunds}
         />
@@ -66,7 +69,7 @@ export default function ReportProjectPage() {
               collectedFunds={Number(collectedFunds)}
               disbursedFunds={Number(disbursedFunds)}
               addOnTotals={Number(addOnTotals)}
-              costPlusTotals={Number(sum(costPlusTotals.map((_) => _.total)))}
+              costPlusTotals={Number(costPlusTotals)}
             />
           </div>
           <div>
@@ -167,7 +170,7 @@ export default function ReportProjectPage() {
                       </TableRow>
                     );
                   })}
-                  {costPlusTotals.map((data) => {
+                  {costPlusTotalsData.map((data) => {
                     const amount = Number(data.total);
                     const isNegative = amount < 0;
                     return (
