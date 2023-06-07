@@ -40,7 +40,7 @@ export function ProjectAddOnTable({ data, newComponent }: Props) {
           <TableBody>
             {data?.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7}>
+                <TableCell colSpan={8}>
                   <p className="text-center">No add ons yet</p>
                 </TableCell>
               </TableRow>

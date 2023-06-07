@@ -195,7 +195,7 @@ export default function ReportProjectPage() {
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <Badge>Project Expenses</Badge>
+                          <Badge>Admin & Professional Fee Expense</Badge>
                         </TableCell>
                       </TableRow>
                     );
