@@ -24,6 +24,7 @@ type Props = {
 export function ProjectSettingTable({ data, errors, newComponent }: Props) {
   return (
     <>
+      <div className="float-left mb-2">{newComponent}</div>
       <TableContainer>
         <Table className="w-full table-auto">
           <TableHeader>
@@ -34,7 +35,7 @@ export function ProjectSettingTable({ data, errors, newComponent }: Props) {
               <TableCell>Date Added</TableCell>
               <TableCell>Start Date</TableCell>
               <TableCell>End Date</TableCell>
-              <TableCell>{newComponent}</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>

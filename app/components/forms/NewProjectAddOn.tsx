@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import { PlusCircleIcon } from "@heroicons/react/solid";
 import { useFetcher } from "@remix-run/react";
 
 import { validateRequiredString } from "../../utils";
@@ -97,7 +96,7 @@ export function NewProjectAddOn({ projectId, userId, errors }: Props) {
         size="small"
         title="new project add on"
       >
-        <PlusCircleIcon className="h-5 w-5" />
+        New Add On
       </Button>
       <DialogWithTransition
         isOpen={toggle}

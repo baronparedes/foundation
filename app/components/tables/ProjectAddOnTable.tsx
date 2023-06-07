@@ -22,6 +22,7 @@ type Props = {
 export function ProjectAddOnTable({ data, newComponent }: Props) {
   return (
     <>
+      <div className="float-left mb-2">{newComponent}</div>
       <TableContainer>
         <Table className="w-full table-auto">
           <TableHeader>
@@ -33,7 +34,7 @@ export function ProjectAddOnTable({ data, newComponent }: Props) {
               <TableCell>By</TableCell>
               <TableCell>Date Added</TableCell>
               <TableCell></TableCell>
-              <TableCell>{newComponent}</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>

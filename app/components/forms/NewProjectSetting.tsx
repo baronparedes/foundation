@@ -1,7 +1,6 @@
 import moment from "moment";
 import { useState } from "react";
 
-import { PlusCircleIcon } from "@heroicons/react/solid";
 import { useFetcher } from "@remix-run/react";
 
 import { validateRequiredString } from "../../utils";
@@ -89,7 +88,7 @@ export function NewProjectSetting({ projectId, userId, errors }: Props) {
         size="small"
         title="new project setting"
       >
-        <PlusCircleIcon className="h-5 w-5" />
+        New Setting
       </Button>
       <DialogWithTransition
         onCloseModal={() => setToggle(false)}
