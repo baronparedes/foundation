@@ -19,7 +19,9 @@ import {
 } from "../../../components/@ui";
 import { Button } from "../../../components/@windmill";
 import { FundPicker } from "../../../components/pickers/FundPicker";
-import { transferFundTransaction } from "../../../models/fund-transaction.server";
+import {
+  transferFundTransaction,
+} from "../../../models/fund-transaction.server";
 import { getFund, getFunds } from "../../../models/fund.server";
 import { requireUserId } from "../../../session.server";
 import { validateRequiredString } from "../../../utils";
@@ -143,6 +145,7 @@ export default function CashInPage() {
           type="number"
           required
           max={selectedFund?.balance}
+          step={0.01}
         />
         <TextArea
           name="description"

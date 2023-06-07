@@ -123,7 +123,7 @@ export function NewProjectSetting({ projectId, userId, errors }: Props) {
             label="Percentage add on"
             type="number"
             required
-            step={0.1}
+            step={0.01}
             min={1}
             max={100}
             error={errors?.percentageAddOn}

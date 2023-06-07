@@ -146,6 +146,7 @@ export function NewStudioVoucherDetails({
                 : undefined
             }
             onChange={(e) => setAmount(Number(e.currentTarget.value))}
+            step={0.01}
           />
           <hr className="my-4" />
           <TextInput
@@ -169,6 +170,7 @@ export function NewStudioVoucherDetails({
             type="number"
             value={quantity}
             onChange={(e) => setQuantity(Number(e.currentTarget.value))}
+            step={0.01}
           />
           <hr className="my-4" />
           <div className="text-right">

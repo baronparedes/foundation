@@ -11,7 +11,11 @@ import {
 } from "@remix-run/react";
 import { json, redirect } from "@remix-run/server-runtime";
 
-import { DialogWithTransition, TextArea, TextInput } from "../../../components/@ui";
+import {
+  DialogWithTransition,
+  TextArea,
+  TextInput,
+} from "../../../components/@ui";
 import { Button } from "../../../components/@windmill";
 import { FundPicker } from "../../../components/pickers/FundPicker";
 import { getFunds } from "../../../models/fund.server";
@@ -181,7 +185,7 @@ export default function VoucherPage() {
           type="number"
           required
           max={maxBalance}
-          step={0.1}
+          step={0.01}
         />
         <TextArea
           name="description"

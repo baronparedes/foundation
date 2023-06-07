@@ -3,7 +3,12 @@ import { useState } from "react";
 import { PencilIcon } from "@heroicons/react/solid";
 import { useFetcher } from "@remix-run/react";
 
-import { DialogWithTransition, LabeledCurrency, TextArea, TextInput } from "../@ui";
+import {
+  DialogWithTransition,
+  LabeledCurrency,
+  TextArea,
+  TextInput,
+} from "../@ui";
 import { Button } from "../@windmill";
 
 import type { ProjectAddOn } from "@prisma/client";
@@ -69,6 +74,7 @@ export function UpdateProjectAddOn({ data, errors }: Props) {
               setAmount(Number(e.currentTarget.value));
             }}
             defaultValue={Number(data.amount)}
+            step={0.01}
           />
           <TextInput
             name="quantity"
@@ -80,6 +86,7 @@ export function UpdateProjectAddOn({ data, errors }: Props) {
               setQuantity(Number(e.currentTarget.value));
             }}
             defaultValue={Number(data.quantity)}
+            step={0.01}
           />
           <TextInput
             name="costPlus"

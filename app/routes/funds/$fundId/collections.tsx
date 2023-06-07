@@ -118,6 +118,7 @@ export default function CollectionsPage() {
           error={actionData?.errors?.amount}
           type="number"
           required
+          step={0.01}
         />
         <TextArea
           name="description"
