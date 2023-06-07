@@ -1,5 +1,7 @@
 import React from "react";
 
+import { ExclamationCircleIcon } from "@heroicons/react/solid";
+
 import { formatCurrencyFixed } from "../../utils";
 import {
   Badge,
@@ -24,6 +26,7 @@ type Props = {
 export function ProjectSettingTable({ data, errors, newComponent }: Props) {
   return (
     <>
+      <div className="mb-2">{newComponent}</div>
       <TableContainer>
         <Table className="w-full table-auto">
           <TableHeader>
@@ -34,7 +37,8 @@ export function ProjectSettingTable({ data, errors, newComponent }: Props) {
               <TableCell>Date Added</TableCell>
               <TableCell>Start Date</TableCell>
               <TableCell>End Date</TableCell>
-              <TableCell>{newComponent}</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -80,6 +84,16 @@ export function ProjectSettingTable({ data, errors, newComponent }: Props) {
                         {projectSetting.endDate &&
                           new Date(projectSetting.endDate).toLocaleDateString()}
                       </span>
+                    </TableCell>
+                    <TableCell>
+                      {projectSetting.isContingency && (
+                        <span title="Contingency expense">
+                          <ExclamationCircleIcon
+                            className="h-5 w-5 text-yellow-600"
+                            aria-label="contingency expense"
+                          />
+                        </span>
+                      )}
                     </TableCell>
                     <TableCell className="inline-flex space-x-2">
                       <UpdateProjectSetting data={projectSetting} errors={errors} />

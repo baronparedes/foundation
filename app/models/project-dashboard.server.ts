@@ -162,7 +162,12 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
   );
 
   const costPlusTotalsData = await getCostPlusTotalsByProjectId({ id });
-  const costPlusTotals = sum(costPlusTotalsData.map((cp) => cp.total));
+  const costPlusTotals = sum(
+    costPlusTotalsData.filter((cp) => !cp.isContingency).map((cp) => cp.total)
+  );
+  const contingencyTotals = sum(
+    costPlusTotalsData.filter((cp) => cp.isContingency).map((cp) => cp.total)
+  );
 
   const addOnExpenses = await getAddOnExpenses({ id });
   const addOnTotals = addOnExpenses.totalAddOns;
@@ -179,7 +184,8 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
 
   const collectedFunds = collectedFundsData._sum.amount;
   const disbursedFunds = categorizedDisbursedTotal + uncategorizedDisbursedTotal;
-  const totalProjectCost = addOnTotals + disbursedFunds + costPlusTotals;
+  const totalProjectCost =
+    addOnTotals + disbursedFunds + costPlusTotals + contingencyTotals;
   const netProjectCost = totalProjectCost - permitsDisbursedTotal;
   const remainingFunds = Number(collectedFunds) - totalProjectCost;
 
@@ -196,5 +202,6 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
     disbursedFunds,
     addOnTotals,
     netProjectCost,
+    contingencyTotals,
   };
 }

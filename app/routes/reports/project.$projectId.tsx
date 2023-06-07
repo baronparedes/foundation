@@ -52,6 +52,7 @@ export default function ReportProjectPage() {
     addOnExpenses,
     costPlusTotalsData,
     netProjectCost,
+    contingencyTotals,
   } = useLoaderData<typeof loader>();
   return (
     <Page currentPage="Report - Projects">
@@ -70,6 +71,7 @@ export default function ReportProjectPage() {
               disbursedFunds={Number(disbursedFunds)}
               addOnTotals={Number(addOnTotals)}
               costPlusTotals={Number(costPlusTotals)}
+              contingencyTotals={Number(contingencyTotals)}
             />
           </div>
           <div>

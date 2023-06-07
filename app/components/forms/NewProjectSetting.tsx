@@ -1,7 +1,6 @@
 import moment from "moment";
 import { useState } from "react";
 
-import { PlusCircleIcon } from "@heroicons/react/solid";
 import { useFetcher } from "@remix-run/react";
 
 import { validateRequiredString } from "../../utils";
@@ -20,8 +19,16 @@ export type ProjectSettingFormErrors = {
 
 export function getProjectSettingFormData(formData: FormData, isUpdating = false) {
   const errors: ProjectSettingFormErrors = {};
-  const { description, percentageAddOn, startDate, endDate, projectId, updatedById, id } =
-    Object.fromEntries(formData);
+  const {
+    description,
+    percentageAddOn,
+    startDate,
+    endDate,
+    projectId,
+    updatedById,
+    id,
+    isContingency,
+  } = Object.fromEntries(formData);
 
   let hasErrors = false;
   if (!validateRequiredString(description)) {
@@ -57,6 +64,7 @@ export function getProjectSettingFormData(formData: FormData, isUpdating = false
     data: {
       description,
       percentageAddOn,
+      isContingency: isContingency ? true : false,
       startDate,
       endDate,
       updatedById,
@@ -89,7 +97,7 @@ export function NewProjectSetting({ projectId, userId, errors }: Props) {
         size="small"
         title="new project setting"
       >
-        <PlusCircleIcon className="h-5 w-5" />
+        New Setting
       </Button>
       <DialogWithTransition
         onCloseModal={() => setToggle(false)}
@@ -127,6 +135,12 @@ export function NewProjectSetting({ projectId, userId, errors }: Props) {
             min={1}
             max={100}
             error={errors?.percentageAddOn}
+          />
+          <TextInput
+            name="isContingency"
+            label="For Contingency?"
+            type="checkbox"
+            defaultChecked={false}
           />
           <hr className="my-4" />
           <TextInput

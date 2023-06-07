@@ -5,15 +5,26 @@ import {
   LockClosedIcon,
   LockOpenIcon,
 } from "@heroicons/react/solid";
-import { Form, useLoaderData, useNavigate, useTransition } from "@remix-run/react";
+import {
+  Form,
+  useLoaderData,
+  useNavigate,
+  useTransition,
+} from "@remix-run/react";
 import { json, redirect } from "@remix-run/server-runtime";
 
 import { DialogWithTransition, LabeledCurrency } from "../../../components/@ui";
 import { Button } from "../../../components/@windmill";
-import { NewProjectVoucherDetails } from "../../../components/forms/NewProjectVoucherDetail";
-import { ToggleProjectVoucherCostPlus } from "../../../components/forms/ToggleProjectVoucherCostPlus";
+import {
+  NewProjectVoucherDetails,
+} from "../../../components/forms/NewProjectVoucherDetail";
+import {
+  ToggleProjectVoucherCostPlus,
+} from "../../../components/forms/ToggleProjectVoucherCostPlus";
 import { FundPicker } from "../../../components/pickers/FundPicker";
-import { ProjectVoucherDetailTable } from "../../../components/tables/ProjectVoucherDetailTable";
+import {
+  ProjectVoucherDetailTable,
+} from "../../../components/tables/ProjectVoucherDetailTable";
 import { getDetailCategories } from "../../../models/detail-category.server";
 import { getFunds } from "../../../models/fund.server";
 import {
@@ -89,7 +100,7 @@ export async function action({ params, request }: ActionArgs) {
       fundId as string,
       updatedById as string
     );
-    return redirect(`./projects/${projectId}`);
+    return redirect(`/projects/${projectId}`);
   }
 
   if (_action === "toggle-cost-plus") {

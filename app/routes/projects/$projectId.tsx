@@ -47,6 +47,7 @@ export async function loader({ params, request }: LoaderArgs) {
     costPlusTotals,
     totalProjectCost,
     netProjectCost,
+    contingencyTotals,
   } = await getProjectDashboard({ id: params.projectId });
 
   return json({
@@ -59,6 +60,7 @@ export async function loader({ params, request }: LoaderArgs) {
     costPlusTotals,
     totalProjectCost,
     netProjectCost,
+    contingencyTotals,
   });
 }
 
@@ -73,6 +75,7 @@ export default function ProjectDetailsPage() {
     costPlusTotals,
     totalProjectCost,
     netProjectCost,
+    contingencyTotals,
   } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
 
@@ -91,6 +94,7 @@ export default function ProjectDetailsPage() {
         disbursedFunds={Number(disbursedFunds)}
         addOnTotals={Number(addOnTotals)}
         costPlusTotals={Number(costPlusTotals)}
+        contingencyTotals={Number(contingencyTotals)}
       />
       <hr className="my-4" />
       <div className="w-full space-x-2 text-right">

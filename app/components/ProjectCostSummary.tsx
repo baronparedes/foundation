@@ -6,6 +6,7 @@ type Props = {
   disbursedFunds: number;
   addOnTotals: number;
   costPlusTotals: number;
+  contingencyTotals: number;
 };
 
 export function ProjectCostSummary({
@@ -14,6 +15,7 @@ export function ProjectCostSummary({
   disbursedFunds,
   addOnTotals,
   costPlusTotals,
+  contingencyTotals,
 }: Props) {
   return (
     <>
@@ -37,6 +39,11 @@ export function ProjectCostSummary({
         <LabeledCurrency
           label="project expenses"
           value={costPlusTotals}
+          valueClassName="text-gmd-500"
+        />
+        <LabeledCurrency
+          label="contingency reserve"
+          value={contingencyTotals}
           valueClassName="text-gmd-500"
         />
       </div>
