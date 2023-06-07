@@ -29,7 +29,6 @@ export function NewProjectVoucherDetails({
   const [amount, setAmount] = useState(0);
   const [supplierName, setSupplierName] = useState("");
   const [referenceNumber, setReferenceNumber] = useState("");
-  const [quantity, setQuantity] = useState<number>();
   const [toggle, setToggle] = useState(false);
   const isValid =
     supplierName !== "" &&
@@ -51,7 +50,6 @@ export function NewProjectVoucherDetails({
     setAmount(0);
     setSupplierName("");
     setReferenceNumber("");
-    setQuantity(undefined);
   }
 
   useEffect(() => {
@@ -137,7 +135,6 @@ export function NewProjectVoucherDetails({
             label="Amount"
             type="number"
             required
-            value={amount}
             min={1}
             max={maxAmount}
             error={
@@ -153,7 +150,6 @@ export function NewProjectVoucherDetails({
             name="supplierName"
             label="Supplier Name"
             required
-            value={supplierName}
             onChange={(e) => setSupplierName(e.currentTarget.value)}
           />
           <TextInput
@@ -164,14 +160,7 @@ export function NewProjectVoucherDetails({
             value={referenceNumber}
             onChange={(e) => setReferenceNumber(e.currentTarget.value)}
           />
-          <TextInput
-            name="quantity"
-            label="Quantity"
-            type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(Number(e.currentTarget.value))}
-            step={0.01}
-          />
+          <TextInput name="quantity" label="Quantity" type="number" step={0.1} />
           <hr className="my-4" />
           <div className="text-right">
             <Button
