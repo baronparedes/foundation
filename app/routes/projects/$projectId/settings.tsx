@@ -12,8 +12,12 @@ import {
   getProjectSettingFormData,
   NewProjectSetting,
 } from "../../../components/forms/NewProjectSetting";
-import { ProjectAddOnTable } from "../../../components/tables/ProjectAddOnTable";
-import { ProjectSettingTable } from "../../../components/tables/ProjectSettingTable";
+import {
+  ProjectAddOnTable,
+} from "../../../components/tables/ProjectAddOnTable";
+import {
+  ProjectSettingTable,
+} from "../../../components/tables/ProjectSettingTable";
 import {
   createProjectAddOn,
   deleteProjectAddOn,
@@ -130,7 +134,7 @@ export default function ProjectSettings() {
       <ProjectSettingTable
         data={projectSettings as unknown as ProjectSettingWithDetails}
         newComponent={
-          <div className="text-right">
+          <div>
             <NewProjectSetting projectId={projectId} userId={userId} />
           </div>
         }
@@ -139,7 +143,7 @@ export default function ProjectSettings() {
       <ProjectAddOnTable
         data={projectAddOns as unknown as ProjectAddOnWithDetails}
         newComponent={
-          <div className="text-right">
+          <div>
             <NewProjectAddOn projectId={projectId} userId={userId} />
           </div>
         }

@@ -30,6 +30,7 @@ export async function deleteProjectSetting({ id }: Pick<ProjectSetting, "id">) {
 export async function createProjectSetting({
   description,
   percentageAddOn,
+  isContingency,
   projectId,
   startDate,
   endDate,
@@ -38,6 +39,7 @@ export async function createProjectSetting({
   const data = {
     description,
     percentageAddOn,
+    isContingency,
     projectId,
     startDate: new Date(startDate),
     endDate: endDate ? new Date(endDate) : null,
@@ -54,6 +56,7 @@ export async function createProjectSetting({
 export async function updateProjectSetting({
   description,
   percentageAddOn,
+  isContingency,
   projectId,
   startDate,
   endDate,
@@ -63,6 +66,7 @@ export async function updateProjectSetting({
   const data = {
     description,
     percentageAddOn,
+    isContingency,
     projectId,
     startDate: new Date(startDate),
     endDate: endDate ? new Date(endDate) : null,

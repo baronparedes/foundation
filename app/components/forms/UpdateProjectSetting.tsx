@@ -66,6 +66,12 @@ export function UpdateProjectSetting({ data, errors }: Props) {
             error={errors?.percentageAddOn}
             defaultValue={Number(data.percentageAddOn)}
           />
+          <TextInput
+            name="isContingency"
+            label="For Contingency?"
+            type="checkbox"
+            defaultChecked={data.isContingency}
+          />
           <hr className="my-4" />
           <TextInput
             name="startDate"

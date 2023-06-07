@@ -134,6 +134,7 @@ model ProjectSetting {
   id              Int     @id @default(autoincrement())
   description     String
   percentageAddOn Decimal @db.Decimal(65, 6)
+  isContingency   Boolean @default(false)
 
   updatedAt   DateTime @updatedAt
   updatedBy   User     @relation(fields: [updatedById], references: [id])

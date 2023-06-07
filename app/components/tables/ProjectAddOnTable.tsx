@@ -22,7 +22,7 @@ type Props = {
 export function ProjectAddOnTable({ data, newComponent }: Props) {
   return (
     <>
-      <div className="float-left mb-2">{newComponent}</div>
+      <div className="mb-2">{newComponent}</div>
       <TableContainer>
         <Table className="w-full table-auto">
           <TableHeader>
