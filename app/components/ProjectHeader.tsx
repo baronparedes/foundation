@@ -6,10 +6,16 @@ import { LabeledCurrency } from "./@ui";
 type Props = {
   project: Project;
   totalProjectCost: number;
+  netProjectCost: number;
   remainingFunds: number;
 };
 
-export function ProjectHeader({ project, totalProjectCost, remainingFunds }: Props) {
+export function ProjectHeader({
+  project,
+  totalProjectCost,
+  remainingFunds,
+  netProjectCost,
+}: Props) {
   return (
     <>
       <div className="grid grid-cols-2 gap-2">
@@ -23,11 +29,18 @@ export function ProjectHeader({ project, totalProjectCost, remainingFunds }: Pro
         </div>
       </div>
       <hr className="my-4" />
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-3">
         <div className="text-center">
           <LabeledCurrency
             label="total project cost"
             value={totalProjectCost}
+            valueClassName={classNames("text-4xl")}
+          />
+        </div>
+        <div className="text-center">
+          <LabeledCurrency
+            label="net project cost"
+            value={netProjectCost}
             valueClassName={classNames("text-4xl")}
           />
         </div>

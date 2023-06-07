@@ -34,7 +34,7 @@ model Project {
   code          String  @unique
   description   String?
   location      String
-  estimatedCost Decimal
+  estimatedCost Decimal @db.Decimal(65, 6)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -60,7 +60,7 @@ model Fund {
 
 model FundTransaction {
   id          Int      @id @default(autoincrement())
-  amount      Decimal
+  amount      Decimal  @db.Decimal(65, 6)
   createdAt   DateTime @default(now())
   description String   @default("")
 
@@ -84,8 +84,8 @@ model ProjectVoucher {
   id              Int      @id @default(autoincrement())
   voucherNumber   String   @unique
   description     String   @default("")
-  disbursedAmount Decimal
-  consumedAmount  Decimal?
+  disbursedAmount Decimal  @db.Decimal(65, 6)
+  consumedAmount  Decimal? @db.Decimal(65, 6)
   isClosed        Boolean  @default(false)
   isDeleted       Boolean  @default(false)
   transactionDate DateTime
@@ -109,10 +109,10 @@ model ProjectVoucher {
 model ProjectVoucherDetail {
   id              Int      @id @default(autoincrement())
   description     String
-  amount          Decimal
+  amount          Decimal  @db.Decimal(65, 6)
   supplierName    String
   referenceNumber String
-  quantity        Decimal?
+  quantity        Decimal? @db.Decimal(65, 6)
 
   projectVoucher   ProjectVoucher @relation(fields: [projectVoucherId], references: [id])
   projectVoucherId Int
@@ -133,7 +133,7 @@ model DetailCategory {
 model ProjectSetting {
   id              Int     @id @default(autoincrement())
   description     String
-  percentageAddOn Decimal
+  percentageAddOn Decimal @db.Decimal(65, 6)
 
   updatedAt   DateTime @updatedAt
   updatedBy   User     @relation(fields: [updatedById], references: [id])
@@ -149,9 +149,9 @@ model ProjectSetting {
 model ProjectAddOn {
   id          Int     @id @default(autoincrement())
   description String
-  amount      Decimal
-  quantity    Decimal
-  total       Decimal
+  amount      Decimal @db.Decimal(65, 6)
+  quantity    Decimal @db.Decimal(65, 6)
+  total       Decimal @db.Decimal(65, 6)
 
   updatedAt   DateTime @updatedAt
   updatedBy   User     @relation(fields: [updatedById], references: [id])
@@ -180,8 +180,8 @@ model StudioVoucher {
   id              Int      @id @default(autoincrement())
   voucherNumber   String   @unique
   description     String   @default("")
-  disbursedAmount Decimal
-  consumedAmount  Decimal?
+  disbursedAmount Decimal  @db.Decimal(65, 6)
+  consumedAmount  Decimal? @db.Decimal(65, 6)
   isClosed        Boolean  @default(false)
   isDeleted       Boolean  @default(false)
   transactionDate DateTime
@@ -203,10 +203,10 @@ model StudioVoucher {
 model StudioVoucherDetail {
   id              Int      @id @default(autoincrement())
   description     String
-  amount          Decimal
+  amount          Decimal  @db.Decimal(65, 6)
   supplierName    String
   referenceNumber String
-  quantity        Decimal?
+  quantity        Decimal? @db.Decimal(65, 6)
 
   studioVoucher   StudioVoucher @relation(fields: [studioVoucherId], references: [id])
   studioVoucherId Int

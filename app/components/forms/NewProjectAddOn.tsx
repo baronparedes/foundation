@@ -4,7 +4,12 @@ import { PlusCircleIcon } from "@heroicons/react/solid";
 import { useFetcher } from "@remix-run/react";
 
 import { validateRequiredString } from "../../utils";
-import { DialogWithTransition, LabeledCurrency, TextArea, TextInput } from "../@ui";
+import {
+  DialogWithTransition,
+  LabeledCurrency,
+  TextArea,
+  TextInput,
+} from "../@ui";
 import { Button } from "../@windmill";
 
 import type { ProjectAddOn } from "@prisma/client";
@@ -131,6 +136,7 @@ export function NewProjectAddOn({ projectId, userId, errors }: Props) {
             onChange={(e) => {
               setAmount(Number(e.currentTarget.value));
             }}
+            step={0.01}
           />
           <TextInput
             name="quantity"
@@ -141,6 +147,7 @@ export function NewProjectAddOn({ projectId, userId, errors }: Props) {
             onChange={(e) => {
               setQuantity(Number(e.currentTarget.value));
             }}
+            step={0.01}
           />
           <TextInput
             name="costPlus"
