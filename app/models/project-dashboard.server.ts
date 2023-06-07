@@ -80,17 +80,6 @@ async function getAddOnExpenses({ id }: Pick<Project, "id">) {
   };
 }
 
-async function getCostPlusTotalsByProjectId({ id }: Pick<Project, "id">) {
-  const vouchers = await prisma.projectVoucher.findMany({
-    where: {
-      isDeleted: false,
-      projectId: id,
-    },
-  });
-  const addOnExpenses = await getAddOnExpenses({ id });
-  return getCostPlusTotals({ id }, vouchers, addOnExpenses.addOns);
-}
-
 async function getCostPlusTotals(
   { id }: Pick<Project, "id">,
   vouchers: ProjectVoucher[],
@@ -170,7 +159,7 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
   );
   const permitsDisbursedTotal = sum(
     categorizedDisbursement
-      .filter((_) => _.category.id !== 4)
+      .filter((_) => _.category.id === 4)
       .map((_) => _.totalDisbursements)
   );
   const costPlusTotal = sum(costPlusTotals.map((_) => _.total));
