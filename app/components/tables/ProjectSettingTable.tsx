@@ -44,7 +44,7 @@ export function ProjectSettingTable({ data, errors, newComponent }: Props) {
           <TableBody>
             {data?.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7}>
+                <TableCell colSpan={8}>
                   <p className="text-center">No settings yet</p>
                 </TableCell>
               </TableRow>

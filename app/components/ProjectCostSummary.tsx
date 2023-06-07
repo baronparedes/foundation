@@ -37,7 +37,7 @@ export function ProjectCostSummary({
           valueClassName="text-red-500"
         />
         <LabeledCurrency
-          label="project expenses"
+          label="admin & professional fee expense"
           value={costPlusTotals}
           valueClassName="text-gmd-500"
         />
