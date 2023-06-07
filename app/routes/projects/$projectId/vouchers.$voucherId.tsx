@@ -1,31 +1,33 @@
-import invariant from 'tiny-invariant';
+import invariant from "tiny-invariant";
 
-import {ExclamationCircleIcon, LockClosedIcon, LockOpenIcon} from '@heroicons/react/solid';
-import {Form, useLoaderData, useNavigate, useTransition} from '@remix-run/react';
-import {json, redirect} from '@remix-run/server-runtime';
-
-import {DialogWithTransition, LabeledCurrency} from '../../../components/@ui';
-import {Button} from '../../../components/@windmill';
-import {NewProjectVoucherDetails} from '../../../components/forms/NewProjectVoucherDetail';
 import {
-  ToggleProjectVoucherCostPlus,
-} from '../../../components/forms/ToggleProjectVoucherCostPlus';
-import {FundPicker} from '../../../components/pickers/FundPicker';
-import {ProjectVoucherDetailTable} from '../../../components/tables/ProjectVoucherDetailTable';
-import {getDetailCategories} from '../../../models/detail-category.server';
-import {getFunds} from '../../../models/fund.server';
+  ExclamationCircleIcon,
+  LockClosedIcon,
+  LockOpenIcon,
+} from "@heroicons/react/solid";
+import { Form, useLoaderData, useNavigate, useTransition } from "@remix-run/react";
+import { json, redirect } from "@remix-run/server-runtime";
+
+import { DialogWithTransition, LabeledCurrency } from "../../../components/@ui";
+import { Button } from "../../../components/@windmill";
+import { NewProjectVoucherDetails } from "../../../components/forms/NewProjectVoucherDetail";
+import { ToggleProjectVoucherCostPlus } from "../../../components/forms/ToggleProjectVoucherCostPlus";
+import { FundPicker } from "../../../components/pickers/FundPicker";
+import { ProjectVoucherDetailTable } from "../../../components/tables/ProjectVoucherDetailTable";
+import { getDetailCategories } from "../../../models/detail-category.server";
+import { getFunds } from "../../../models/fund.server";
 import {
   addProjectVoucherDetail,
   deleteProjectVoucherDetail,
   getProjectVoucherDetails,
-} from '../../../models/project-voucher-detail.server';
+} from "../../../models/project-voucher-detail.server";
 import {
   closeProjectVoucher,
   getProjectVoucher,
   toggleCostPlus,
-} from '../../../models/project-voucher.server';
-import {requireUserId} from '../../../session.server';
-import {formatCurrencyFixed, sum} from '../../../utils';
+} from "../../../models/project-voucher.server";
+import { requireUserId } from "../../../session.server";
+import { formatCurrencyFixed, sum } from "../../../utils";
 
 import type { FundWithBalance } from "../../../models/fund.server";
 import type { ProjectVoucherDetailslWithCategory } from "../../../models/project-voucher-detail.server";
@@ -45,7 +47,14 @@ export async function loader({ params, request }: LoaderArgs) {
 
   const funds = await getFunds();
 
-  return json({ projectId, voucher, userId, voucherDetails, categories, funds });
+  return json({
+    projectId,
+    voucher,
+    userId,
+    voucherDetails,
+    categories,
+    funds,
+  });
 }
 
 export async function action({ params, request }: ActionArgs) {

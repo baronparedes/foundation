@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import {formatCurrencyFixed} from '../../utils';
+import { formatCurrencyFixed } from "../../utils";
 import {
   Badge,
   Table,
@@ -9,9 +9,9 @@ import {
   TableContainer,
   TableHeader,
   TableRow,
-} from '../@windmill';
-import {DeleteProjectSetting} from '../forms/DeleteProjectSetting';
-import {UpdateProjectSetting} from '../forms/UpdateProjectSetting';
+} from "../@windmill";
+import { DeleteProjectSetting } from "../forms/DeleteProjectSetting";
+import { UpdateProjectSetting } from "../forms/UpdateProjectSetting";
 
 import type { ProjectSettingWithDetails } from "../../models/project-setting.server";
 import type { ProjectSettingFormErrors } from "../forms/NewProjectSetting";

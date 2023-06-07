@@ -1,16 +1,16 @@
-import invariant from 'tiny-invariant';
-import {getProject, Project} from '~/models/project.server';
+import invariant from "tiny-invariant";
+import { getProject, Project } from "~/models/project.server";
 
-import {json} from '@remix-run/node';
-import {Form, Outlet, useCatch, useLoaderData, useNavigate} from '@remix-run/react';
+import { json } from "@remix-run/node";
+import { Form, Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
 
-import {SearchInput} from '../../components/@ui/SearchInput';
-import {Button} from '../../components/@windmill';
-import {ProjectCostSummary} from '../../components/ProjectCostSummary';
-import {ProjectHeader} from '../../components/ProjectHeader';
-import {ProjectVoucherTable} from '../../components/tables/ProjectVoucherTable';
-import {getProjectFundDetails} from '../../models/project-dashboard.server';
-import {getProjectVouchers} from '../../models/project-voucher.server';
+import { SearchInput } from "../../components/@ui/SearchInput";
+import { Button } from "../../components/@windmill";
+import { ProjectCostSummary } from "../../components/ProjectCostSummary";
+import { ProjectHeader } from "../../components/ProjectHeader";
+import { ProjectVoucherTable } from "../../components/tables/ProjectVoucherTable";
+import { getProjectFundDetails } from "../../models/project-dashboard.server";
+import { getProjectVouchers } from "../../models/project-voucher.server";
 
 import type { LoaderArgs } from "@remix-run/node";
 import type { ProjectVoucherWithDetails } from "../../models/project-voucher.server";

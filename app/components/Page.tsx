@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
 
-import {Transition} from '@headlessui/react';
-import {Form, NavLink} from '@remix-run/react';
+import { Transition } from "@headlessui/react";
+import { Form, NavLink } from "@remix-run/react";
 
-import LogoGMD from '../assets/img/gmd-logo-inverted.png';
-import ImageGMD from '../assets/img/gmd-main-logo-no-bg.png';
-import {useUser} from '../utils';
-import {Button} from './@windmill';
+import LogoGMD from "../assets/img/gmd-logo-inverted.png";
+import ImageGMD from "../assets/img/gmd-main-logo-no-bg.png";
+import { useUser } from "../utils";
+import { Button } from "./@windmill";
 
 type Props = {
   currentPage: string;

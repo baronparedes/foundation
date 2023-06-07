@@ -1,8 +1,8 @@
-import classNames from 'classnames';
-import {useState} from 'react';
+import classNames from "classnames";
+import { useState } from "react";
 
-import {formatCurrencyFixed} from '../../utils';
-import {DialogWithTransition} from '../@ui';
+import { formatCurrencyFixed } from "../../utils";
+import { DialogWithTransition } from "../@ui";
 import {
   Badge,
   Card,
@@ -14,7 +14,7 @@ import {
   TableFooter,
   TableHeader,
   TableRow,
-} from '../@windmill';
+} from "../@windmill";
 
 import type { StudioVoucherDetailsWithVoucherNumber } from "../../models/studio-voucher-detail.server";
 import type { ProjectVoucher, StudioVoucher } from "@prisma/client";

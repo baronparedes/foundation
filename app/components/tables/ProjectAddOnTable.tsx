@@ -1,6 +1,6 @@
-import {ExclamationCircleIcon} from '@heroicons/react/solid';
+import { ExclamationCircleIcon } from "@heroicons/react/solid";
 
-import {formatCurrencyFixed} from '../../utils';
+import { formatCurrencyFixed } from "../../utils";
 import {
   Badge,
   Table,
@@ -9,9 +9,9 @@ import {
   TableContainer,
   TableHeader,
   TableRow,
-} from '../@windmill';
-import {DeleteProjectAddOn} from '../forms/DeleteProjectAddOn';
-import {UpdateProjectAddOn} from '../forms/UpdateProjectAddOn';
+} from "../@windmill";
+import { DeleteProjectAddOn } from "../forms/DeleteProjectAddOn";
+import { UpdateProjectAddOn } from "../forms/UpdateProjectAddOn";
 
 import type { ProjectAddOnWithDetails } from "../../models/project-add-on.server";
 type Props = {

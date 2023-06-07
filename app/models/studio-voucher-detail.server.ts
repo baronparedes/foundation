@@ -1,5 +1,5 @@
 import type { Prisma, StudioVoucher, StudioVoucherDetail } from "@prisma/client";
-import {prisma} from '../db.server';
+import { prisma } from "../db.server";
 
 export type StudioVoucherDetailslWithCategory = Prisma.PromiseReturnType<
   typeof getStudioVoucherDetails

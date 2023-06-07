@@ -1,33 +1,33 @@
-import invariant from 'tiny-invariant';
+import invariant from "tiny-invariant";
 
-import {useLoaderData, useNavigate} from '@remix-run/react';
-import {json} from '@remix-run/server-runtime';
+import { useLoaderData, useNavigate } from "@remix-run/react";
+import { json } from "@remix-run/server-runtime";
 
-import {DialogWithTransition} from '../../../components/@ui';
+import { DialogWithTransition } from "../../../components/@ui";
 import {
   getNewProjectAddOnFormData,
   NewProjectAddOn,
-} from '../../../components/forms/NewProjectAddOn';
+} from "../../../components/forms/NewProjectAddOn";
 import {
   getProjectSettingFormData,
   NewProjectSetting,
-} from '../../../components/forms/NewProjectSetting';
-import {ProjectAddOnTable} from '../../../components/tables/ProjectAddOnTable';
-import {ProjectSettingTable} from '../../../components/tables/ProjectSettingTable';
+} from "../../../components/forms/NewProjectSetting";
+import { ProjectAddOnTable } from "../../../components/tables/ProjectAddOnTable";
+import { ProjectSettingTable } from "../../../components/tables/ProjectSettingTable";
 import {
   createProjectAddOn,
   deleteProjectAddOn,
   getProjectAddOns,
   updateProjectAddOn,
-} from '../../../models/project-add-on.server';
+} from "../../../models/project-add-on.server";
 import {
   createProjectSetting,
   deleteProjectSetting,
   getProjectSettings,
   updateProjectSetting,
-} from '../../../models/project-setting.server';
-import {getProject} from '../../../models/project.server';
-import {requireUserId} from '../../../session.server';
+} from "../../../models/project-setting.server";
+import { getProject } from "../../../models/project.server";
+import { requireUserId } from "../../../session.server";
 
 import type { ProjectAddOnWithDetails } from "../../../models/project-add-on.server";
 import type { ProjectSettingWithDetails } from "../../../models/project-setting.server";
@@ -68,7 +68,10 @@ export async function action({ params, request }: ActionArgs) {
     const projectAddOnFormData = getNewProjectAddOnFormData(formData);
     if (!projectAddOnFormData.errors) {
       const { id } = await createProjectAddOn(projectAddOnFormData.data);
-      return json({ state: "created project add on", projectAddOnId: id });
+      return json({
+        state: "created project add on",
+        projectAddOnId: id,
+      });
     }
   }
   if (_action === "update-project-add-on") {
@@ -91,7 +94,10 @@ export async function action({ params, request }: ActionArgs) {
     const projectSettingFormData = getProjectSettingFormData(formData);
     if (!projectSettingFormData.errors) {
       const { id } = await createProjectSetting(projectSettingFormData.data);
-      return json({ state: "created project setting", projectSettingId: id });
+      return json({
+        state: "created project setting",
+        projectSettingId: id,
+      });
     }
   }
 

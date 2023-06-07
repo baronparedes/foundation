@@ -1,6 +1,6 @@
 import type { Studio, StudioVoucher } from "@prisma/client";
-import {prisma} from '../db.server';
-import {sum} from '../utils';
+import { prisma } from "../db.server";
+import { sum } from "../utils";
 
 async function getClosedVoucherDetails(vouchers: StudioVoucher[]) {
   const closedVouchers = vouchers.filter((v) => v.isClosed);

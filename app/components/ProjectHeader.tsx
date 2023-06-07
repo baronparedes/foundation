@@ -1,7 +1,7 @@
 import type { Project } from "@prisma/client";
-import classNames from 'classnames';
+import classNames from "classnames";
 
-import {LabeledCurrency} from './@ui';
+import { LabeledCurrency } from "./@ui";
 
 type Props = {
   project: Project;

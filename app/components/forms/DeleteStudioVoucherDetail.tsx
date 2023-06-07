@@ -1,8 +1,8 @@
-import {TrashIcon} from '@heroicons/react/solid';
-import {Form, useFetcher} from '@remix-run/react';
+import { TrashIcon } from "@heroicons/react/solid";
+import { Form, useFetcher } from "@remix-run/react";
 
-import {TextInput} from '../@ui';
-import {Button} from '../@windmill';
+import { TextInput } from "../@ui";
+import { Button } from "../@windmill";
 
 type Props = {
   studioVoucherId: number;

@@ -1,11 +1,11 @@
-import {useState} from 'react';
+import { useState } from "react";
 
-import {PlusCircleIcon} from '@heroicons/react/solid';
-import {useFetcher} from '@remix-run/react';
+import { PlusCircleIcon } from "@heroicons/react/solid";
+import { useFetcher } from "@remix-run/react";
 
-import {validateRequiredString} from '../../utils';
-import {DialogWithTransition, LabeledCurrency, TextArea, TextInput} from '../@ui';
-import {Button} from '../@windmill';
+import { validateRequiredString } from "../../utils";
+import { DialogWithTransition, LabeledCurrency, TextArea, TextInput } from "../@ui";
+import { Button } from "../@windmill";
 
 import type { ProjectAddOn } from "@prisma/client";
 export type ProjectAddOnFormErrors = {

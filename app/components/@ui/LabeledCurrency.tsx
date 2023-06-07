@@ -1,6 +1,6 @@
-import classNames from 'classnames';
+import classNames from "classnames";
 
-import {formatCurrency, formatCurrencyFixed} from '../../utils';
+import { formatCurrency, formatCurrencyFixed } from "../../utils";
 
 type Props = {
   label: string;

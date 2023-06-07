@@ -1,6 +1,6 @@
 import type { Project, ProjectAddOn, ProjectSetting, ProjectVoucher } from "@prisma/client";
-import {prisma} from '../db.server';
-import {isBeforeDate, isBetweenDates, sum} from '../utils';
+import { prisma } from "../db.server";
+import { isBeforeDate, isBetweenDates, sum } from "../utils";
 
 async function getClosedVoucherDetails(vouchers: ProjectVoucher[]) {
   const closedVouchers = vouchers.filter((v) => v.isClosed);

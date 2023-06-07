@@ -1,15 +1,15 @@
-import invariant from 'tiny-invariant';
-import {getStudio} from '~/models/studio.server';
+import invariant from "tiny-invariant";
+import { getStudio } from "~/models/studio.server";
 
-import {json} from '@remix-run/node';
-import {Form, Outlet, useCatch, useLoaderData, useNavigate} from '@remix-run/react';
+import { json } from "@remix-run/node";
+import { Form, Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
 
-import {SearchInput} from '../../components/@ui/SearchInput';
-import {Button} from '../../components/@windmill';
-import {StudioHeader} from '../../components/StudioHeader';
-import {StudioVoucherTable} from '../../components/tables/StudioVoucherTable';
-import {getStudioFundDetails} from '../../models/studio-dashboard.server';
-import {getStudioVouchers} from '../../models/studio-voucher.server';
+import { SearchInput } from "../../components/@ui/SearchInput";
+import { Button } from "../../components/@windmill";
+import { StudioHeader } from "../../components/StudioHeader";
+import { StudioVoucherTable } from "../../components/tables/StudioVoucherTable";
+import { getStudioFundDetails } from "../../models/studio-dashboard.server";
+import { getStudioVouchers } from "../../models/studio-voucher.server";
 
 import type { Studio } from "~/models/studio.server";
 import type { LoaderArgs } from "@remix-run/node";

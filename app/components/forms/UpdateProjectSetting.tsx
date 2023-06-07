@@ -1,11 +1,11 @@
-import moment from 'moment';
-import {useState} from 'react';
+import moment from "moment";
+import { useState } from "react";
 
-import {PencilIcon} from '@heroicons/react/solid';
-import {useFetcher} from '@remix-run/react';
+import { PencilIcon } from "@heroicons/react/solid";
+import { useFetcher } from "@remix-run/react";
 
-import {DialogWithTransition, TextArea, TextInput} from '../@ui';
-import {Button} from '../@windmill';
+import { DialogWithTransition, TextArea, TextInput } from "../@ui";
+import { Button } from "../@windmill";
 
 import type { ProjectSetting } from "@prisma/client";
 import type { ProjectSettingFormErrors } from "./NewProjectSetting";

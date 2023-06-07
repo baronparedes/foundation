@@ -1,7 +1,7 @@
 import type { Fund, FundTransaction } from "@prisma/client";
-import {prisma} from '~/db.server';
+import { prisma } from "~/db.server";
 
-import {Decimal} from '@prisma/client/runtime';
+import { Decimal } from "@prisma/client/runtime";
 
 export type { FundTransaction } from "@prisma/client";
 

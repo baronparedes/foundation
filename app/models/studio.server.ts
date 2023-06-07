@@ -1,6 +1,6 @@
 import type { User, Studio } from "@prisma/client";
 
-import {prisma} from '~/db.server';
+import { prisma } from "~/db.server";
 
 export type { Studio } from "@prisma/client";
 

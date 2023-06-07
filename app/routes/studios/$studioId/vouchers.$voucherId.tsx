@@ -1,24 +1,27 @@
-import invariant from 'tiny-invariant';
+import invariant from "tiny-invariant";
 
-import {LockClosedIcon, LockOpenIcon} from '@heroicons/react/solid';
-import {Form, useLoaderData, useNavigate, useTransition} from '@remix-run/react';
-import {json, redirect} from '@remix-run/server-runtime';
+import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/solid";
+import { Form, useLoaderData, useNavigate, useTransition } from "@remix-run/react";
+import { json, redirect } from "@remix-run/server-runtime";
 
-import {DialogWithTransition, LabeledCurrency} from '../../../components/@ui';
-import {Button} from '../../../components/@windmill';
-import {NewStudioVoucherDetails} from '../../../components/forms/NewStudioVoucherDetail';
-import {FundPicker} from '../../../components/pickers/FundPicker';
-import {StudioVoucherDetailTable} from '../../../components/tables/StudioVoucherDetailTable';
-import {getDetailCategories} from '../../../models/detail-category.server';
-import {getFunds} from '../../../models/fund.server';
+import { DialogWithTransition, LabeledCurrency } from "../../../components/@ui";
+import { Button } from "../../../components/@windmill";
+import { NewStudioVoucherDetails } from "../../../components/forms/NewStudioVoucherDetail";
+import { FundPicker } from "../../../components/pickers/FundPicker";
+import { StudioVoucherDetailTable } from "../../../components/tables/StudioVoucherDetailTable";
+import { getDetailCategories } from "../../../models/detail-category.server";
+import { getFunds } from "../../../models/fund.server";
 import {
   addStudioVoucherDetail,
   deleteStudioVoucherDetail,
   getStudioVoucherDetails,
-} from '../../../models/studio-voucher-detail.server';
-import {closeStudioVoucher, getStudioVoucher} from '../../../models/studio-voucher.server';
-import {requireUserId} from '../../../session.server';
-import {formatCurrencyFixed, sum} from '../../../utils';
+} from "../../../models/studio-voucher-detail.server";
+import {
+  closeStudioVoucher,
+  getStudioVoucher,
+} from "../../../models/studio-voucher.server";
+import { requireUserId } from "../../../session.server";
+import { formatCurrencyFixed, sum } from "../../../utils";
 
 import type { FundWithBalance } from "../../../models/fund.server";
 import type { StudioVoucherDetailslWithCategory } from "../../../models/studio-voucher-detail.server";
@@ -38,7 +41,14 @@ export async function loader({ params, request }: LoaderArgs) {
 
   const funds = await getFunds();
 
-  return json({ studioId, voucher, userId, voucherDetails, categories, funds });
+  return json({
+    studioId,
+    voucher,
+    userId,
+    voucherDetails,
+    categories,
+    funds,
+  });
 }
 
 export async function action({ params, request }: ActionArgs) {

@@ -1,6 +1,6 @@
-import moment from 'moment';
-import React, {useState} from 'react';
-import invariant from 'tiny-invariant';
+import moment from "moment";
+import React, { useState } from "react";
+import invariant from "tiny-invariant";
 
 import {
   Form,
@@ -8,17 +8,17 @@ import {
   useLoaderData,
   useNavigate,
   useTransition,
-} from '@remix-run/react';
-import {json, redirect} from '@remix-run/server-runtime';
+} from "@remix-run/react";
+import { json, redirect } from "@remix-run/server-runtime";
 
-import {DialogWithTransition, TextArea, TextInput} from '../../../components/@ui';
-import {Button} from '../../../components/@windmill';
-import {FundPicker} from '../../../components/pickers/FundPicker';
-import {getFunds} from '../../../models/fund.server';
-import {createStudioVoucher} from '../../../models/studio-voucher.server';
-import {getStudio} from '../../../models/studio.server';
-import {requireUserId} from '../../../session.server';
-import {validateRequiredString} from '../../../utils';
+import { DialogWithTransition, TextArea, TextInput } from "../../../components/@ui";
+import { Button } from "../../../components/@windmill";
+import { FundPicker } from "../../../components/pickers/FundPicker";
+import { getFunds } from "../../../models/fund.server";
+import { createStudioVoucher } from "../../../models/studio-voucher.server";
+import { getStudio } from "../../../models/studio.server";
+import { requireUserId } from "../../../session.server";
+import { validateRequiredString } from "../../../utils";
 
 import type { FundWithBalance } from "../../../models/fund.server";
 import type { StudioVoucher } from "@prisma/client";

@@ -1,5 +1,5 @@
 import type { Prisma, ProjectVoucher, ProjectVoucherDetail } from "@prisma/client";
-import {prisma} from '../db.server';
+import { prisma } from "../db.server";
 
 export type ProjectVoucherDetailslWithCategory = Prisma.PromiseReturnType<
   typeof getProjectVoucherDetails

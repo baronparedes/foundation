@@ -1,7 +1,7 @@
-import invariant from 'tiny-invariant';
+import invariant from "tiny-invariant";
 
-import {useLoaderData} from '@remix-run/react';
-import {json} from '@remix-run/server-runtime';
+import { useLoaderData } from "@remix-run/react";
+import { json } from "@remix-run/server-runtime";
 
 import {
   Badge,
@@ -11,13 +11,13 @@ import {
   TableContainer,
   TableHeader,
   TableRow,
-} from '../../components/@windmill';
-import Page from '../../components/Page';
-import {ProjectCostSummary} from '../../components/ProjectCostSummary';
-import {ProjectHeader} from '../../components/ProjectHeader';
-import {getProjectDashboard} from '../../models/project-dashboard.server';
-import {requireUserId} from '../../session.server';
-import {formatCurrencyFixed, sum} from '../../utils';
+} from "../../components/@windmill";
+import Page from "../../components/Page";
+import { ProjectCostSummary } from "../../components/ProjectCostSummary";
+import { ProjectHeader } from "../../components/ProjectHeader";
+import { getProjectDashboard } from "../../models/project-dashboard.server";
+import { requireUserId } from "../../session.server";
+import { formatCurrencyFixed, sum } from "../../utils";
 
 import type { Project } from "@prisma/client";
 import type { LoaderArgs } from "@remix-run/server-runtime";

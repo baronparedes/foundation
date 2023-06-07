@@ -1,10 +1,10 @@
-import {useState} from 'react';
+import { useState } from "react";
 
-import {PencilIcon} from '@heroicons/react/solid';
-import {useFetcher} from '@remix-run/react';
+import { PencilIcon } from "@heroicons/react/solid";
+import { useFetcher } from "@remix-run/react";
 
-import {DialogWithTransition, LabeledCurrency, TextArea, TextInput} from '../@ui';
-import {Button} from '../@windmill';
+import { DialogWithTransition, LabeledCurrency, TextArea, TextInput } from "../@ui";
+import { Button } from "../@windmill";
 
 import type { ProjectAddOn } from "@prisma/client";
 import type { ProjectAddOnFormErrors } from "./NewProjectAddOn";

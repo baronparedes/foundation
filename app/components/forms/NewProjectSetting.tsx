@@ -1,12 +1,12 @@
-import moment from 'moment';
-import {useState} from 'react';
+import moment from "moment";
+import { useState } from "react";
 
-import {PlusCircleIcon} from '@heroicons/react/solid';
-import {useFetcher} from '@remix-run/react';
+import { PlusCircleIcon } from "@heroicons/react/solid";
+import { useFetcher } from "@remix-run/react";
 
-import {validateRequiredString} from '../../utils';
-import {DialogWithTransition, TextArea, TextInput} from '../@ui';
-import {Button} from '../@windmill';
+import { validateRequiredString } from "../../utils";
+import { DialogWithTransition, TextArea, TextInput } from "../@ui";
+import { Button } from "../@windmill";
 
 import type { ProjectSetting } from "@prisma/client";
 const today = moment().format("yyyy-MM-DD");

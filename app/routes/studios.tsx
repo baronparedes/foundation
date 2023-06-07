@@ -1,11 +1,11 @@
 import type { LoaderArgs } from "@remix-run/node";
-import {requireUserId} from '~/session.server';
+import { requireUserId } from "~/session.server";
 
-import {json} from '@remix-run/node';
-import {Link, NavLink, Outlet, useLoaderData} from '@remix-run/react';
+import { json } from "@remix-run/node";
+import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
-import Page from '../components/Page';
-import {getStudiosByUserId} from '../models/studio.server';
+import Page from "../components/Page";
+import { getStudiosByUserId } from "../models/studio.server";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await requireUserId(request);

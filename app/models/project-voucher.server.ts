@@ -1,8 +1,8 @@
-import {prisma} from '~/db.server';
+import { prisma } from "~/db.server";
 
-import {Prisma} from '@prisma/client';
+import { Prisma } from "@prisma/client";
 
-import {createFundTransaction} from './fund-transaction.server';
+import { createFundTransaction } from "./fund-transaction.server";
 
 import type { Project, ProjectVoucher } from "@prisma/client";
 export type { ProjectVoucher, ProjectVoucherDetail } from "@prisma/client";

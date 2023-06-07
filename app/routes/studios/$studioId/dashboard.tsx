@@ -1,14 +1,14 @@
-import invariant from 'tiny-invariant';
+import invariant from "tiny-invariant";
 
-import {useLoaderData, useNavigate} from '@remix-run/react';
-import {json} from '@remix-run/server-runtime';
+import { useLoaderData, useNavigate } from "@remix-run/react";
+import { json } from "@remix-run/server-runtime";
 
-import {DialogWithTransition} from '../../../components/@ui';
-import {Card, CardBody} from '../../../components/@windmill';
-import {DisbursementCard} from '../../../components/cards/DisbursementCard';
-import {getStudioDashboard} from '../../../models/studio-dashboard.server';
-import {requireUserId} from '../../../session.server';
-import {formatCurrencyFixed, sum} from '../../../utils';
+import { DialogWithTransition } from "../../../components/@ui";
+import { Card, CardBody } from "../../../components/@windmill";
+import { DisbursementCard } from "../../../components/cards/DisbursementCard";
+import { getStudioDashboard } from "../../../models/studio-dashboard.server";
+import { requireUserId } from "../../../session.server";
+import { formatCurrencyFixed, sum } from "../../../utils";
 
 import type { StudioVoucherDetailsWithVoucherNumber } from "../../../models/studio-voucher-detail.server";
 import type { StudioVoucher } from "../../../models/studio-voucher.server";
