@@ -29,19 +29,19 @@ export function ProjectHeader({
         </div>
       </div>
       <hr className="my-4" />
-      <div className="grid grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-3">
         <div className="text-center">
           <LabeledCurrency
             label="total project cost"
             value={totalProjectCost}
-            valueClassName={classNames("text-4xl")}
+            valueClassName={classNames("text-2xl")}
           />
         </div>
         <div className="text-center">
           <LabeledCurrency
             label="net project cost"
             value={netProjectCost}
-            valueClassName={classNames("text-4xl")}
+            valueClassName={classNames("text-2xl")}
           />
         </div>
         <div className="text-center">
@@ -49,7 +49,7 @@ export function ProjectHeader({
             label="remaining funds"
             value={remainingFunds}
             valueClassName={classNames(
-              "text-4xl",
+              "text-2xl",
               remainingFunds < 200000 ? "text-red-500" : "text-green-500"
             )}
           />
