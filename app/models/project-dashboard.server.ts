@@ -1,16 +1,6 @@
-import type {
-  Prisma,
-  Project,
-  ProjectAddOn,
-  ProjectSetting,
-  ProjectVoucher,
-  User,
-} from "@prisma/client";
+import type { Project, ProjectAddOn, ProjectSetting, ProjectVoucher } from "@prisma/client";
 import { prisma } from "../db.server";
 import { isBeforeDate, isBetweenDates, sum } from "../utils";
-import { getProjectsByUserId } from "./project.server";
-
-export type ProjectDashboard = Prisma.PromiseReturnType<typeof getProjectDashboard>;
 
 async function getClosedVoucherDetails(vouchers: ProjectVoucher[]) {
   const closedVouchers = vouchers.filter((v) => v.isClosed);
@@ -145,15 +135,6 @@ async function getCostPlusTotals(
   });
 
   return result;
-}
-
-export async function getProjectDashboardByUserId({ userId }: { userId: User["id"] }) {
-  const projects = await getProjectsByUserId({ userId });
-  const data = projects.map(async (p) => {
-    const item = await getProjectDashboard({ id: p.id });
-    return item as unknown as ProjectDashboard;
-  });
-  return data;
 }
 
 export async function getProjectDashboard({ id }: Pick<Project, "id">) {
