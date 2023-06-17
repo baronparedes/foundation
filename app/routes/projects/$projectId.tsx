@@ -89,7 +89,7 @@ export default function ProjectDetailsPage() {
         contingencyTotals={Number(contingencyTotals)}
       />
       <hr className="my-4" />
-      <div className="w-full space-x-2 text-right">
+      <div className="flex w-full justify-end space-x-2">
         <Button onClick={() => navigate("./settings")}>Settings</Button>
         <Button onClick={() => navigate("./dashboard")}>Dashboard</Button>
         <Button
