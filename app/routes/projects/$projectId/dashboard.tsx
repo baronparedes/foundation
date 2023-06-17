@@ -90,18 +90,9 @@ export default function ProjectDashboard() {
           />
         </div>
       </div>
-
       <hr className="my-4" />
-      <AddOnExpenseCard
-        colored
-        className="m-2 cursor-pointer bg-gmd-50 hover:bg-gmd-100"
-        description="Total Add On Expenses"
-        total={addOnExpenses.totalAddOns}
-        addOns={addOnExpenses.addOns as unknown as ProjectAddOn[]}
-      />
       {costPlusTotalsData?.length > 0 && (
         <>
-          <hr className="my-4" />
           <div className="my-4">
             <div className="flex">
               {costPlusTotalsData.map((cp, key) => {
@@ -120,13 +111,20 @@ export default function ProjectDashboard() {
           </div>
         </>
       )}
-      <hr className="my-4" />
-      <Card colored className="m-2 bg-gmd-600 text-white">
+      <AddOnExpenseCard
+        colored
+        className="m-2 cursor-pointer bg-gmd-50 hover:bg-gmd-100"
+        description="Total Add On Expenses"
+        total={addOnExpenses.totalAddOns}
+        addOns={addOnExpenses.addOns as unknown as ProjectAddOn[]}
+      />
+      <Card colored className="m-2 mt-4 bg-gmd-600 text-white">
         <CardBody>
           <p className="mb-4 font-semibold">Total Disbursed</p>
           <p className="currency">{formatCurrencyFixed(totalDisbursed)}</p>
         </CardBody>
       </Card>
+      <hr className="my-4" />
       <div>
         <div className="m-2 flex-none">
           <div className="grid gap-4 pb-4 md:grid-cols-3 xl:grid-cols-3">

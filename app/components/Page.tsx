@@ -133,7 +133,7 @@ export default function Page({ children, currentPage }: React.PropsWithChildren<
         <div>
           <img aria-hidden="true" className="mx-auto my-2 h-24" src={ImageGMD} alt="GMD" />
         </div>
-        <div className="mx-auto max-w-7xl py-1 px-4 text-right font-serif sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl py-1 px-4 text-right sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold text-black">{currentPage}</h1>
         </div>
       </header>

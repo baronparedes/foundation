@@ -2,21 +2,13 @@ import invariant from "tiny-invariant";
 import { getProject } from "~/models/project.server";
 
 import { json } from "@remix-run/node";
-import {
-  Form,
-  Outlet,
-  useCatch,
-  useLoaderData,
-  useNavigate,
-} from "@remix-run/react";
+import { Form, Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
 
 import { SearchInput } from "../../components/@ui/SearchInput";
 import { Button } from "../../components/@windmill";
 import { ProjectCostSummary } from "../../components/ProjectCostSummary";
 import { ProjectHeader } from "../../components/ProjectHeader";
-import {
-  ProjectVoucherTable,
-} from "../../components/tables/ProjectVoucherTable";
+import { ProjectVoucherTable } from "../../components/tables/ProjectVoucherTable";
 import { getProjectDashboard } from "../../models/project-dashboard.server";
 import { getProjectVouchers } from "../../models/project-voucher.server";
 
@@ -100,6 +92,14 @@ export default function ProjectDetailsPage() {
       <div className="w-full space-x-2 text-right">
         <Button onClick={() => navigate("./settings")}>Settings</Button>
         <Button onClick={() => navigate("./dashboard")}>Dashboard</Button>
+        <Button
+          tabIndex={-1}
+          onClick={() => {
+            window.open(`/reports/project/${project.id}`);
+          }}
+        >
+          Report Preview
+        </Button>
         <Button onClick={() => navigate("./vouchers")}>New Voucher</Button>
         <Outlet />
       </div>

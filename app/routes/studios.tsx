@@ -35,7 +35,7 @@ export default function StudiossPage() {
                     }
                     to={studio.id}
                   >
-                    {studio.name}
+                    🏢 {studio.name}
                   </NavLink>
                 </li>
               ))}
