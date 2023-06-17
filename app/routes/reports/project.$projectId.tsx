@@ -269,7 +269,7 @@ export default function ReportProjectPage() {
                       <Table className="w-full table-auto">
                         <TableHeader>
                           <tr>
-                            <TableCell colSpan={8} className="text-xl">
+                            <TableCell colSpan={8} className="text-lg">
                               <h1 className="text-center">{item.category.description}</h1>
                             </TableCell>
                           </tr>

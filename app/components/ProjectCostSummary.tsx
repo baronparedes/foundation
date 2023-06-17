@@ -19,7 +19,7 @@ export function ProjectCostSummary({
 }: Props) {
   return (
     <>
-      <div className={`flex flex-wrap justify-center gap-9 text-center`}>
+      <div className={`flex flex-wrap justify-center gap-12 text-center`}>
         {estimatedCost && <LabeledCurrency label="estimated cost" value={estimatedCost} />}
         <LabeledCurrency
           label="collected funds"
