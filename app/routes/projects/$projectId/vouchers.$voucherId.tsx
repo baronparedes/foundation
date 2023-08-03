@@ -5,26 +5,15 @@ import {
   LockClosedIcon,
   LockOpenIcon,
 } from "@heroicons/react/solid";
-import {
-  Form,
-  useLoaderData,
-  useNavigate,
-  useTransition,
-} from "@remix-run/react";
+import { Form, useLoaderData, useNavigate, useTransition } from "@remix-run/react";
 import { json, redirect } from "@remix-run/server-runtime";
 
 import { DialogWithTransition, LabeledCurrency } from "../../../components/@ui";
 import { Button } from "../../../components/@windmill";
-import {
-  NewProjectVoucherDetails,
-} from "../../../components/forms/NewProjectVoucherDetail";
-import {
-  ToggleProjectVoucherCostPlus,
-} from "../../../components/forms/ToggleProjectVoucherCostPlus";
+import { NewProjectVoucherDetails } from "../../../components/forms/NewProjectVoucherDetail";
+import { ToggleProjectVoucherCostPlus } from "../../../components/forms/ToggleProjectVoucherCostPlus";
 import { FundPicker } from "../../../components/pickers/FundPicker";
-import {
-  ProjectVoucherDetailTable,
-} from "../../../components/tables/ProjectVoucherDetailTable";
+import { ProjectVoucherDetailTable } from "../../../components/tables/ProjectVoucherDetailTable";
 import { getDetailCategories } from "../../../models/detail-category.server";
 import { getFunds } from "../../../models/fund.server";
 import {
@@ -35,6 +24,7 @@ import {
 import {
   closeProjectVoucher,
   getProjectVoucher,
+  reopenProjectVoucher,
   toggleCostPlus,
 } from "../../../models/project-voucher.server";
 import { requireUserId } from "../../../session.server";
@@ -110,6 +100,11 @@ export async function action({ params, request }: ActionArgs) {
       updatedById.toString(),
       costPlus.toString().toLowerCase() === "true"
     );
+  }
+
+  if (_action === "reopen-voucher") {
+    await reopenProjectVoucher(Number(projectVoucherId), updatedById as string);
+    return redirect(`/projects/${projectId}`);
   }
 
   return null;
@@ -234,6 +229,23 @@ export default function VoucherDetails() {
                   disabled={transition.state === "submitting"}
                 >
                   {itemizedAmount === 0 ? "Delete Voucher" : "Close Voucher"}
+                </Button>
+              </div>
+            </Form>
+          )}
+          {voucher.isClosed && (
+            <Form method="post">
+              <input type="hidden" value={userId} name="updatedById" />
+              <input type="hidden" value={voucher.id} name="projectVoucherId" />
+              <div className="text-right">
+                <Button
+                  className="my-4"
+                  name="_action"
+                  value="reopen-voucher"
+                  type="submit"
+                  disabled={transition.state === "submitting"}
+                >
+                  Reopen Voucher
                 </Button>
               </div>
             </Form>
