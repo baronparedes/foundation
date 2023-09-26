@@ -30,7 +30,12 @@ export function FundPicker({
         </option>
         {funds.map((f) => {
           return (
-            <option key={f.id} value={f.id} data-balance={f.balance}>
+            <option
+              key={f.id}
+              value={f.id}
+              data-balance={f.balance}
+              data-enforced={f.enforceBalance}
+            >
               {f.name} - {formatCurrencyFixed(Number(f.balance))}
             </option>
           );

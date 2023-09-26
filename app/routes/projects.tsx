@@ -40,7 +40,7 @@ export default function ProjectsPage() {
           ) : (
             <div className="space-y-4">
               {projectDashboards.map((dashboard) => {
-                const { project, remainingFunds, netProjectCost } = dashboard;
+                const { project, remainingFunds, totalProjectCost } = dashboard;
                 return (
                   <>
                     <Card colored className="m-4 hover:bg-gmd-100" key={project.id}>
@@ -57,8 +57,8 @@ export default function ProjectsPage() {
                               )}
                             />
                             <LabeledCurrency
-                              label="net project cost"
-                              value={netProjectCost}
+                              label="total project cost"
+                              value={totalProjectCost}
                               valueClassName="text-sm"
                             />
                           </div>

@@ -28,6 +28,7 @@ import {
 import {
   closeStudioVoucher,
   getStudioVoucher,
+  reopenStudioVoucher,
 } from "../../../models/studio-voucher.server";
 import { requireUserId } from "../../../session.server";
 import { formatCurrencyFixed, sum } from "../../../utils";
@@ -92,6 +93,11 @@ export async function action({ params, request }: ActionArgs) {
       fundId as string,
       updatedById as string
     );
+    return redirect(`/studios/${studioId}`);
+  }
+
+  if (_action === "reopen-voucher") {
+    await reopenStudioVoucher(Number(studioVoucherId), updatedById as string);
     return redirect(`/studios/${studioId}`);
   }
 
@@ -204,6 +210,23 @@ export default function VoucherDetails() {
                   disabled={transition.state === "submitting"}
                 >
                   {itemizedAmount === 0 ? "Delete Voucher" : "Close Voucher"}
+                </Button>
+              </div>
+            </Form>
+          )}
+          {voucher.isClosed && (
+            <Form method="post">
+              <input type="hidden" value={userId} name="updatedById" />
+              <input type="hidden" value={voucher.id} name="studioVoucherId" />
+              <div className="text-right">
+                <Button
+                  className="my-4"
+                  name="_action"
+                  value="reopen-voucher"
+                  type="submit"
+                  disabled={transition.state === "submitting"}
+                >
+                  Reopen Voucher
                 </Button>
               </div>
             </Form>

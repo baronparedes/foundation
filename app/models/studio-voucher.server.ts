@@ -180,3 +180,61 @@ export async function closeStudioVoucher(
     }),
   ]);
 }
+
+export async function reopenStudioVoucher(studioVoucherId: number, updatedById: string) {
+  const studioVoucher = await prisma.studioVoucher.findFirstOrThrow({
+    where: { id: studioVoucherId, isClosed: true, isDeleted: false },
+  });
+
+  const closedConsumedAmount = await prisma.studioVoucherDetail.aggregate({
+    where: { studioVoucherId },
+    _sum: {
+      amount: true,
+    },
+  });
+
+  const refundAmount =
+    Number(studioVoucher.disbursedAmount) - Number(closedConsumedAmount._sum.amount);
+
+  const desc = `refund reversal from voucher ${studioVoucher.voucherNumber}`;
+
+  if (refundAmount === 0) {
+    await prisma.studioVoucher.update({
+      where: {
+        id: studioVoucherId,
+      },
+      data: {
+        consumedAmount: studioVoucher.disbursedAmount, //revert value
+        isClosed: false,
+        isDeleted: false,
+        updatedById,
+      },
+    });
+    return;
+  }
+
+  await prisma.$transaction([
+    prisma.studioVoucher.update({
+      where: {
+        id: studioVoucherId,
+      },
+      data: {
+        consumedAmount: studioVoucher.disbursedAmount, //revert value
+        isClosed: false,
+        isDeleted: false,
+        updatedById,
+      },
+    }),
+    createFundTransaction({
+      amount: new Prisma.Decimal(refundAmount * -1),
+      description: desc,
+      comments: desc,
+      createdAt: new Date(),
+      createdById: updatedById,
+      fundId: studioVoucher.fundId,
+      projectId: null,
+      studioId: null,
+      type: "disbursement",
+    }),
+  ]);
+}

@@ -4,7 +4,7 @@ import type { Fund, Prisma } from "@prisma/client";
 export type { Fund } from "@prisma/client";
 
 export type FundWithTransaction = Prisma.PromiseReturnType<typeof getFund>;
-export type FundWithBalance = Pick<Fund, "id" | "name" | "code"> & {
+export type FundWithBalance = Pick<Fund, "id" | "name" | "code" | "enforceBalance"> & {
   balance: Prisma.Decimal | number;
 };
 
@@ -58,6 +58,7 @@ export async function getFunds() {
       id: true,
       name: true,
       code: true,
+      enforceBalance: true,
     },
     orderBy: { updatedAt: "desc" },
   });
