@@ -138,12 +138,15 @@ export default function VoucherPage() {
   const today = moment().format("yyyy-MM-DD");
 
   const [maxBalance, setMaxBalance] = useState(0);
+  const [enforceBalance, setEnforceBalance] = useState(true);
 
   function handleOnSelectFund(e: React.FormEvent<HTMLSelectElement>) {
     const index = e.currentTarget.selectedIndex;
     const optionElement = e.currentTarget.childNodes[index] as HTMLOptionElement;
     const dataBalance = optionElement.dataset.balance;
+    const enforced = optionElement.dataset.enforced;
     setMaxBalance(Number(dataBalance) ?? 0);
+    setEnforceBalance(enforced === "true");
   }
 
   return (
@@ -184,7 +187,7 @@ export default function VoucherPage() {
           error={actionData?.errors?.disbursedAmount}
           type="number"
           required
-          max={maxBalance}
+          max={enforceBalance ? maxBalance : undefined}
           step={0.01}
         />
         <TextArea
