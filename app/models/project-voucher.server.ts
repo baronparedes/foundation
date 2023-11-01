@@ -51,7 +51,7 @@ export function getProjectVouchers({
 
   return prisma.projectVoucher.findMany({
     ...args,
-    orderBy: { createdAt: "desc" },
+    orderBy: { transactionDate: "desc" },
     include: {
       fund: {
         select: {

@@ -1,6 +1,14 @@
-import type { Project, ProjectAddOn, ProjectSetting, ProjectVoucher } from "@prisma/client";
+import type {
+  Prisma,
+  Project,
+  ProjectAddOn,
+  ProjectSetting,
+  ProjectVoucher,
+} from "@prisma/client";
 import { prisma } from "../db.server";
 import { isBeforeDate, isBetweenDates, sum } from "../utils";
+
+export type CollectedFunds = Prisma.PromiseReturnType<typeof getCollectedFunds>;
 
 async function getClosedVoucherDetails(vouchers: ProjectVoucher[]) {
   const closedVouchers = vouchers.filter((v) => v.isClosed);
@@ -137,6 +145,23 @@ async function getCostPlusTotals(
   return result;
 }
 
+async function getCollectedFunds({ id }: Pick<Project, "id">) {
+  const collectedFundsData = await prisma.fundTransaction.findMany({
+    where: {
+      projectId: id,
+      type: "collection",
+    },
+    select: {
+      amount: true,
+      description: true,
+      createdAt: true,
+      comments: true,
+    },
+  });
+
+  return collectedFundsData;
+}
+
 export async function getProjectDashboard({ id }: Pick<Project, "id">) {
   const project = await prisma.project.findFirstOrThrow({
     where: { id },
@@ -147,15 +172,8 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
       projectId: id,
     },
   });
-  const collectedFundsData = await prisma.fundTransaction.aggregate({
-    where: {
-      projectId: id,
-      type: "collection",
-    },
-    _sum: {
-      amount: true,
-    },
-  });
+
+  const collectedFundsData = await getCollectedFunds({ id });
 
   const { uncategorizedDisbursement, categorizedDisbursement } = await getVoucherDetails(
     vouchers
@@ -182,7 +200,7 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
       .map((_) => _.totalDisbursements)
   );
 
-  const collectedFunds = collectedFundsData._sum.amount;
+  const collectedFunds = sum(collectedFundsData.map((cf) => Number(cf.amount)));
   const disbursedFunds = categorizedDisbursedTotal + uncategorizedDisbursedTotal;
   const totalProjectCost =
     addOnTotals + disbursedFunds + costPlusTotals + contingencyTotals;
@@ -203,5 +221,6 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
     addOnTotals,
     netProjectCost,
     contingencyTotals,
+    collectedFundsData,
   };
 }

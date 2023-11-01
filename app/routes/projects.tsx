@@ -30,7 +30,7 @@ export default function ProjectsPage() {
 
   return (
     <Page currentPage="Projects">
-      <div className="py-4 md:flex">
+      <div className="py-4 lg:flex">
         <div className="flex-none">
           <Link to="new" className="block p-4 text-xl text-blue-500 hover:bg-sky-100">
             + Project

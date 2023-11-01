@@ -25,10 +25,11 @@ export async function loader({ params, request }: LoaderArgs) {
 
   const url = new URL(request.url);
   const urlParams = new URLSearchParams(url.search);
+  const criteria = urlParams.get("search") ?? undefined;
 
   const projectVouchers = await getProjectVouchers({
     id: params.projectId,
-    criteria: urlParams.get("search") ?? undefined,
+    criteria,
   });
 
   const {
@@ -89,7 +90,7 @@ export default function ProjectDetailsPage() {
         contingencyTotals={Number(contingencyTotals)}
       />
       <hr className="my-4" />
-      <div className="flex w-full justify-end space-x-2">
+      <div className="flex w-full flex-wrap justify-end space-x-2">
         <Button onClick={() => navigate("./settings")}>Settings</Button>
         <Button onClick={() => navigate("./dashboard")}>Dashboard</Button>
         <Button

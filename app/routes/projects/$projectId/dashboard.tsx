@@ -7,12 +7,14 @@ import { json } from "@remix-run/server-runtime";
 import { DialogWithTransition, LabeledCurrency } from "../../../components/@ui";
 import { Button, Card, CardBody } from "../../../components/@windmill";
 import { AddOnExpenseCard } from "../../../components/cards/AddOnExpenseCard";
+import { CollectedFundsCard } from "../../../components/cards/CollectedFundsCard";
 import { DisbursementCard } from "../../../components/cards/DisbursementCard";
 import { getDetailCategories } from "../../../models/detail-category.server";
 import { getProjectDashboard } from "../../../models/project-dashboard.server";
 import { requireUserId } from "../../../session.server";
 import { formatCurrencyFixed, sum } from "../../../utils";
 
+import type { CollectedFunds } from "../../../models/project-dashboard.server";
 import type { ProjectAddOn } from "@prisma/client";
 import type { ProjectVoucherDetailsWithVoucherNumber } from "../../../models/project-voucher-detail.server";
 import type { ProjectVoucher } from "../../../models/project-voucher.server";
@@ -28,6 +30,8 @@ export async function loader({ params, request }: LoaderArgs) {
     costPlusTotalsData,
     totalProjectCost,
     netProjectCost,
+    collectedFundsData,
+    collectedFunds,
   } = await getProjectDashboard({ id: params.projectId });
 
   if (!project) {
@@ -47,6 +51,8 @@ export async function loader({ params, request }: LoaderArgs) {
     totalProjectCost,
     netProjectCost,
     categories,
+    collectedFunds,
+    collectedFundsData,
   });
 }
 
@@ -60,6 +66,8 @@ export default function ProjectDashboard() {
     totalProjectCost,
     netProjectCost,
     categories,
+    collectedFunds,
+    collectedFundsData,
   } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
 
@@ -109,21 +117,31 @@ export default function ProjectDashboard() {
               })}
             </div>
           </div>
+          <hr className="my-4" />
         </>
       )}
-      <AddOnExpenseCard
-        colored
-        className="m-2 cursor-pointer bg-gmd-50 hover:bg-gmd-100"
-        description="Total Add On Expenses"
-        total={addOnExpenses.totalAddOns}
-        addOns={addOnExpenses.addOns as unknown as ProjectAddOn[]}
-      />
-      <Card colored className="m-2 mt-4 bg-gmd-600 text-white">
-        <CardBody>
-          <p className="mb-4 font-semibold">Total Disbursed</p>
-          <p className="currency">{formatCurrencyFixed(totalDisbursed)}</p>
-        </CardBody>
-      </Card>
+      <div>
+        <AddOnExpenseCard
+          colored
+          className="m-2 cursor-pointer bg-gmd-50 hover:bg-gmd-100"
+          description="Total Add On Expenses"
+          total={addOnExpenses.totalAddOns}
+          addOns={addOnExpenses.addOns as unknown as ProjectAddOn[]}
+        />
+        <CollectedFundsCard
+          colored
+          className="m-2 cursor-pointer bg-gmd-50 hover:bg-gmd-100"
+          description="Collected Funds"
+          total={collectedFunds}
+          collectedFunds={collectedFundsData as unknown as CollectedFunds}
+        />
+        <Card colored className="m-2 bg-gmd-600 text-white">
+          <CardBody>
+            <p className="mb-4 font-semibold">Total Disbursed</p>
+            <p className="currency">{formatCurrencyFixed(totalDisbursed)}</p>
+          </CardBody>
+        </Card>
+      </div>
       <hr className="my-4" />
       <div className="grid md:grid-cols-3">
         {uncategorizedDisbursement.totalDisbursements > 0 && (
