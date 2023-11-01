@@ -1,6 +1,15 @@
-import type { Project, ProjectAddOn, ProjectSetting, ProjectVoucher } from "@prisma/client";
+import type {
+  Prisma,
+  Project,
+  ProjectAddOn,
+  ProjectSetting,
+  ProjectVoucher,
+} from "@prisma/client";
 import { prisma } from "../db.server";
 import { isBeforeDate, isBetweenDates, sum } from "../utils";
+
+export type CollectedFunds = Prisma.PromiseReturnType<typeof getCollectedFunds>;
+export type ProjectDashboard = Prisma.PromiseReturnType<typeof getProjectDashboard>;
 
 async function getClosedVoucherDetails(vouchers: ProjectVoucher[]) {
   const closedVouchers = vouchers.filter((v) => v.isClosed);
@@ -58,6 +67,38 @@ async function getVoucherDetails(vouchers: ProjectVoucher[]) {
     uncategorizedDisbursement,
     categorizedDisbursement,
   };
+}
+
+//TODO: Migrate to Prisma
+async function getVoucherDetailsRaw({ id }: Pick<Project, "id">) {
+  type DisbursementRawData = {
+    transactionDate: Date;
+    supplierName: string;
+    description: string;
+    referenceNumber: string;
+    category: string;
+    amount: Number;
+    voucherNumber: string;
+  };
+  const rawData = await prisma.$queryRaw`
+    SELECT
+        pv."transactionDate",
+        pvd."supplierName",
+        pvd."description",
+        pvd."referenceNumber",
+        dc."description" AS "category",
+        pvd."amount",
+        pv."voucherNumber"
+    FROM public."ProjectVoucherDetail" pvd
+    JOIN public."ProjectVoucher" pv ON pv.id = pvd."projectVoucherId"
+    JOIN public."DetailCategory" dc ON dc.id = pvd."detailCategoryId"
+    WHERE pv."projectId" = ${id}
+    AND pv."isDeleted" = false
+    AND pv."isClosed" = true
+    ORDER BY pv."transactionDate"
+  `;
+
+  return rawData as DisbursementRawData[];
 }
 
 async function getAddOnExpenses({ id }: Pick<Project, "id">) {
@@ -137,29 +178,27 @@ async function getCostPlusTotals(
   return result;
 }
 
-export async function getProjectDashboard({ id }: Pick<Project, "id">) {
-  const project = await prisma.project.findFirstOrThrow({
-    where: { id },
-  });
-  const vouchers = await prisma.projectVoucher.findMany({
-    where: {
-      isDeleted: false,
-      projectId: id,
-    },
-  });
-  const collectedFundsData = await prisma.fundTransaction.aggregate({
+async function getCollectedFunds({ id }: Pick<Project, "id">) {
+  const collectedFundsData = await prisma.fundTransaction.findMany({
     where: {
       projectId: id,
       type: "collection",
     },
-    _sum: {
+    select: {
       amount: true,
+      description: true,
+      createdAt: true,
+      comments: true,
     },
   });
 
-  const { uncategorizedDisbursement, categorizedDisbursement } = await getVoucherDetails(
-    vouchers
-  );
+  return collectedFundsData;
+}
+
+export async function getProjectDashboard({ id }: Pick<Project, "id">) {
+  const project = await prisma.project.findFirstOrThrow({
+    where: { id },
+  });
 
   const costPlusTotalsData = await getCostPlusTotalsByProjectId({ id });
   const costPlusTotals = sum(
@@ -172,6 +211,15 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
   const addOnExpenses = await getAddOnExpenses({ id });
   const addOnTotals = addOnExpenses.totalAddOns;
 
+  const vouchers = await prisma.projectVoucher.findMany({
+    where: {
+      isDeleted: false,
+      projectId: id,
+    },
+  });
+  const { uncategorizedDisbursement, categorizedDisbursement } = await getVoucherDetails(
+    vouchers
+  );
   const uncategorizedDisbursedTotal = uncategorizedDisbursement.totalDisbursements;
   const categorizedDisbursedTotal = sum(
     categorizedDisbursement.map((_) => _.totalDisbursements)
@@ -182,7 +230,10 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
       .map((_) => _.totalDisbursements)
   );
 
-  const collectedFunds = collectedFundsData._sum.amount;
+  const categorizedDisbursementRaw = await getVoucherDetailsRaw({ id });
+  const collectedFundsData = await getCollectedFunds({ id });
+
+  const collectedFunds = sum(collectedFundsData.map((cf) => Number(cf.amount)));
   const disbursedFunds = categorizedDisbursedTotal + uncategorizedDisbursedTotal;
   const totalProjectCost =
     addOnTotals + disbursedFunds + costPlusTotals + contingencyTotals;
@@ -193,6 +244,7 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
     project,
     uncategorizedDisbursement,
     categorizedDisbursement,
+    categorizedDisbursementRaw,
     addOnExpenses,
     costPlusTotals,
     totalProjectCost,
@@ -203,5 +255,6 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
     addOnTotals,
     netProjectCost,
     contingencyTotals,
+    collectedFundsData,
   };
 }
