@@ -5,6 +5,7 @@ import { json } from "@remix-run/server-runtime";
 
 import {
   Badge,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -57,6 +58,16 @@ export default function ReportProjectPage() {
   } = useLoaderData<typeof loader>();
   return (
     <Page currentPage="Report - Projects">
+      <div className="mt-2 mb-2 space-x-2 text-center print:hidden">
+        <a href={`/reports/project/${project.id}/export`} tabIndex={-1}>
+          <Button className="w-40" tabIndex={-1}>
+            Export Data
+          </Button>
+        </a>
+        <Button className="w-40" tabIndex={-1} onClick={() => window.print()}>
+          Print
+        </Button>
+      </div>
       <div className="w-full py-4">
         <ProjectHeader
           project={project as unknown as Project}

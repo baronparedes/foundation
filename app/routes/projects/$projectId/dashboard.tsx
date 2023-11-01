@@ -121,19 +121,22 @@ export default function ProjectDashboard() {
         </>
       )}
       <div>
-        <AddOnExpenseCard
-          colored
-          className="m-2 cursor-pointer bg-gmd-50 hover:bg-gmd-100"
-          description="Total Add On Expenses"
-          total={addOnExpenses.totalAddOns}
-          addOns={addOnExpenses.addOns as unknown as ProjectAddOn[]}
-        />
         <CollectedFundsCard
           colored
           className="m-2 cursor-pointer bg-gmd-50 hover:bg-gmd-100"
           description="Collected Funds"
           total={collectedFunds}
           collectedFunds={collectedFundsData as unknown as CollectedFunds}
+        />
+      </div>
+      <hr className="my-4" />
+      <div>
+        <AddOnExpenseCard
+          colored
+          className="m-2 cursor-pointer bg-gmd-50 hover:bg-gmd-100"
+          description="Total Add On Expenses"
+          total={addOnExpenses.totalAddOns}
+          addOns={addOnExpenses.addOns as unknown as ProjectAddOn[]}
         />
         <Card colored className="m-2 bg-gmd-600 text-white">
           <CardBody>
@@ -214,7 +217,10 @@ export default function ProjectDashboard() {
           })}
       </div>
       <hr className="my-4" />
-      <div className="text-right">
+      <div className="space-x-2 text-right">
+        <a href={`/reports/project/${project.id}/export`} tabIndex={-1}>
+          <Button tabIndex={-1}>Export Data</Button>
+        </a>
         <Button
           tabIndex={-1}
           onClick={() => {
