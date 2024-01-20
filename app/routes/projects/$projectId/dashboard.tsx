@@ -154,6 +154,7 @@ export default function ProjectDashboard() {
             total={uncategorizedDisbursement.totalDisbursements}
             description="Uncategorized"
             vouchers={uncategorizedDisbursement.vouchers as unknown as ProjectVoucher[]}
+            projectId={project.id}
           />
         )}
         {categories
@@ -172,6 +173,7 @@ export default function ProjectDashboard() {
                 disbursements={
                   data.disbursements as unknown as ProjectVoucherDetailsWithVoucherNumber[]
                 }
+                projectId={project.id}
               />
             );
           })}
@@ -209,6 +211,7 @@ export default function ProjectDashboard() {
                       disbursements={
                         data.disbursements as unknown as ProjectVoucherDetailsWithVoucherNumber[]
                       }
+                      projectId={project.id}
                     />
                   );
                 })}

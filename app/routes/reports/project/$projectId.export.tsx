@@ -2,10 +2,10 @@ import type { LoaderArgs } from "@remix-run/server-runtime";
 import moment from "moment";
 import invariant from "tiny-invariant";
 
-import { getProjectDashboard } from "../../models/project-dashboard.server";
-import { formatCurrencyFixed } from "../../utils";
+import { getProjectDashboard } from "../../../models/project-dashboard.server";
+import { formatCurrencyFixed } from "../../../utils";
 
-import type { ProjectDashboard } from "../../models/project-dashboard.server";
+import type { ProjectDashboard } from "../../../models/project-dashboard.server";
 
 interface Dictionary<T> {
   [key: string]: T;

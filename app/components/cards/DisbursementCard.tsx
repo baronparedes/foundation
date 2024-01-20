@@ -2,9 +2,10 @@ import classNames from "classnames";
 import { useState } from "react";
 
 import { formatCurrencyFixed } from "../../utils";
-import { DialogWithTransition } from "../@ui";
+import { DialogWithTransition, LabeledCurrency } from "../@ui";
 import {
   Badge,
+  Button,
   Card,
   CardBody,
   Table,
@@ -28,6 +29,7 @@ type Props = {
     | ProjectVoucherDetailsWithVoucherNumber[]
     | StudioVoucherDetailsWithVoucherNumber[];
   vouchers?: ProjectVoucher[] | StudioVoucher[];
+  projectId?: string;
 };
 
 export function DisbursementCard({
@@ -35,6 +37,7 @@ export function DisbursementCard({
   total,
   disbursements,
   vouchers,
+  projectId,
   ...cardProps
 }: Props & CardProps) {
   const [toggle, setToggle] = useState(false);
@@ -62,6 +65,31 @@ export function DisbursementCard({
       >
         {disbursements && disbursements.length > 0 && (
           <>
+            {projectId && (
+              <>
+                <div className="mt-2 mb-2 space-x-2 text-center print:hidden">
+                  <Button
+                    tabIndex={-1}
+                    onClick={() => {
+                      window.open(`/reports/project/${projectId}/${description}`);
+                    }}
+                  >
+                    Report Preview
+                  </Button>
+                </div>
+                <hr className="my-4" />
+              </>
+            )}
+            <div className="text-center">
+              <div>
+                <LabeledCurrency
+                  label="total"
+                  value={total}
+                  valueClassName={classNames("text-2xl")}
+                />
+              </div>
+            </div>
+            <hr className="my-4" />
             <TableContainer>
               <Table className="w-full table-auto">
                 <TableHeader>

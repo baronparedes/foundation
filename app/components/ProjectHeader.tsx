@@ -8,6 +8,7 @@ type Props = {
   totalProjectCost: number;
   netProjectCost: number;
   remainingFunds: number;
+  basicDetails?: boolean;
 };
 
 export function ProjectHeader({
@@ -15,6 +16,7 @@ export function ProjectHeader({
   totalProjectCost,
   remainingFunds,
   netProjectCost,
+  basicDetails,
 }: Props) {
   return (
     <>
@@ -28,33 +30,37 @@ export function ProjectHeader({
           <h5>📍 {project.location}</h5>
         </div>
       </div>
-      <hr className="my-4" />
-      <div className="grid gap-3 md:grid-cols-3">
-        <div className="text-center">
-          <LabeledCurrency
-            label="total project cost"
-            value={totalProjectCost}
-            valueClassName={classNames("text-2xl")}
-          />
-        </div>
-        <div className="text-center">
-          <LabeledCurrency
-            label="net project cost"
-            value={netProjectCost}
-            valueClassName={classNames("text-2xl")}
-          />
-        </div>
-        <div className="text-center">
-          <LabeledCurrency
-            label="remaining funds"
-            value={remainingFunds}
-            valueClassName={classNames(
-              "text-2xl",
-              remainingFunds < 200000 ? "text-red-500" : "text-green-500"
-            )}
-          />
-        </div>
-      </div>
+      {!basicDetails && (
+        <>
+          <hr className="my-4" />
+          <div className="grid gap-3 md:grid-cols-3">
+            <div className="text-center">
+              <LabeledCurrency
+                label="total project cost"
+                value={totalProjectCost}
+                valueClassName={classNames("text-2xl")}
+              />
+            </div>
+            <div className="text-center">
+              <LabeledCurrency
+                label="net project cost"
+                value={netProjectCost}
+                valueClassName={classNames("text-2xl")}
+              />
+            </div>
+            <div className="text-center">
+              <LabeledCurrency
+                label="remaining funds"
+                value={remainingFunds}
+                valueClassName={classNames(
+                  "text-2xl",
+                  remainingFunds < 200000 ? "text-red-500" : "text-green-500"
+                )}
+              />
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }

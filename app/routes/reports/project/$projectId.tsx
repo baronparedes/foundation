@@ -12,13 +12,13 @@ import {
   TableContainer,
   TableHeader,
   TableRow,
-} from "../../components/@windmill";
-import Page from "../../components/Page";
-import { ProjectCostSummary } from "../../components/ProjectCostSummary";
-import { ProjectHeader } from "../../components/ProjectHeader";
-import { getProjectDashboard } from "../../models/project-dashboard.server";
-import { requireUserId } from "../../session.server";
-import { formatCurrencyFixed } from "../../utils";
+} from "../../../components/@windmill";
+import Page from "../../../components/Page";
+import { ProjectCostSummary } from "../../../components/ProjectCostSummary";
+import { ProjectHeader } from "../../../components/ProjectHeader";
+import { getProjectDashboard } from "../../../models/project-dashboard.server";
+import { requireUserId } from "../../../session.server";
+import { formatCurrencyFixed } from "../../../utils";
 
 import type { Project } from "@prisma/client";
 import type { LoaderArgs } from "@remix-run/server-runtime";
@@ -68,7 +68,7 @@ export default function ReportProjectPage() {
           Print
         </Button>
       </div>
-      <div className="w-full py-4">
+      <div className="w-full py-4 text-xs">
         <ProjectHeader
           project={project as unknown as Project}
           netProjectCost={netProjectCost}
