@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ExclamationCircleIcon } from "@heroicons/react/solid";
 
 import { formatCurrencyFixed } from "../../utils";
-import { DialogWithTransition } from "../@ui";
+import { DialogWithTransition, LabeledCurrency } from "../@ui";
 import {
   Badge,
   Card,
@@ -56,6 +56,16 @@ export function AddOnExpenseCard({
         title={description}
         onCloseModal={() => setToggle(false)}
       >
+        <div className="text-center">
+          <div>
+            <LabeledCurrency
+              label="total"
+              value={total}
+              valueClassName={classNames("text-2xl")}
+            />
+          </div>
+        </div>
+        <hr className="my-4" />
         <TableContainer>
           <Table className="w-full table-auto">
             <TableHeader>
