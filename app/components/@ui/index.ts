@@ -8,3 +8,4 @@ export { default as DialogWithTransition } from "./DialogWithTransition";
 
 export { default as LinkStyled } from "./LinkStyled";
 export { default as LabeledCurrency } from "./LabeledCurrency";
+export { default as Currency } from "./Currency";

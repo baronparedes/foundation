@@ -2,13 +2,22 @@ import invariant from "tiny-invariant";
 import { getProject } from "~/models/project.server";
 
 import { json } from "@remix-run/node";
-import { Form, Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
+import {
+  Form,
+  Outlet,
+  useCatch,
+  useLoaderData,
+  useNavigate,
+} from "@remix-run/react";
 
 import { SearchInput } from "../../components/@ui/SearchInput";
 import { Button } from "../../components/@windmill";
+import Page from "../../components/Page";
 import { ProjectCostSummary } from "../../components/ProjectCostSummary";
 import { ProjectHeader } from "../../components/ProjectHeader";
-import { ProjectVoucherTable } from "../../components/tables/ProjectVoucherTable";
+import {
+  ProjectVoucherTable,
+} from "../../components/tables/ProjectVoucherTable";
 import { getProjectDashboard } from "../../models/project-dashboard.server";
 import { getProjectVouchers } from "../../models/project-voucher.server";
 
@@ -73,48 +82,50 @@ export default function ProjectDetailsPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full">
-      <ProjectHeader
-        project={project as unknown as Project}
-        totalProjectCost={totalProjectCost}
-        netProjectCost={netProjectCost}
-        remainingFunds={remainingFunds}
-      />
-      <hr className="my-4" />
-      <ProjectCostSummary
-        estimatedCost={Number(project.estimatedCost)}
-        collectedFunds={Number(collectedFunds)}
-        disbursedFunds={Number(disbursedFunds)}
-        addOnTotals={Number(addOnTotals)}
-        costPlusTotals={Number(costPlusTotals)}
-        contingencyTotals={Number(contingencyTotals)}
-      />
-      <hr className="my-4" />
-      <div className="flex w-full flex-wrap justify-end space-x-2">
-        <Button onClick={() => navigate("./settings")}>Settings</Button>
-        <Button onClick={() => navigate("./dashboard")}>Dashboard</Button>
-        <Button
-          tabIndex={-1}
-          onClick={() => {
-            window.open(`/reports/project/${project.id}`);
-          }}
-        >
-          Report Preview
-        </Button>
-        <Button onClick={() => navigate("./vouchers")}>New Voucher</Button>
-        <Outlet />
-      </div>
-      <hr className="my-4" />
-      <Form>
-        <SearchInput placeholder="search vouchers" />
-      </Form>
-      <hr className="my-4" />
-      <div>
-        <ProjectVoucherTable
-          data={projectVouchers as unknown as ProjectVoucherWithDetails}
+    <Page currentPage="Projects">
+      <div className="w-full py-4">
+        <ProjectHeader
+          project={project as unknown as Project}
+          totalProjectCost={totalProjectCost}
+          netProjectCost={netProjectCost}
+          remainingFunds={remainingFunds}
         />
+        <hr className="my-4" />
+        <ProjectCostSummary
+          estimatedCost={Number(project.estimatedCost)}
+          collectedFunds={Number(collectedFunds)}
+          disbursedFunds={Number(disbursedFunds)}
+          addOnTotals={Number(addOnTotals)}
+          costPlusTotals={Number(costPlusTotals)}
+          contingencyTotals={Number(contingencyTotals)}
+        />
+        <hr className="my-4" />
+        <div className="flex w-full flex-wrap justify-end space-x-2">
+          <Button onClick={() => navigate("./settings")}>Settings</Button>
+          <Button onClick={() => navigate("./dashboard")}>Dashboard</Button>
+          <Button
+            tabIndex={-1}
+            onClick={() => {
+              window.open(`/reports/project/${project.id}`);
+            }}
+          >
+            Report Preview
+          </Button>
+          <Button onClick={() => navigate("./vouchers")}>New Voucher</Button>
+          <Outlet />
+        </div>
+        <hr className="my-4" />
+        <Form>
+          <SearchInput placeholder="search vouchers" />
+        </Form>
+        <hr className="my-4" />
+        <div>
+          <ProjectVoucherTable
+            data={projectVouchers as unknown as ProjectVoucherWithDetails}
+          />
+        </div>
       </div>
-    </div>
+    </Page>
   );
 }
 
