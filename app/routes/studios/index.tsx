@@ -1,12 +1,56 @@
-import { Link } from "@remix-run/react";
+import type { LoaderArgs } from "@remix-run/node";
+import { requireUserId } from "~/session.server";
 
-export default function ProjectIndexPage() {
+import { json } from "@remix-run/node";
+import { Link, NavLink, useLoaderData } from "@remix-run/react";
+
+import Page from "../../components/Page";
+import { getStudiosByUserId } from "../../models/studio.server";
+
+export async function loader({ request }: LoaderArgs) {
+  const userId = await requireUserId(request);
+  const studios = await getStudiosByUserId({ userId });
+  return json({ studios });
+}
+
+export default function StudiosPage() {
+  const data = useLoaderData<typeof loader>();
+
   return (
-    <p>
-      Select a studio or{" "}
-      <Link to="new" className="text-blue-500 underline">
-        create a new one.
-      </Link>
-    </p>
+    <Page currentPage="Studios">
+      <div className="sm:py-4 md:flex">
+        <div className="flex-none">
+          <Link to="new" className="block p-4 text-xl text-blue-500 hover:bg-sky-100">
+            + Studio
+          </Link>
+          {data.studios.length === 0 ? (
+            <p className="p-4">No studios yet</p>
+          ) : (
+            <ol>
+              {data.studios.map((studio) => (
+                <li key={studio.id}>
+                  <NavLink
+                    className={({ isActive }) =>
+                      `block p-4 text-xl hover:bg-sky-100 ${isActive ? "bg-white" : ""}`
+                    }
+                    to={studio.id}
+                  >
+                    🏢 {studio.name}
+                  </NavLink>
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+        <div className="flex-1 p-6">
+          <p>
+            Select a studio or{" "}
+            <Link to="new" className="text-blue-500 underline">
+              create a new one.
+            </Link>
+          </p>
+        </div>
+      </div>
+    </Page>
   );
 }
