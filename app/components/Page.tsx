@@ -16,6 +16,7 @@ const PAGES = [
   { label: "Projects", route: "/projects" },
   { label: "Studios", route: "/studios" },
   { label: "Funds", route: "/funds" },
+  { label: "Reports", route: "/reports" },
 ];
 
 export default function Page({ children, currentPage }: React.PropsWithChildren<Props>) {
