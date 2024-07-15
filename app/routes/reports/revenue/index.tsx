@@ -42,15 +42,20 @@ export async function loader({ request }: LoaderArgs) {
 export default function ReportsIndexPage() {
   const { projectDashboards, studioDashboard } = useLoaderData<typeof loader>();
 
-  //TODO: For Review
   const calculateProjectNetRevenue = (dashboard: typeof projectDashboards[number]) => {
-    const { remainingFunds, costPlusTotals } = dashboard;
-
-    if (remainingFunds < costPlusTotals) {
-      return remainingFunds - costPlusTotals;
+    const { remainingFunds, costPlusTotals, contingencyTotals } = dashboard;
+    if (remainingFunds >= 0) return costPlusTotals;
+    if (remainingFunds < 0) {
+      const balanceAfterContingency = remainingFunds + contingencyTotals;
+      if (balanceAfterContingency >= 0) {
+        return costPlusTotals;
+      }
+      if (balanceAfterContingency < 0) {
+        const balanceAfterCostPlus = balanceAfterContingency + costPlusTotals;
+        return balanceAfterCostPlus;
+      }
     }
-
-    return costPlusTotals;
+    return 0;
   };
 
   const totalProjectRevenue = sum(
@@ -94,7 +99,10 @@ export default function ReportsIndexPage() {
               <tr>
                 <TableCell>Project</TableCell>
                 <TableCell>Total Project Cost</TableCell>
+                <TableCell>Supervision & Purchasing</TableCell>
                 <TableCell>Remaining Funds</TableCell>
+                <TableCell>Contingency Amount</TableCell>
+                <TableCell>Costplus Ampount</TableCell>
                 <TableCell>Projected Revenue</TableCell>
               </tr>
             </TableHeader>
@@ -114,11 +122,26 @@ export default function ReportsIndexPage() {
                       </Badge>
                     </TableCell>
                     <TableCell>
+                      <Badge className="currency" type="neutral">
+                        {formatCurrencyFixed(dashboard.addOnTotals)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
                       <Badge
                         type={dashboard.remainingFunds < 0 ? "danger" : "success"}
                         className="currency"
                       >
                         {formatCurrencyFixed(dashboard.remainingFunds)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className="currency">
+                        {formatCurrencyFixed(dashboard.contingencyTotals)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className="currency">
+                        {formatCurrencyFixed(dashboard.costPlusTotals)}
                       </Badge>
                     </TableCell>
                     <TableCell>
