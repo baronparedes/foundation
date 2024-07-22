@@ -1,12 +1,19 @@
 import classNames from "classnames";
+import moment from "moment";
+import { useState } from "react";
 import { requireUserId } from "~/session.server";
 
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 
-import { LabeledCurrency, LinkStyled } from "../../../components/@ui";
+import {
+  LabeledCurrency,
+  LinkStyled,
+  TextInput,
+} from "../../../components/@ui";
 import {
   Badge,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -15,32 +22,28 @@ import {
   TableRow,
 } from "../../../components/@windmill";
 import Page from "../../../components/Page";
-import { getProjectDashboard } from "../../../models/project-dashboard.server";
-import { getProjectsByUserId } from "../../../models/project.server";
-import { getStudioDashboard } from "../../../models/studio-dashboard.server";
+import { getRevenueDashboard } from "../../../models/reports-revenue.server";
 import { formatCurrencyFixed, sum } from "../../../utils";
 
 import type { LoaderArgs } from "@remix-run/node";
 export async function loader({ request }: LoaderArgs) {
   const userId = await requireUserId(request);
-  const projects = await getProjectsByUserId({ userId });
-
-  const projectDashboards = await Promise.all(
-    projects.map(async (p) => {
-      const item = await getProjectDashboard({ id: p.id });
-      return item;
-    })
+  const url = new URL(request.url);
+  const fromDate = url.searchParams.get("fromDate");
+  const toDate = url.searchParams.get("toDate");
+  const { projectDashboards, studioDashboard } = await getRevenueDashboard(
+    userId,
+    fromDate,
+    toDate
   );
 
-  const studioDashboard = await getStudioDashboard({
-    id: "clim7plmg0000qk0j4h09cw8o",
-  });
-
-  return json({ projectDashboards, studioDashboard });
+  return json({ projectDashboards, studioDashboard, fromDate, toDate });
 }
 
 export default function ReportsIndexPage() {
-  const { projectDashboards, studioDashboard } = useLoaderData<typeof loader>();
+  const { projectDashboards, studioDashboard, fromDate, toDate } =
+    useLoaderData<typeof loader>();
+  const studioDisbursedFunds = studioDashboard?.disbursedFunds ?? 0;
 
   const calculateProjectNetRevenue = (dashboard: typeof projectDashboards[number]) => {
     const { remainingFunds, costPlusTotals, contingencyTotals } = dashboard;
@@ -61,12 +64,49 @@ export default function ReportsIndexPage() {
   const totalProjectRevenue = sum(
     projectDashboards.map((d) => calculateProjectNetRevenue(d))
   );
+  const totalNetRevenue = totalProjectRevenue - studioDisbursedFunds;
 
-  const totalNetRevenue = totalProjectRevenue - studioDashboard.disbursedFunds;
+  const [reportFromDate, setReportFromDate] = useState(fromDate);
+  const [reportToDate, setReportToDate] = useState(toDate);
 
   return (
     <Page currentPage={"Reports"}>
       <div className="w-full py-4">
+        <div className="align-center grid grid-cols-3 gap-3 py-4">
+          <div>
+            <TextInput
+              name="startDate"
+              label="Start Date"
+              required
+              type="date"
+              defaultValue={moment(reportFromDate).format("yyyy-MM-DD")}
+              onChange={(e) => {
+                setReportFromDate(e.currentTarget.value);
+              }}
+            />
+          </div>
+          <div>
+            <TextInput
+              name="endDate"
+              label="End Date"
+              type="date"
+              defaultValue={moment(reportToDate).format("yyyy-MM-DD")}
+              onChange={(e) => {
+                setReportToDate(e.currentTarget.value);
+              }}
+            />
+          </div>
+          <div>
+            <label className="flex w-full flex-col gap-1">
+              <br />
+              <Link
+                to={`/reports/revenue?fromDate=${reportFromDate}&toDate=${reportToDate}`}
+              >
+                <Button>Filter</Button>
+              </Link>
+            </label>
+          </div>
+        </div>
         <div className="grid grid-cols-3 gap-3 py-4">
           <div className="text-center">
             <LabeledCurrency
@@ -78,7 +118,7 @@ export default function ReportsIndexPage() {
           <div className="text-center">
             <LabeledCurrency
               label="studio expense"
-              value={studioDashboard.disbursedFunds}
+              value={studioDisbursedFunds}
               valueClassName={classNames("text-4xl", "text-red-500")}
             />
           </div>
@@ -101,9 +141,9 @@ export default function ReportsIndexPage() {
                 <TableCell>Total Project Cost</TableCell>
                 <TableCell>Supervision & Purchasing</TableCell>
                 <TableCell>Remaining Funds</TableCell>
-                <TableCell>Contingency Amount</TableCell>
-                <TableCell>Costplus Ampount</TableCell>
-                <TableCell>Projected Revenue</TableCell>
+                <TableCell>Contingency</TableCell>
+                <TableCell>Costplus</TableCell>
+                <TableCell>Revenue</TableCell>
               </tr>
             </TableHeader>
             <TableBody>
