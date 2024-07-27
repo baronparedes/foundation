@@ -1,4 +1,4 @@
-import type { Studio, StudioVoucher } from "@prisma/client";
+import type { Prisma, Studio, StudioVoucher } from "@prisma/client";
 import { prisma } from "../db.server";
 import { sum } from "../utils";
 
@@ -60,16 +60,72 @@ async function getVoucherDetails(vouchers: StudioVoucher[]) {
   };
 }
 
-export async function getStudioDashboard({ id }: Pick<Studio, "id">) {
+async function getStudioVouchers(
+  { id }: Pick<Studio, "id">,
+  params?: {
+    fromDate: string | null;
+    toDate: string | null;
+  }
+) {
+  let args: Prisma.StudioVoucherFindManyArgs = {
+    where: { studioId: id, isDeleted: false },
+  };
+
+  if (params) {
+    if (params.fromDate && !params.toDate) {
+      args = {
+        where: {
+          studioId: id,
+          isDeleted: false,
+          transactionDate: {
+            gte: new Date(params.fromDate),
+          },
+        },
+      };
+    }
+    if (!params.fromDate && params.toDate) {
+      args = {
+        where: {
+          studioId: id,
+          isDeleted: false,
+          transactionDate: {
+            lte: new Date(params.toDate),
+          },
+        },
+      };
+    }
+    if (params.fromDate && params.toDate) {
+      args = {
+        where: {
+          studioId: id,
+          isDeleted: false,
+          transactionDate: {
+            lte: new Date(params.toDate),
+            gte: new Date(params.fromDate),
+          },
+        },
+      };
+    }
+  }
+
+  const vouchers = await prisma.studioVoucher.findMany({
+    ...args,
+  });
+
+  return vouchers;
+}
+
+export async function getStudioDashboard(
+  { id }: Pick<Studio, "id">,
+  params?: {
+    fromDate: string | null;
+    toDate: string | null;
+  }
+) {
   const studio = await prisma.studio.findFirstOrThrow({
     where: { id },
   });
-  const vouchers = await prisma.studioVoucher.findMany({
-    where: {
-      isDeleted: false,
-      studioId: id,
-    },
-  });
+  const vouchers = await getStudioVouchers({ id }, params);
   const collectedFundsData = await prisma.fundTransaction.aggregate({
     _sum: {
       amount: true,

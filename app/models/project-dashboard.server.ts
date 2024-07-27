@@ -101,6 +101,7 @@ async function getVoucherDetailsRaw({ id }: Pick<Project, "id">) {
   return rawData as DisbursementRawData[];
 }
 
+//TODO: This should have transaction dates
 async function getAddOnExpenses({ id }: Pick<Project, "id">) {
   const addOns = await prisma.projectAddOn.findMany({
     where: {
@@ -121,13 +122,10 @@ async function getAddOnExpenses({ id }: Pick<Project, "id">) {
   };
 }
 
-async function getCostPlusTotalsByProjectId({ id }: Pick<Project, "id">) {
-  const vouchers = await prisma.projectVoucher.findMany({
-    where: {
-      isDeleted: false,
-      projectId: id,
-    },
-  });
+async function getCostPlusTotalsByProjectId(
+  { id }: Pick<Project, "id">,
+  vouchers: ProjectVoucher[]
+) {
   const addOnExpenses = await getAddOnExpenses({ id });
   return getCostPlusTotals({ id }, vouchers, addOnExpenses.addOns);
 }
@@ -178,12 +176,56 @@ async function getCostPlusTotals(
   return result;
 }
 
-async function getCollectedFunds({ id }: Pick<Project, "id">) {
+async function getCollectedFunds(
+  { id }: Pick<Project, "id">,
+  params?: {
+    fromDate: string | null;
+    toDate: string | null;
+  }
+) {
+  let args: Prisma.FundTransactionFindManyArgs = {
+    where: { projectId: id, type: "collection" },
+  };
+
+  if (params) {
+    if (params.fromDate && !params.toDate) {
+      args = {
+        where: {
+          projectId: id,
+          type: "collection",
+          createdAt: {
+            gte: new Date(params.fromDate),
+          },
+        },
+      };
+    }
+    if (!params.fromDate && params.toDate) {
+      args = {
+        where: {
+          projectId: id,
+          type: "collection",
+          createdAt: {
+            lte: new Date(params.toDate),
+          },
+        },
+      };
+    }
+    if (params.fromDate && params.toDate) {
+      args = {
+        where: {
+          projectId: id,
+          type: "collection",
+          createdAt: {
+            lte: new Date(params.toDate),
+            gte: new Date(params.fromDate),
+          },
+        },
+      };
+    }
+  }
+
   const collectedFundsData = await prisma.fundTransaction.findMany({
-    where: {
-      projectId: id,
-      type: "collection",
-    },
+    ...args,
     select: {
       amount: true,
       description: true,
@@ -195,12 +237,75 @@ async function getCollectedFunds({ id }: Pick<Project, "id">) {
   return collectedFundsData;
 }
 
-export async function getProjectDashboard({ id }: Pick<Project, "id">) {
+async function getProjectVouchers(
+  { id }: Pick<Project, "id">,
+  params?: {
+    fromDate: string | null;
+    toDate: string | null;
+  }
+) {
+  let args: Prisma.ProjectVoucherFindManyArgs = {
+    where: { projectId: id, isDeleted: false },
+  };
+
+  if (params) {
+    if (params.fromDate && !params.toDate) {
+      args = {
+        where: {
+          projectId: id,
+          isDeleted: false,
+          transactionDate: {
+            gte: new Date(params.fromDate),
+          },
+        },
+      };
+    }
+    if (!params.fromDate && params.toDate) {
+      args = {
+        where: {
+          projectId: id,
+          isDeleted: false,
+          transactionDate: {
+            lte: new Date(params.toDate),
+          },
+        },
+      };
+    }
+    if (params.fromDate && params.toDate) {
+      args = {
+        where: {
+          projectId: id,
+          isDeleted: false,
+          transactionDate: {
+            lte: new Date(params.toDate),
+            gte: new Date(params.fromDate),
+          },
+        },
+      };
+    }
+  }
+
+  const vouchers = await prisma.projectVoucher.findMany({
+    ...args,
+  });
+
+  return vouchers;
+}
+
+export async function getProjectDashboard(
+  { id }: Pick<Project, "id">,
+  params?: {
+    fromDate: string | null;
+    toDate: string | null;
+  }
+) {
   const project = await prisma.project.findFirstOrThrow({
     where: { id },
   });
 
-  const costPlusTotalsData = await getCostPlusTotalsByProjectId({ id });
+  const vouchers = await getProjectVouchers({ id }, params);
+
+  const costPlusTotalsData = await getCostPlusTotalsByProjectId({ id }, vouchers);
   const costPlusTotals = sum(
     costPlusTotalsData.filter((cp) => !cp.isContingency).map((cp) => cp.total)
   );
@@ -211,12 +316,6 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
   const addOnExpenses = await getAddOnExpenses({ id });
   const addOnTotals = addOnExpenses.totalAddOns;
 
-  const vouchers = await prisma.projectVoucher.findMany({
-    where: {
-      isDeleted: false,
-      projectId: id,
-    },
-  });
   const { uncategorizedDisbursement, categorizedDisbursement } = await getVoucherDetails(
     vouchers
   );
@@ -231,7 +330,7 @@ export async function getProjectDashboard({ id }: Pick<Project, "id">) {
   );
 
   const categorizedDisbursementRaw = await getVoucherDetailsRaw({ id });
-  const collectedFundsData = await getCollectedFunds({ id });
+  const collectedFundsData = await getCollectedFunds({ id }, params);
 
   const collectedFunds = sum(collectedFundsData.map((cf) => Number(cf.amount)));
   const disbursedFunds = categorizedDisbursedTotal + uncategorizedDisbursedTotal;
