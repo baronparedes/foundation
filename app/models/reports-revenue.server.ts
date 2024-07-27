@@ -11,7 +11,7 @@ export async function getRevenueDashboard(
 
   const projectDashboards = await Promise.all(
     projects.map(async (p) => {
-      const item = await getProjectDashboard({ id: p.id });
+      const item = await getProjectDashboard({ id: p.id }, { fromDate, toDate });
       return {
         ...item,
         sorter: item.project.name,
@@ -19,9 +19,12 @@ export async function getRevenueDashboard(
     })
   );
 
-  const studioDashboard = await getStudioDashboard({
-    id: process.env.STUDIO_ID ?? "",
-  });
+  const studioDashboard = await getStudioDashboard(
+    {
+      id: process.env.STUDIO_ID ?? "",
+    },
+    { fromDate, toDate }
+  );
 
   const projectDashboardsSorted = projectDashboards
     .map((p) => p)

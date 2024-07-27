@@ -69,14 +69,27 @@ export default function ReportsIndexPage() {
   const [reportFromDate, setReportFromDate] = useState(fromDate);
   const [reportToDate, setReportToDate] = useState(toDate);
 
+  const getReportLink = () => {
+    if (reportFromDate && reportToDate) {
+      return `/reports/revenue?fromDate=${reportFromDate}&toDate=${reportToDate}`;
+    }
+    if (reportFromDate && !reportToDate) {
+      return `/reports/revenue?fromDate=${reportFromDate}`;
+    }
+    if (!reportFromDate && reportToDate) {
+      return `/reports/revenue?toDate=${reportToDate}`;
+    }
+    return ".";
+  };
+
   return (
     <Page currentPage={"Reports"}>
       <div className="w-full py-4">
         <div className="align-center grid grid-cols-3 gap-3 py-4">
           <div>
             <TextInput
-              name="startDate"
-              label="Start Date"
+              name="fromDate"
+              label="From"
               required
               type="date"
               defaultValue={moment(reportFromDate).format("yyyy-MM-DD")}
@@ -87,8 +100,8 @@ export default function ReportsIndexPage() {
           </div>
           <div>
             <TextInput
-              name="endDate"
-              label="End Date"
+              name="toDate"
+              label="to"
               type="date"
               defaultValue={moment(reportToDate).format("yyyy-MM-DD")}
               onChange={(e) => {
@@ -97,11 +110,9 @@ export default function ReportsIndexPage() {
             />
           </div>
           <div>
-            <label className="flex w-full flex-col gap-1">
+            <label className="flex w-full flex-col gap-1 print:hidden">
               <br />
-              <Link
-                to={`/reports/revenue?fromDate=${reportFromDate}&toDate=${reportToDate}`}
-              >
+              <Link to={getReportLink()}>
                 <Button>Filter</Button>
               </Link>
             </label>
@@ -138,7 +149,7 @@ export default function ReportsIndexPage() {
             <TableHeader>
               <tr>
                 <TableCell>Project</TableCell>
-                <TableCell>Total Project Cost</TableCell>
+                <TableCell>Project Cost</TableCell>
                 <TableCell>Supervision & Purchasing</TableCell>
                 <TableCell>Remaining Funds</TableCell>
                 <TableCell>Contingency</TableCell>
